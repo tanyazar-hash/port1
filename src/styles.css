@@ -1061,3 +1061,44 @@ body,.site,.page-transition{background:#eaf4fc;color:#152b49}
 @media(prefers-reduced-transparency:reduce){
  .process-card,.plan,.chatbox,.calculator,.faq-glass .faq-item{backdrop-filter:none;-webkit-backdrop-filter:none;background:#f4faff}
 }
+
+
+/* ICE GLASS 3.2 — editorial refinement while retaining interactive robot */
+.inner-hero.inner-hero-robot{
+ background:radial-gradient(ellipse 52% 82% at 83% 48%,#a2cbed9c,transparent 85%),
+ linear-gradient(155deg,#fbfdff 0%,#eaf5fc 49%,#d4e9f9 100%);
+}
+.inner-hero-robot .inner-hero-copy{z-index:3}
+.inner-hero-robot .inner-hero-copy h1{
+ color:#173653;letter-spacing:-.075em;
+ text-shadow:0 1px 0 #ffffff91;
+}
+.inner-hero-robot .inner-hero-copy p{color:#526f88;line-height:1.85}
+.inner-hero-robot .robot-showcase{z-index:2;filter:drop-shadow(0 30px 35px #426d8e27)}
+.inner-hero-robot .robot-halo{
+ background:radial-gradient(ellipse,#c5e4f9a8 0%,#9ecbed4d 45%,transparent 72%);
+ filter:blur(24px);
+}
+.inner-hero-robot .robot-caption{color:#477da5;letter-spacing:.18em}
+.feature-list .feature-row{
+ border-bottom:1px solid #9dbfda65;
+ padding-top:clamp(30px,4vw,58px);padding-bottom:clamp(30px,4vw,58px);
+}
+.feature-list .feature-row:hover{background:linear-gradient(90deg,#ffffffb0,#ffffff45)}
+.feature-list .feature-row h2{color:#183c5c}
+.feature-list .feature-row p{color:#55748f}
+.plan .primary-btn,.end-section .primary-btn{border-radius:999px}
+.plan{outline:1px solid #b8d6e83d;outline-offset:4px}
+.process-card{outline:1px solid #b9d7eb37;outline-offset:4px}
+.faq-glass .faq-item{background:#ffffff87}
+.faq-glass .faq-item:hover{background:#ffffffe0}
+.site-footer{box-shadow:inset 0 1px #fff}
+@media(max-width:900px){
+ .inner-hero-robot .inner-hero-copy h1{font-size:clamp(42px,5.4vw,69px)}
+}
+@media(max-width:720px){
+ .inner-hero.inner-hero-robot{background:linear-gradient(180deg,#f9fcff,#e8f4fc 53%,#cfe7f9)}
+ .inner-hero-robot .robot-showcase{filter:drop-shadow(0 12px 22px #4d7da22b)}
+ .feature-list .feature-row{padding-top:28px;padding-bottom:28px}
+ .plan,.process-card{outline-offset:2px}
+}
