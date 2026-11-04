@@ -1020,3 +1020,44 @@ body,.site,.page-transition{background:#eaf4fc;color:#152b49}
 @media(prefers-reduced-motion:reduce){
  .process-card,.plan,.faq-item{transition:none}
 }
+
+
+/* ICE GLASS 3.1 — continuous pearlescent wave language and refined glass depth */
+.hero-section,.inner-hero,.split-section,.demo-section,.process-section,.calculator-section,.pricing-grid,.feature-list,.end-section,.faq-glass{isolation:isolate}
+.hero-section::after,.inner-hero::after,.split-section::after,.demo-section::after,.process-section::after,.calculator-section::after,.pricing-grid::after,.feature-list::after,.end-section::after{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.62;
+ background:
+ radial-gradient(ellipse 70% 28% at 7% 6%,#ffffffa8 0%,transparent 83%),
+ radial-gradient(ellipse 66% 29% at 94% 95%,#ffffffb0 0%,transparent 82%);
+ mask-image:linear-gradient(180deg,#000,transparent 48%,#000);
+}
+.hero-section::before,.inner-hero::before,.split-section::before,.demo-section::before,.process-section::before,.calculator-section::before,.pricing-grid::before,.feature-list::before,.end-section::before{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:linear-gradient(137deg,transparent 13%,#ffffffa8 29%,#ffffff08 47%,#ffffff8c 66%,transparent 83%);
+ clip-path:polygon(0 0,29% 0,54% 33%,100% 73%,100% 100%,73% 100%,39% 60%,0 19%);
+ opacity:.27;
+}
+.hero-section>*,.inner-hero>*,.split-section>*,.demo-section>*,.process-section>*,.calculator-section>*,.pricing-grid>*,.feature-list>*,.end-section>*{position:relative;z-index:1}
+.hero-section .hero-visual,.hero-section .hero-glow,.inner-hero .robot-showcase{position:absolute}
+.process-card,.plan,.chatbox,.calculator,.faq-glass .faq-item{
+ box-shadow:0 15px 55px #547fa51d,0 1px 2px #6f9cb32a,inset 0 1px 0 #ffffffef;
+ border-color:#ffffffed;
+}
+.process-card::before,.plan::before{
+ content:"";position:absolute;top:0;left:12%;width:76%;height:1px;
+ background:linear-gradient(90deg,transparent,#fff,transparent);pointer-events:none;
+}
+.process-card,.plan{position:relative;overflow:hidden}
+.plan.popular{box-shadow:0 25px 65px #4b86b138,inset 0 1px #fff}
+.faq-glass .faq-item{box-shadow:0 10px 35px #4c7ba11e,inset 0 1px #fff}
+.faq-glass .faq-item:focus-within{border-color:#78add3;box-shadow:0 0 0 3px #80b7de30}
+.hero-content h1,.inner-hero h1,.section h2{letter-spacing:-.065em}
+.hero-content h1{letter-spacing:-.075em}
+.section-kicker{letter-spacing:.18em}
+@media(max-width:720px){
+ .hero-section::before,.inner-hero::before,.split-section::before,.demo-section::before,.process-section::before,.calculator-section::before,.pricing-grid::before,.feature-list::before,.end-section::before{opacity:.16}
+ .process-card,.plan{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+}
+@media(prefers-reduced-transparency:reduce){
+ .process-card,.plan,.chatbox,.calculator,.faq-glass .faq-item{backdrop-filter:none;-webkit-backdrop-filter:none;background:#f4faff}
+}
