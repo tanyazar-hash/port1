@@ -248,7 +248,9 @@ test('scroll reveals remain readable when reduced motion is enabled', async ({ p
   await cards.first().scrollIntoViewIfNeeded();
   await expect(cards.first()).toHaveClass(/visible/);
   await expect(cards.first()).toHaveCSS('opacity','1');
-  await expect(cards.first()).toHaveCSS('transform','none');
+  // translate3d(0,0,0) computes to an identity matrix in Chromium.
+  const transform = await cards.first().evaluate(el => getComputedStyle(el).transform);
+  expect(['none', 'matrix(1, 0, 0, 1, 0, 0)', 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)']).toContain(transform);
   await page.goto('/#/pricing');
   await expect(page.locator('.faq-item').first()).toHaveClass(/visible/);
   await expect(page.locator('.faq-item').first()).toHaveCSS('opacity','1');
