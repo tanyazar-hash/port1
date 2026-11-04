@@ -270,3 +270,25 @@ test('switching pages resets scroll to the first screen', async ({ page }) => {
   await expect.poll(()=>page.evaluate(()=>window.scrollY)).toBe(0);
   await expect(page.locator('.inner-hero')).toBeVisible();
 });
+
+test('demo chat does not pull the visitor away from the hero after initial render', async ({ page }) => {
+  await page.goto('/#/home');
+  await expect(page.locator('.messages .bubble.bot')).toHaveCount(1);
+  // The old chat scrollIntoView({behavior:'smooth'}) started after React mounted
+  // and dragged the whole document into the demo section.
+  await page.waitForTimeout(1600);
+  const scrollY = await page.evaluate(() => window.scrollY);
+  expect(scrollY).toBeLessThan(5);
+  await expect(page.locator('.hero-content h1')).toBeInViewport();
+});
+
+test('chat auto-scroll stays inside the message log', async ({ page }) => {
+  await page.goto('/#/home');
+  await page.locator('.demo-section').scrollIntoViewIfNeeded();
+  await page.getByRole('button', { name: 'Помогите выбрать товар' }).click();
+  await expect(page.locator('.messages .bubble')).toHaveCount(3);
+  const log = page.locator('.messages');
+  const internalScroll = await log.evaluate(el => ({ scrollTop: el.scrollTop, scrollHeight: el.scrollHeight, clientHeight: el.clientHeight }));
+  expect(internalScroll.scrollTop).toBeGreaterThanOrEqual(0);
+  expect(internalScroll.scrollHeight).toBeGreaterThanOrEqual(internalScroll.clientHeight);
+});
