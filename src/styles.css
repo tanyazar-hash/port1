@@ -142,3 +142,13 @@
 @keyframes orb-breathe{0%,100%{border-radius:44% 56% 68% 32%/40% 38% 62% 60%;filter:saturate(.5)}50%{border-radius:54% 46% 48% 52%/52% 61% 39% 48%;filter:saturate(.7)}}
 @media(max-width:720px){.chapter-nav{left:6%;right:11%;bottom:25px;gap:10px}.chapter-nav button{font-size:10px;gap:6px}.story-step{top:57%}.story-steps{bottom:70px}}
 @media(prefers-reduced-motion:reduce){.hero-visual .fallback-orb{animation:none}.story-step{filter:none!important}.chapter-line:after{transition:none}}
+
+
+/* v0.8: subtle cinematic depth cues, legible composition */
+.story-ambient{background:radial-gradient(ellipse at 72% 45%,#293a3b 0%,#192124 34%,#101216 75%)}
+.story-ambient:after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 68% 50%,transparent 12%,#10121675 80%);z-index:1}
+.story-vignette{background:linear-gradient(90deg,#101216ed 0%,#101216bd 29%,#10121633 58%,transparent 85%)}
+.story-step{width:min(60%,790px)}
+.story-step h2{font-size:clamp(44px,5.2vw,82px)}
+.story-step p{max-width:380px}
+@media(max-width:720px){.story-ambient:after{background:linear-gradient(0deg,#101216b3,transparent 85%)}.story-vignette{background:linear-gradient(0deg,#101216e8 0%,#1012169c 48%,transparent 88%)}.story-step{width:86%}.story-step h2{font-size:clamp(39px,8vw,59px)}}
