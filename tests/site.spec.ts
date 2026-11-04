@@ -160,3 +160,39 @@ test('pricing FAQ has light glass layout and accessible accordion', async ({ pag
   const background=await faq.evaluate(el=>getComputedStyle(el).backgroundImage);
   expect(background).toContain('gradient');
 });
+
+
+test('mobile pages have no horizontal document overflow', async ({ page }) => {
+  for (const route of routes) {
+    await page.goto('/' + route.hash);
+    await expect(page.locator('main h1')).toBeVisible();
+    const dimensions = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.document, route.hash + ' overflow').toBeLessThanOrEqual(dimensions.viewport + 2);
+  }
+});
+
+test('FAQ answers are labelled regions and hidden when collapsed', async ({ page }) => {
+  await page.goto('/#/pricing');
+  const question = page.locator('#faq-question-0');
+  const answer = page.locator('#faq-answer-0');
+  await expect(question).toHaveAttribute('aria-controls', 'faq-answer-0');
+  await expect(answer).toHaveAttribute('aria-labelledby', 'faq-question-0');
+  await expect(answer).toBeVisible();
+  await question.click();
+  await expect(question).toHaveAttribute('aria-expanded', 'false');
+  await expect(answer).toBeHidden();
+  await question.click();
+  await expect(answer).toBeVisible();
+});
+
+test('demo does not append stale replies after scenario switch', async ({ page }) => {
+  await page.goto('/#/home');
+  await page.getByRole('button', { name: 'Помогите выбрать товар' }).click();
+  await page.getByRole('group', { name: 'Выберите тип бизнеса' }).getByRole('button', { name: 'Услуги' }).click();
+  await page.waitForTimeout(650);
+  await expect(page.locator('.bubble.bot')).toHaveCount(1);
+  await expect(page.locator('.bubble.user')).toHaveCount(0);
+});
