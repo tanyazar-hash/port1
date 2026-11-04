@@ -86,3 +86,15 @@ test('calculator updates when range changes', async ({ page }) => {
   });
   await expect(result).not.toHaveText(before || '');
 });
+
+
+test('interactive story chapters respond to clicks', async ({ page }) => {
+  await page.goto('/#/home');
+  const chapters=page.getByRole('navigation', {name:'Этапы истории'});
+  await expect(chapters.getByRole('button')).toHaveCount(3);
+  await chapters.getByRole('button', {name:/этапу 2: Контакт/}).click();
+  await expect(chapters.getByRole('button', {name:/этапу 2: Контакт/})).toHaveAttribute('aria-current','step');
+  await expect(page.locator('.story-step.current')).toContainText('ПЕРВЫЙ ШАГ');
+  await chapters.getByRole('button', {name:/этапу 3: Результат/}).click();
+  await expect(chapters.getByRole('button', {name:/этапу 3: Результат/})).toHaveAttribute('aria-current','step');
+});
