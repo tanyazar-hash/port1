@@ -1154,3 +1154,47 @@ body,.site,.page-transition{background:#eaf4fc;color:#152b49}
 @media(prefers-reduced-motion:reduce){
  .hero-glass-note{animation:none}
 }
+
+
+/* ICE GLASS 3.4 — responsive polish and accessible glass interactions */
+:where(button,a,input):focus-visible{outline:3px solid #3c91c8;outline-offset:4px}
+:where(.primary-btn,.text-btn,.inline-link,.faq-item button,.scenario-picker button,.suggestions button){
+ transition:transform .25s ease,background-color .25s ease,border-color .25s ease,box-shadow .25s ease,color .25s ease;
+}
+@media(hover:hover){
+ .faq-glass .faq-item:hover{transform:translateY(-2px);box-shadow:0 18px 40px #4c7ba128,inset 0 1px #fff}
+ .plan:hover,.process-card:hover{box-shadow:0 23px 65px #547fa52c,inset 0 1px #fff}
+}
+@media(max-width:800px){
+ .hero-section .hero-content{padding-top:clamp(125px,19svh,180px);padding-bottom:135px}
+ .hero-section .hero-content h1{font-size:clamp(48px,10vw,84px);line-height:1.02;letter-spacing:-.075em;overflow-wrap:normal}
+ .hero-section .hero-copy{max-width:510px;line-height:1.7}
+ .hero-section .hero-bottom{bottom:24px;gap:16px}
+ .hero-section .hero-visual{opacity:.65}
+ .hero-section .hero-glow{opacity:.42}
+ .faq-glass .faq-art h2{letter-spacing:-.075em}
+ .faq-glass .faq-glass-list{position:relative;z-index:2}
+}
+@media(max-width:560px){
+ .hero-section .hero-content{padding:135px 6vw 125px}
+ .hero-section .hero-content h1{font-size:clamp(42px,10.2vw,61px);line-height:1.04}
+ .hero-section .hero-copy{font-size:clamp(14px,3.7vw,16px)}
+ .hero-section .hero-actions{flex-wrap:wrap;gap:14px 22px}
+ .hero-section .hero-bottom{font-size:9px;letter-spacing:.07em}
+ .hero-section .hero-bottom span:last-child{text-align:right}
+ .hero-section .hero-edition{gap:12px;flex-wrap:wrap}
+ .hero-section .hero-visual{opacity:.42}
+ .section-kicker,.eyebrow{letter-spacing:.13em}
+ .section h2,.inner-hero h1{overflow-wrap:break-word}
+ .faq-glass .faq-item button{min-height:64px;line-height:1.45}
+ .chatbox,.calculator,.plan,.process-card{border-radius:22px}
+ .hero-section .primary-btn,.end-section .primary-btn{min-height:48px}
+}
+@media(max-width:380px){
+ .hero-section .hero-content h1{font-size:clamp(37px,10vw,43px)}
+ .hero-section .hero-bottom{font-size:8px}
+ .hero-section .hero-actions{align-items:flex-start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){
+ .faq-glass .faq-item,.plan,.process-card{transition:none!important}
+}
