@@ -133,3 +133,14 @@ test('business demo switches scenarios and resets conversation', async ({ page }
   await expect(page.locator('.bubble.bot')).toHaveCount(1);
   await expect(page.locator('.bubble.bot')).toContainText('возможностями продукта');
 });
+
+
+test('features and about pages include a responsive robot showcase', async ({ page }) => {
+  for (const route of ['features','about']) {
+    await page.goto('/#/'+route);
+    await expect(page.locator('.inner-hero-robot')).toBeVisible();
+    await expect(page.getByLabel('Интерактивный 3D-робот, который следит за курсором')).toBeVisible();
+    await expect(page.locator('.inner-hero-robot h1')).toBeVisible();
+    await expect(page.locator('.inner-hero-robot')).not.toContainText('NaN');
+  }
+});
