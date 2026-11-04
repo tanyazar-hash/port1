@@ -1503,3 +1503,49 @@ body{background:#bccfdd!important;color:#173b57}
 @media(prefers-reduced-transparency:reduce){
  .process-card,.plan,.chatbox,.calculator,.faq-glass .faq-item{background:#e5eef4!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 }
+
+
+/* === KONTАKTIUM / MOTION SYSTEM — scroll-triggered, varied, accessible === */
+/* Motion runs on content only: not sticky wrappers, page geometry or live 3D canvas. */
+.scroll-animate{
+ --motion-delay:0ms;
+ --motion-y:0px;
+ --motion-x:0px;
+ --motion-scale:1;
+ --motion-blur:0px;
+ opacity:0!important;
+ transform:translate3d(var(--motion-x),var(--motion-y),0) scale(var(--motion-scale))!important;
+ filter:blur(var(--motion-blur));
+ transition:
+  opacity 820ms cubic-bezier(.2,.7,.2,1),
+  transform 980ms cubic-bezier(.16,1,.3,1),
+  filter 860ms cubic-bezier(.2,.7,.2,1)!important;
+ transition-delay:var(--motion-delay)!important;
+ will-change:opacity,transform;
+}
+.scroll-animate[data-motion="rise"]{--motion-y:46px;--motion-blur:3px}
+.scroll-animate[data-motion="slide-left"]{--motion-x:52px;--motion-blur:2px}
+.scroll-animate[data-motion="slide-right"]{--motion-x:-52px;--motion-blur:2px}
+.scroll-animate[data-motion="scale"]{--motion-y:22px;--motion-scale:.935;--motion-blur:4px}
+.scroll-animate[data-motion="fade"]{--motion-y:12px}
+.scroll-animate.visible{
+ --motion-y:0px;--motion-x:0px;--motion-scale:1;--motion-blur:0px;
+ opacity:1!important;transform:translate3d(0,0,0) scale(1)!important;filter:blur(0)!important;
+ will-change:auto;
+}
+/* Keep pointer interaction available while elements are revealed. */
+.scroll-animate:not(.visible){pointer-events:none}
+.scroll-animate.visible{pointer-events:auto}
+@media(max-width:720px){
+ .scroll-animate[data-motion="rise"]{--motion-y:25px;--motion-blur:1px}
+ .scroll-animate[data-motion="slide-left"]{--motion-x:24px;--motion-blur:1px}
+ .scroll-animate[data-motion="slide-right"]{--motion-x:-24px;--motion-blur:1px}
+ .scroll-animate[data-motion="scale"]{--motion-y:14px;--motion-scale:.965;--motion-blur:1px}
+}
+@media(prefers-reduced-motion:reduce){
+ .scroll-animate,.scroll-animate.visible{
+  opacity:1!important;transform:none!important;filter:none!important;
+  transition:none!important;transition-delay:0ms!important;
+  pointer-events:auto!important;
+ }
+}
