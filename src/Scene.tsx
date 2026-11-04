@@ -3,16 +3,17 @@ import { Float, MeshTransmissionMaterial, Stars } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
 
-function Sculpture({ entered }: { entered: boolean }) {
+function Sculpture({ entered, scrollProgress = 0 }: { entered: boolean; scrollProgress?: number }) {
   const mesh = useRef<THREE.Mesh>(null);
   useFrame(({ pointer, clock }, delta) => {
     if (!mesh.current) return;
     mesh.current.rotation.y += delta * (entered ? 0.22 : 0.12);
     mesh.current.rotation.x = THREE.MathUtils.damp(mesh.current.rotation.x, pointer.y * 0.24, 2, delta);
     mesh.current.rotation.z = THREE.MathUtils.damp(mesh.current.rotation.z, pointer.x * -0.16, 2, delta);
-    const scale = entered ? 1.55 : 1;
+    const scrollAmount = Math.min(1, scrollProgress / 12);
+    const scale = entered ? 1.55 : 1 + scrollAmount * 0.22;
     mesh.current.scale.lerp(new THREE.Vector3(scale, scale, scale), Math.min(delta * 2, 1));
-    mesh.current.position.y = Math.sin(clock.elapsedTime * 0.6) * 0.08;
+    mesh.current.position.y = Math.sin(clock.elapsedTime * 0.6) * 0.08 + Math.min(1, scrollProgress / 12) * 0.25;
   });
   return <Float speed={1.1} floatIntensity={0.35} rotationIntensity={0.12}>
     <mesh ref={mesh} rotation={[0.4, 0, 0.3]}>
@@ -22,7 +23,7 @@ function Sculpture({ entered }: { entered: boolean }) {
   </Float>;
 }
 
-export default function Scene({ entered }: { entered: boolean }) {
+export default function Scene({ entered, scrollProgress = 0 }: { entered: boolean; scrollProgress?: number }) {
   return <Canvas dpr={[1, 1.7]} camera={{ position: [0, 0, 6.4], fov: 43 }} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}>
     <color attach="background" args={['#101216']} />
     <fog attach="fog" args={['#101216', 8, 18]} />
@@ -30,6 +31,6 @@ export default function Scene({ entered }: { entered: boolean }) {
     <pointLight position={[-4, 3, 3]} intensity={32} color="#658f91" />
     <pointLight position={[4, -2, 2]} intensity={25} color="#e1eee8" />
     <pointLight position={[0, 4, -3]} intensity={18} color="#34545c" />
-    <Suspense fallback={null}><Sculpture entered={entered} /><Stars radius={40} depth={30} count={450} factor={2} saturation={0.5} fade speed={0.4} /></Suspense>
+    <Suspense fallback={null}><Sculpture entered={entered} scrollProgress={scrollProgress} /><Stars radius={40} depth={30} count={450} factor={2} saturation={0.5} fade speed={0.4} /></Suspense>
   </Canvas>;
 }
