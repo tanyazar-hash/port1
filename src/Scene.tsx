@@ -56,7 +56,8 @@ export default function Scene({ entered, scrollProgress = 0, storyProgress, hero
   return <Canvas dpr={[1, 1.5]} camera={{ position: [hero ? 1.35 : 0, 0, 7.8], fov: 43 }} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}>
     
     
-    <ambientLight intensity={0.9} />\n    <pointLight position={[-4, 3, 3]} intensity={12} color="#8fc5ee" />
+    <ambientLight intensity={0.9} />
+    <pointLight position={[-4, 3, 3]} intensity={12} color="#8fc5ee" />
     <pointLight position={[4, -2, 2]} intensity={14} color="#ffffff" />
     <pointLight position={[0, 4, -3]} intensity={9} color="#6d9ec9" />
     <Suspense fallback={null}><Sculpture entered={entered} scrollProgress={scrollProgress} storyProgress={storyProgress} hero={hero} /></Suspense>
