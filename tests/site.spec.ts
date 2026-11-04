@@ -156,8 +156,10 @@ test('pricing FAQ has light glass layout and accessible accordion', async ({ pag
   await expect(faq.getByText(/подключение выполняется/)).toBeVisible();
   await question.click();
   await expect(question).toHaveAttribute('aria-expanded','false');
-  const background=await faq.evaluate(el=>getComputedStyle(el).backgroundImage);
-  expect(background).toContain('gradient');
+  // FAQ shares the continuous site canvas instead of introducing a hard gradient seam.
+  await expect(faq).toHaveCSS('background-image', 'none');
+  const siteBackground=await page.locator('.site').evaluate(el=>getComputedStyle(el).backgroundImage);
+  expect(siteBackground).toContain('gradient');
 });
 
 
