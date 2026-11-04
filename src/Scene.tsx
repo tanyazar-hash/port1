@@ -46,7 +46,7 @@ function Sculpture({ entered, storyProgress, scrollProgress, hero = false }: { e
     <Float speed={0.75} floatIntensity={0.15} rotationIntensity={0.05}>
     <mesh ref={mesh} rotation={[0.4, 0, 0.3]}>
       <torusKnotGeometry args={[1.18, 0.35, 240, 24, 2, 3]} />
-      <MeshTransmissionMaterial backside samples={3} resolution={256} transmission={0.72} thickness={0.7} roughness={0.15} chromaticAberration={0.1} anisotropy={0.2} distortion={0.12} distortionScale={0.2} temporalDistortion={0.08} color={hero ? "#d6ebff" : "#9abedc"} metalness={0.1} />
+      <MeshTransmissionMaterial backside samples={3} resolution={256} transmission={0.85} thickness={0.7} roughness={0.08} chromaticAberration={0.1} anisotropy={0.2} distortion={0.12} distortionScale={0.2} temporalDistortion={0.08} color="#d6ebff" metalness={0.08} />
     </mesh>
     </Float>
   </>;
@@ -54,8 +54,8 @@ function Sculpture({ entered, storyProgress, scrollProgress, hero = false }: { e
 
 export default function Scene({ entered, scrollProgress = 0, storyProgress, hero = false }: { entered: boolean; scrollProgress?: number; storyProgress?: number; hero?: boolean }) {
   return <Canvas dpr={[1, 1.5]} camera={{ position: [hero ? 1.35 : 0, 0, 7.8], fov: 43 }} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}>
-    {!hero&&<color attach="background" args={['#101b2a']} />}
-    {!hero&&<fog attach="fog" args={['#101b2a', 8, 18]} />}
+    
+    
     <ambientLight intensity={1.4} />
     <pointLight position={[-4, 3, 3]} intensity={32} color="#8fc5ee" />
     <pointLight position={[4, -2, 2]} intensity={25} color="#ffffff" />
