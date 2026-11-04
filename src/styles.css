@@ -1102,3 +1102,55 @@ body,.site,.page-transition{background:#eaf4fc;color:#152b49}
  .feature-list .feature-row{padding-top:28px;padding-bottom:28px}
  .plan,.process-card{outline-offset:2px}
 }
+
+
+/* ICE GLASS 3.3 — hero art direction and luminous floating glass plaque */
+.hero-section{isolation:isolate}
+.hero-section .hero-visual{z-index:1;pointer-events:none}
+.hero-section .hero-glow{z-index:1;pointer-events:none}
+.hero-section .hero-content{z-index:3}
+.hero-section .hero-bottom{z-index:3}
+.hero-section .hero-grid{z-index:0}
+.hero-glass-note{
+ position:absolute;z-index:4;right:6.5vw;bottom:120px;
+ display:flex;align-items:center;gap:16px;width:min(355px,30vw);
+ padding:18px 20px;border-radius:22px;
+ background:linear-gradient(135deg,#ffffffd9,#eaf6ff87);
+ border:1px solid #ffffffef;
+ box-shadow:0 24px 65px #427da630,0 1px 0 #fff inset;
+ backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+ color:#244c70;transform:rotate(-3deg);
+ animation:hero-plaque-float 7s ease-in-out infinite;
+ pointer-events:none;
+}
+.hero-glass-note-icon{
+ width:43px;height:43px;flex:none;display:grid;place-items:center;
+ border-radius:15px;background:linear-gradient(145deg,#faffff,#b8dbf5);
+ border:1px solid #fff;color:#3b7ba9;font-size:23px;
+ box-shadow:0 7px 18px #538cb82e;
+}
+.hero-glass-note strong{display:block;font-size:10px;line-height:1.5;letter-spacing:.075em}
+.hero-glass-note small{display:block;margin-top:5px;font-size:11px;color:#6885a0;line-height:1.4}
+.hero-glass-note-arrow{margin-left:auto;color:#5b92bc;align-self:flex-start}
+@keyframes hero-plaque-float{
+ 0%,100%{transform:translateY(0) rotate(-3deg)}
+ 50%{transform:translateY(-12px) rotate(-1deg)}
+}
+.hero-section .fallback-orb{
+ border:1px solid #ffffff80;
+ box-shadow:inset -28px -36px 65px #2e6b9b55,inset 12px 15px 25px #fff8,0 26px 70px #689dcb45;
+}
+.hero-section .hero-glow{
+ border:1px solid #ffffffb8;
+ box-shadow:0 0 80px #76b4e450,inset 0 0 48px #ffffffa3;
+}
+@media(max-width:1100px){
+ .hero-glass-note{right:4vw;bottom:100px;width:275px;padding:14px}
+ .hero-glass-note strong{font-size:9px}
+}
+@media(max-width:800px){
+ .hero-glass-note{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .hero-glass-note{animation:none}
+}
