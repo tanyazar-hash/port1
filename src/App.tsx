@@ -105,7 +105,23 @@ function App(){
   const getPage=():Page=>{const h=window.location.hash.replace(/^#\/?/,'');return links.some(x=>x.id===h)?h as Page:'home';};
   const [storyProgress,setStoryProgress]=useState(0);const [page,setPage]=useState<Page>(getPage);const [menu,setMenu]=useState(false);const [webgl,setWebgl]=useState(false);const [reduced,setReduced]=useState(false);const [progress,setProgress]=useState(0);const [faq,setFaq]=useState<number|null>(0);
   useReveal(page);
-  useEffect(()=>{setWebgl(canUseWebGL());setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches);const onHash=()=>{setPage(getPage());window.scrollTo(0,0);};window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash);},[]);
+  // Browsers may restore an old scroll position after reload, sometimes into the sticky story.
+  // Own scroll restoration for this one-page hash-routed experience.
+  useLayoutEffect(()=>{
+    if('scrollRestoration' in window.history)window.history.scrollRestoration='manual';
+    const reset=()=>window.scrollTo({top:0,left:0,behavior:'instant'});
+    reset();
+    const onPageShow=()=>reset();
+    window.addEventListener('pageshow',onPageShow);
+    return()=>window.removeEventListener('pageshow',onPageShow);
+  },[]);
+  useEffect(()=>{
+    setWebgl(canUseWebGL());
+    setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const onHash=()=>{setPage(getPage());window.scrollTo({top:0,left:0,behavior:'instant'});};
+    window.addEventListener('hashchange',onHash);
+    return()=>window.removeEventListener('hashchange',onHash);
+  },[]);
   useEffect(()=>{let raf=0;const onScroll=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max*100:0);const story=document.querySelector('.scroll-story');if(story){const rect=story.getBoundingClientRect();const range=Math.max(1,rect.height-innerHeight);const raw=-rect.top/range;const t=Number.isFinite(raw)?Math.max(0,Math.min(1,raw)):0;setStoryProgress(t);(story as HTMLElement).style.setProperty('--story-progress',String(t));}});};window.addEventListener('scroll',onScroll,{passive:true});onScroll();return()=>{window.removeEventListener('scroll',onScroll);cancelAnimationFrame(raf);};},[page]);
   function jumpToChapter(index:number){
     const story=document.querySelector('.scroll-story');
@@ -116,7 +132,7 @@ function App(){
     const destination=top+range*((index+.5)/3);
     window.scrollTo({top:destination,behavior:reduced?'instant':'smooth'});
   }
-  function navigate(id:Page){setMenu(false);if(id===page){window.scrollTo({top:0,behavior:'smooth'});}else{window.location.hash='/'+id;setPage(id);window.scrollTo(0,0);}}
+  function navigate(id:Page){setMenu(false);if(id===page){window.scrollTo({top:0,behavior:'smooth'});}else{window.location.hash='/'+id;setPage(id);window.scrollTo({top:0,left:0,behavior:'instant'});}}
   const nav=(id:Page,label:string)=> <a key={id} href={'#/'+id} className={page===id?'active':''} onClick={()=>{setMenu(false);setPage(id);window.scrollTo(0,0);}}>{label}</a>;
   return <div className="site"><div className="scroll-progress" style={{width:progress+'%'}}/><header className="site-header"><button className="brand" onClick={()=>navigate('home')} aria-label="На главную"><span className="brand-icon">✳</span> КОНТАКТИУМ<span className="brand-dot">.</span></button><nav className={menu?'nav open':'nav'} aria-label="Навигация">{links.map(l=>nav(l.id,l.label))}</nav><a className="header-cta" href="https://kontaktium.ru/" target="_blank" rel="noopener noreferrer">Подключить <span>↗</span></a><button className="menu-toggle" onClick={()=>setMenu(v=>!v)} aria-label={menu?'Закрыть меню':'Открыть меню'} aria-expanded={menu}>{menu?'✕':'☰'}</button></header>
   <main key={page} className="page-transition">
