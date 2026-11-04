@@ -208,3 +208,25 @@ test('FAQ has light decorative glass artwork and no dark WebGL canvas', async ({
   await expect(page.locator('.faq-glass-orb')).toBeVisible();
   await expect(page.locator('.faq-sculpture canvas')).toHaveCount(0);
 });
+
+test('continuous site palette has transparent section backgrounds and readable story', async ({ page }) => {
+  await page.goto('/#/home');
+  const selectors = ['.hero-section', '.scroll-story', '.story-sticky', '.stat-band', '.split-section', '.demo-section', '.process-section', '.calculator-section', '.end-section'];
+  for (const selector of selectors) {
+    const background = await page.locator(selector).evaluate(el => getComputedStyle(el).backgroundColor);
+    expect(background, selector + ' should not create a hard background edge').toBe('rgba(0, 0, 0, 0)');
+  }
+  await expect(page.locator('.site')).not.toHaveCSS('background-image', 'none');
+  await expect(page.locator('.story-step.current h2')).toBeVisible();
+});
+
+test('editorial call to action has readable context and glass illustration', async ({ page }) => {
+  for (const route of ['home', 'features', 'about']) {
+    await page.goto('/#/' + route);
+    const cta = page.locator('.end-section');
+    await expect(cta.locator('.end-content h2')).toBeVisible();
+    await expect(cta.locator('.end-content p')).toBeVisible();
+    await expect(cta.locator('.end-art')).toBeVisible();
+    await expect(cta.getByRole('button')).toBeVisible();
+  }
+});
