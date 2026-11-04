@@ -15,19 +15,44 @@ function useReveal(page:Page){
     elements.forEach(el=>observer.observe(el));return()=>observer.disconnect();
   },[page]);
 }
+type DemoScenario = 'shop' | 'service' | 'software';
+const demoScenarios: Record<DemoScenario,{label:string;greeting:string;prompts:string[];answers:string[]}> = {
+  shop:{label:'Интернет-магазин',greeting:'Здравствуйте! Помогу подобрать товар и разобраться с доставкой. Что ищете?',prompts:['Помогите выбрать товар','Как оформить заказ?'],answers:['Расскажите, что для вас важно: цена, характеристики или срок доставки? Я помогу сузить выбор.','Подскажу основные шаги оформления. Для точных условий доставки нужно проверить информацию магазина.','Могу уточнить детали запроса, чтобы менеджер продолжил разговор. Это демонстрация — данные никуда не отправляются.']},
+  service:{label:'Услуги',greeting:'Добрый день! Расскажите, какая задача перед вами — помогу определить следующий шаг.',prompts:['Хочу узнать стоимость','Нужна консультация'],answers:['Стоимость зависит от объёма и сроков. Расскажите немного о задаче, чтобы подготовить запрос специалисту.','Давайте уточним цель и желаемый результат — так консультация будет предметнее.','Спасибо! В реальном сервисе такой контекст можно передать менеджеру. Здесь мы показываем только сценарий.']},
+  software:{label:'IT / SaaS',greeting:'Привет! Помогу разобраться с возможностями продукта и выбором подходящего решения.',prompts:['Какие есть возможности?','Подойдёт ли нам сервис?'],answers:['Начнём с главной задачи: автоматизация, поддержка клиентов или рост конверсии?','Расскажите о размере команды и процессе работы — это поможет понять, какой вариант стоит рассмотреть.','Я собрал контекст беседы. В реальном продукте его можно передать специалисту; в демо ничего не сохраняется.']}
+};
 function DemoChat(){
-  const [messages,setMessages]=useState<{from:'bot'|'user';text:string}[]>([{from:'bot',text:'Здравствуйте! 👋 Я виртуальный помощник. Подскажу, как не терять заявки. Что вас интересует?'}]);
+  const [scenario,setScenario]=useState<DemoScenario>('shop');
+  const [messages,setMessages]=useState<{from:'bot'|'user';text:string}[]>([{from:'bot',text:demoScenarios.shop.greeting}]);
   const [value,setValue]=useState('');
   const [stage,setStage]=useState(0);
   const chatEnd=useRef<HTMLDivElement>(null);
-  useEffect(() => { chatEnd.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, [messages]);
+  const timers=useRef<ReturnType<typeof setTimeout>[]>([]);
+  useEffect(()=>()=>{timers.current.forEach(clearTimeout);},[]);
+  useEffect(()=>{chatEnd.current?.scrollIntoView({behavior:'smooth',block:'nearest'});},[messages]);
+  function changeScenario(next:DemoScenario){
+    timers.current.forEach(clearTimeout);timers.current=[];
+    setScenario(next);setStage(0);setValue('');
+    setMessages([{from:'bot',text:demoScenarios[next].greeting}]);
+  }
   function reply(text:string){
     const input=text.trim();if(!input)return;
-    setMessages(m=>[...m,{from:'user',text:input}]);setValue('');
-    const next=stage===0?'Отлично! AI-консультант может первым начать разговор, ответить на вопросы и собрать контакты. Сколько посетителей бывает на вашем сайте?':stage===1?'Спасибо! Мы можем показать, как это будет выглядеть на вашем сайте. Это демонстрация интерфейса — реальные заявки здесь не отправляются.':'В демо можно попробовать разные вопросы. Для подключения настоящего сервиса перейдите на сайт Контактиум.';
-    setStage(s=>s+1);window.setTimeout(()=>setMessages(m=>[...m,{from:'bot',text:next}]),450);
+    const answer=demoScenarios[scenario].answers[Math.min(stage,2)];
+    setMessages(m=>[...m,{from:'user',text:input}]);setValue('');setStage(n=>n+1);
+    const timer=setTimeout(()=>{setMessages(m=>[...m,{from:'bot',text:answer}]);timers.current=timers.current.filter(t=>t!==timer);},400);
+    timers.current.push(timer);
   }
-  return <div className="chatbox"><div className="chathead"><span className="avatar">✦</span><div><strong>AI-консультант</strong><small><i/> Демо · онлайн</small></div><span className="chatbadge">LIVE DEMO</span></div><div className="messages">{messages.map((m,i)=><div key={i} className={'bubble '+m.from}>{m.text}</div>)}<div ref={chatEnd}/></div>{stage===0&&<div className="suggestions"><button onClick={()=>reply('Как это работает?')}>Как это работает?</button><button onClick={()=>reply('Хочу больше заявок')}>Хочу больше заявок</button></div>}<form className="chatinput" onSubmit={e=>{e.preventDefault();reply(value);}}><input aria-label="Сообщение для демо-чата" placeholder="Напишите сообщение..." value={value} onChange={e=>setValue(e.target.value)}/><button aria-label="Отправить сообщение" type="submit">↗</button></form><p className="demo-note">Интерактивная демонстрация, не подключённая к AI или CRM</p></div>;
+  return <div className="demo-experience">
+    <div className="scenario-picker" role="group" aria-label="Выберите тип бизнеса">
+      {(Object.keys(demoScenarios) as DemoScenario[]).map(key=><button key={key} type="button" className={scenario===key?'active':''} aria-pressed={scenario===key} onClick={()=>changeScenario(key)}>{demoScenarios[key].label}</button>)}
+    </div>
+    <div className="chatbox"><div className="chathead"><span className="avatar">✦</span><div><strong>AI-консультант</strong><small><i/> Симуляция · {demoScenarios[scenario].label}</small></div><span className="chatbadge">DEMO</span></div>
+      <div className="messages" role="log" aria-live="polite">{messages.map((m,i)=><div key={i} className={'bubble '+m.from}>{m.text}</div>)}<div ref={chatEnd}/></div>
+      {stage===0&&<div className="suggestions">{demoScenarios[scenario].prompts.map(prompt=><button key={prompt} type="button" onClick={()=>reply(prompt)}>{prompt}</button>)}</div>}
+      <form className="chatinput" onSubmit={e=>{e.preventDefault();reply(value);}}><input aria-label="Сообщение для демо-чата" placeholder="Напишите свой вопрос..." value={value} onChange={e=>setValue(e.target.value)}/><button aria-label="Отправить сообщение" type="submit">↗</button></form>
+      <p className="demo-note">Демонстрационный сценарий: ответы заранее подготовлены, данные не отправляются.</p>
+    </div>
+  </div>;
 }
 function Calculator(){
   const [visits,setVisits]=useState(3000);const [engagement,setEngagement]=useState(10);const [conversion,setConversion]=useState(20);
