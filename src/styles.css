@@ -321,3 +321,15 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d7e6
 .site-footer button{color:#c0d6c4}
 .fallback-orb{background:radial-gradient(circle at 30% 25%,#e2eae1,#a5bcb0 24%,#47675c 51%,#17241f 76%);box-shadow:inset -25px -30px 50px #10171a,0 0 95px #8db9af20}
 @media(max-width:720px){.nav{background:#19231e;border-color:#b9cdbb30}.hero-section{background:radial-gradient(ellipse at 60% 25%,#283c35,#101216 69%)}}
+
+
+/* v1.2 — scenario-led product demo */
+.demo-experience{width:100%;min-width:0;max-width:560px;margin-inline:auto}
+.scenario-picker{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.scenario-picker button{padding:11px 14px;border:1px solid #c6d8c344;border-radius:999px;background:#f2f4ee0a;color:#c3d0c6;font-size:12px;transition:background .2s,color .2s,border-color .2s}
+.scenario-picker button:hover{border-color:#d6e5d1a6}
+.scenario-picker button.active{background:#d8e4d8;color:#1c2b22;border-color:#d8e4d8}
+.demo-experience .chatbox{max-width:none}
+.demo-experience .messages{height:290px;scroll-behavior:smooth}
+.demo-experience .chatinput input{background:transparent}
+@media(max-width:720px){.scenario-picker button{font-size:11px;padding:10px 12px}.demo-experience .messages{height:270px}}
