@@ -152,3 +152,29 @@
 .story-step h2{font-size:clamp(44px,5.2vw,82px)}
 .story-step p{max-width:380px}
 @media(max-width:720px){.story-ambient:after{background:linear-gradient(0deg,#101216b3,transparent 85%)}.story-vignette{background:linear-gradient(0deg,#101216e8 0%,#1012169c 48%,transparent 88%)}.story-step{width:86%}.story-step h2{font-size:clamp(39px,8vw,59px)}}
+
+
+/* v0.9 — reliable scroll chapters. Overrides legacy conflicting :has rules. */
+.scroll-story{height:195svh;min-height:1050px;position:relative}
+.story-sticky{position:sticky;top:0;height:100svh;min-height:0;overflow:hidden}
+.story-steps{position:absolute;inset:0;z-index:6;pointer-events:none}
+.story-step,.story-step:first-child:not(.current),.story-step:has(~ .story-step.current){
+  position:absolute;left:7%;top:48%;width:min(60%,790px);
+  opacity:0;visibility:hidden;transform:translateY(-44%) translateY(18px);
+  filter:none;pointer-events:none;
+  transition:opacity .35s ease,transform .45s ease,visibility 0s linear .35s;
+}
+.story-step.current,.story-step:first-child.current{
+  opacity:1;visibility:visible;transform:translateY(-44%);
+  filter:none;transition:opacity .4s ease,transform .5s ease,visibility 0s;
+}
+.story-step.current h2,.story-step.current p,.story-step.current .story-num{opacity:1;visibility:visible}
+.chapter-nav{bottom:38px}
+.story-meter{top:50%}
+@media(max-width:720px){
+ .scroll-story{height:185svh;min-height:900px}
+ .story-sticky{height:100svh;min-height:0}
+ .story-step,.story-step:first-child:not(.current),.story-step:has(~ .story-step.current){left:6%;top:56%;width:86%}
+ .story-step.current,.story-step:first-child.current{transform:translateY(-44%)}
+ .chapter-nav{bottom:26px}
+}
