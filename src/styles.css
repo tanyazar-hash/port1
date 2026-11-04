@@ -1198,3 +1198,64 @@ body,.site,.page-transition{background:#eaf4fc;color:#152b49}
 @media(prefers-reduced-motion:reduce){
  .faq-glass .faq-item,.plan,.process-card{transition:none!important}
 }
+
+
+/* ICE GLASS 3.5 — sculptural FAQ composition, reference-inspired */
+.faq-section.faq-glass{
+ position:relative;isolation:isolate;
+ grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);
+ column-gap:clamp(28px,5vw,100px);
+ padding-block:clamp(100px,10vw,165px);
+ min-height:780px;
+ background:radial-gradient(ellipse 46% 68% at 36% 52%,#b3d7f1ab,transparent 88%),
+ linear-gradient(160deg,#f9fcff 2%,#e9f5fd 45%,#d6eaf9 100%);
+}
+.faq-section.faq-glass::before{
+ content:"";position:absolute;inset:-15% -10%;z-index:0;pointer-events:none;
+ background:linear-gradient(150deg,transparent 16%,#ffffff9c 35%,#d8ecfa4d 48%,#ffffff9e 62%,transparent 81%);
+ clip-path:polygon(0 0,38% 0,75% 30%,100% 53%,100% 83%,70% 68%,29% 35%,0 18%);
+ opacity:.8;
+}
+.faq-section.faq-glass::after{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:radial-gradient(ellipse 42% 18% at 46% 83%,#ffffffa8,transparent 95%);
+}
+.faq-glass .faq-art{position:relative;z-index:1;min-height:490px;align-self:stretch}
+.faq-glass .faq-art .section-kicker{position:relative;z-index:3;color:#3d6b91}
+.faq-glass .faq-art h2{
+ position:relative;z-index:3;pointer-events:none;
+ font-size:clamp(76px,7.2vw,138px);line-height:.93;
+ letter-spacing:-.085em;color:#1a3a59;
+ text-shadow:0 2px 0 #ffffff82;
+}
+.faq-glass .faq-art h2 span{color:#7fb6df}
+.faq-glass .faq-sculpture{
+ right:-13%;top:12%;width:95%;height:82%;opacity:1;
+ filter:drop-shadow(0 35px 32px #4b84b143);
+}
+.faq-glass .faq-glass-list{position:relative;z-index:3}
+.faq-glass .faq-item{
+ border-radius:22px;background:linear-gradient(115deg,#ffffffc7,#e5f3ffb3);
+ border:1px solid #ffffffed;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+ box-shadow:0 18px 42px #6c9cbd24,inset 0 1px #fff;
+}
+.faq-glass .faq-item button{color:#254a6a;font-weight:650}
+.faq-glass .faq-item p{color:#52728e;line-height:1.75}
+@media(max-width:1100px){
+ .faq-section.faq-glass{grid-template-columns:1fr;row-gap:25px;min-height:0}
+ .faq-glass .faq-art{min-height:390px}
+ .faq-glass .faq-art h2{font-size:clamp(72px,10vw,110px)}
+ .faq-glass .faq-sculpture{right:0;top:0;width:58%;height:100%}
+}
+@media(max-width:720px){
+ .faq-section.faq-glass{padding:78px 6vw 92px;row-gap:15px}
+ .faq-glass .faq-art{min-height:330px}
+ .faq-glass .faq-art h2{font-size:clamp(56px,12vw,82px)}
+ .faq-glass .faq-sculpture{right:-8%;top:8%;width:72%;height:90%;opacity:.86}
+ .faq-glass .faq-item{border-radius:18px}
+}
+@media(max-width:420px){
+ .faq-glass .faq-art{min-height:290px}
+ .faq-glass .faq-art h2{font-size:clamp(48px,11.7vw,60px)}
+ .faq-glass .faq-sculpture{right:-12%;width:78%;opacity:.78}
+}
