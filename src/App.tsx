@@ -41,6 +41,15 @@ function App(){
   useReveal(page);
   useEffect(()=>{setWebgl(canUseWebGL());setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches);const onHash=()=>{setPage(getPage());window.scrollTo(0,0);};window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash);},[]);
   useEffect(()=>{let raf=0;const onScroll=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max*100:0);const story=document.querySelector('.scroll-story');if(story){const rect=story.getBoundingClientRect();const range=Math.max(1,rect.height-innerHeight);const raw=-rect.top/range;const t=Number.isFinite(raw)?Math.max(0,Math.min(1,raw)):0;setStoryProgress(t);(story as HTMLElement).style.setProperty('--story-progress',String(t));const steps=story.querySelectorAll('.story-step');steps.forEach((el,i)=>el.classList.toggle('current',Math.min(2,Math.floor(t*3))===i));}});};window.addEventListener('scroll',onScroll,{passive:true});onScroll();return()=>{window.removeEventListener('scroll',onScroll);cancelAnimationFrame(raf);};},[page]);
+  function jumpToChapter(index:number){
+    const story=document.querySelector('.scroll-story');
+    if(!story)return;
+    const rect=story.getBoundingClientRect();
+    const top=window.scrollY+rect.top;
+    const range=Math.max(1,rect.height-window.innerHeight);
+    const destination=top+range*((index+.5)/3);
+    window.scrollTo({top:destination,behavior:reduced?'instant':'smooth'});
+  }
   function navigate(id:Page){setMenu(false);if(id===page){window.scrollTo({top:0,behavior:'smooth'});}else{window.location.hash='/'+id;setPage(id);window.scrollTo(0,0);}}
   const nav=(id:Page,label:string)=> <a key={id} href={'#/'+id} className={page===id?'active':''} onClick={()=>{setMenu(false);setPage(id);window.scrollTo(0,0);}}>{label}</a>;
   return <div className="site"><div className="scroll-progress" style={{width:progress+'%'}}/><header className="site-header"><button className="brand" onClick={()=>navigate('home')} aria-label="На главную"><span className="brand-icon">✳</span> КОНТАКТИУМ<span className="brand-dot">.</span></button><nav className={menu?'nav open':'nav'} aria-label="Навигация">{links.map(l=>nav(l.id,l.label))}</nav><a className="header-cta" href="https://kontaktium.ru/" target="_blank" rel="noopener noreferrer">Подключить <span>↗</span></a><button className="menu-toggle" onClick={()=>setMenu(v=>!v)} aria-label={menu?'Закрыть меню':'Открыть меню'} aria-expanded={menu}>{menu?'✕':'☰'}</button></header>
@@ -52,6 +61,9 @@ function App(){
         <div className="story-ambient" aria-hidden="true">{webgl&&!reduced?<SceneBoundary><Suspense fallback={<div className="story-orbit"><div className="story-core"/></div>}><Scene entered={false} storyProgress={storyProgress}/></Suspense></SceneBoundary>:<div className="story-orbit"><div className="story-core"/></div>}</div>
         <div className="story-vignette" aria-hidden="true"/>
         <div className="story-meter" aria-hidden="true"><span>THE JOURNEY</span><div><i style={{height:(storyProgress*100)+'%'}}/></div><span>0{Math.min(3,Math.floor(storyProgress*3)+1)} / 03</span></div>
+        <nav className="chapter-nav" aria-label="Этапы истории">
+          {['Интерес','Контакт','Результат'].map((label,index)=><button key={label} type="button" aria-label={`Перейти к этапу ${index+1}: ${label}`} aria-current={Math.min(2,Math.floor(storyProgress*3))===index?'step':undefined} className={Math.min(2,Math.floor(storyProgress*3))===index?'selected':''} onClick={()=>jumpToChapter(index)}><span className="chapter-index">0{index+1}</span><span className="chapter-label">{label}</span><span className="chapter-line"/></button>)}
+        </nav>
         <div className="story-steps">
           <div className="story-step"><span className="story-num">01 / ИНТЕРЕС</span><h2>КАЖДЫЙ ВИЗИТ<br/><em>ЧТО-ТО ЗНАЧИТ.</em></h2><p>Кто-то просто смотрит. Кто-то уже готов спросить. Важно почувствовать момент.</p></div>
           <div className="story-step"><span className="story-num">02 / КОНТАКТ</span><h2>ПЕРВЫЙ ШАГ<br/><em>ЗА НАМИ.</em></h2><p>Контактиум помогает начать разговор, когда внимание посетителя ещё здесь.</p></div>
