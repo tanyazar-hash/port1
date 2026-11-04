@@ -120,3 +120,25 @@
 .story-meter{z-index:7}
 .hero-visual .fallback-orb{left:67%;top:49%;width:min(30vw,390px);opacity:.8;filter:saturate(.5)}
 @media(max-width:720px){.scroll-story{height:210vh;min-height:1200px}.story-sticky{min-height:570px}.story-step{top:60%;width:86%}.hero-visual .fallback-orb{left:58%;top:35%;width:62vw;opacity:.55}}
+
+
+/* v0.7 — cinematic chapter navigation and soft atmospheric art direction */
+.chapter-nav{position:absolute;z-index:9;bottom:42px;left:7%;right:7%;display:flex;align-items:stretch;gap:12px;max-width:560px}
+.chapter-nav button{position:relative;display:flex;align-items:center;gap:12px;min-width:0;flex:1;padding:13px 2px 16px;background:none;border:0;color:#9faeaa;text-align:left;font:600 11px 'Space Grotesk',sans-serif;letter-spacing:.05em;transition:color .3s}
+.chapter-nav button:hover,.chapter-nav button.selected{color:#f0f4ee}
+.chapter-index{font-size:10px;opacity:.65}.chapter-label{white-space:nowrap}
+.chapter-line{position:absolute;bottom:0;left:0;right:0;height:2px;background:#b3c5bd3b;overflow:hidden}
+.chapter-line:after{content:'';display:block;width:100%;height:100%;background:#dcebe2;transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.chapter-nav button.selected .chapter-line:after{transform:scaleX(1)}
+.chapter-nav button:focus-visible{outline:2px solid #dcebe2;outline-offset:5px;border-radius:2px}
+.story-steps{bottom:75px}
+.story-step{transition:opacity .55s ease,transform .7s cubic-bezier(.2,.7,.2,1),filter .55s ease;filter:blur(10px)}
+.story-step.current{filter:blur(0)}
+.story-step:first-child:not(.current){filter:blur(10px)}
+.story-step:has(~ .story-step.current){filter:blur(10px)}
+.story-step p{max-width:440px}
+.hero-section:after{content:'';position:absolute;inset:auto 0 0;height:150px;pointer-events:none;background:linear-gradient(0deg,#101216,transparent);z-index:1}
+.hero-visual .fallback-orb{animation:orb-breathe 9s ease-in-out infinite;box-shadow:inset -25px -30px 50px #10171a,0 0 95px #8db9af20}
+@keyframes orb-breathe{0%,100%{border-radius:44% 56% 68% 32%/40% 38% 62% 60%;filter:saturate(.5)}50%{border-radius:54% 46% 48% 52%/52% 61% 39% 48%;filter:saturate(.7)}}
+@media(max-width:720px){.chapter-nav{left:6%;right:11%;bottom:25px;gap:10px}.chapter-nav button{font-size:10px;gap:6px}.story-step{top:57%}.story-steps{bottom:70px}}
+@media(prefers-reduced-motion:reduce){.hero-visual .fallback-orb{animation:none}.story-step{filter:none!important}.chapter-line:after{transition:none}}
