@@ -61,6 +61,8 @@ test('scroll story has readable content without NaN or blank stage', async ({ pa
     await expect(story).not.toContainText('NaN');
     await expect(story.locator('.story-step.current')).toHaveCount(1);
     await expect(story.locator('.story-step.current h2')).toBeVisible();
+    await expect(story.locator('.story-step.current')).toHaveCSS('opacity', '1');
+    await expect(story.locator('.story-step.current')).toHaveCSS('visibility', 'visible');
     await page.screenshot({ path: testInfo.outputPath('story-' + Math.round(fraction * 100) + '.png'), animations: 'disabled' });
   }
 });
