@@ -103,3 +103,20 @@
 .reveal.visible{opacity:1;transform:none}
 @media(min-width:1100px){.hero-content{padding-left:6vw}.hero-visual{left:40%}}
 @media(max-width:720px){.site-header{height:74px}.hero-section{min-height:820px}.hero-content{padding-top:160px;padding-bottom:110px;max-width:100%}.hero-content h1{font-size:clamp(45px,9vw,67px)}.hero-visual{left:5%;right:-35%;transform:translateY(-14%);opacity:.34}.story-step{left:6%;top:62%;width:87%}.story-step h2{font-size:clamp(39px,8vw,59px)}.story-vignette{background:linear-gradient(0deg,#101216c9 0%,#10121655 65%,transparent 100%)}}
+
+
+/* v0.6: reliable scroll stage, no dead empty panels */
+.scroll-story{height:225vh;min-height:1450px}
+.story-sticky{height:100svh;min-height:650px}
+.story-ambient{position:absolute;inset:0;z-index:0;overflow:hidden}
+.story-ambient canvas{display:block;width:100%!important;height:100%!important}
+.story-steps{z-index:5}
+.story-step{top:52%;width:min(76%,980px)}
+.story-step h2{max-width:850px}
+.story-step.current{opacity:1;visibility:visible}
+.story-step:first-child:not(.current){opacity:1}
+.story-step:has(~ .story-step.current){opacity:0}
+.story-vignette{z-index:2;pointer-events:none}
+.story-meter{z-index:7}
+.hero-visual .fallback-orb{left:67%;top:49%;width:min(30vw,390px);opacity:.8;filter:saturate(.5)}
+@media(max-width:720px){.scroll-story{height:210vh;min-height:1200px}.story-sticky{min-height:570px}.story-step{top:60%;width:86%}.hero-visual .fallback-orb{left:58%;top:35%;width:62vw;opacity:.55}}
