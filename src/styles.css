@@ -189,3 +189,62 @@ html,body,#root{overflow-x:clip}
 .story-sticky{position:sticky;top:0;height:100svh;overflow:hidden}
 .story-step.current{opacity:1!important;visibility:visible!important;filter:none!important}
 @media(max-width:720px){.scroll-story{height:240svh;min-height:1250px}}
+
+
+/* DESIGN SYSTEM / PHASE 1 — restrained editorial contrast, Nov 2026.
+   Intentionally scoped: never change scroll-story, sticky positioning or chapter visibility. */
+:root{--ink:#101216;--paper:#eeeFE9;--sage:#c4d3ca;--muted:#a8b7b1;--hairline:#ffffff24}
+body{background:var(--ink)}
+.site{background:var(--ink);color:#f1f2ed}
+.site-header{background:#101216ed;backdrop-filter:blur(18px);border-bottom:1px solid #ffffff18}
+.brand-icon{background:#c8d7cd;color:#24332d}
+.brand-dot,.footer-logo span{color:#b6c9bf}
+.nav a{color:#a6b4af;transition:color .25s ease}
+.nav a:hover,.nav a.active{color:#f5f6f1}
+.header-cta{border-color:#b6c9bf55;color:#f2f4ef;transition:background .25s,color .25s,transform .25s}
+.header-cta:hover{background:#cbd8d0;color:#17231d;transform:translateY(-2px)}
+.header-cta span{color:inherit}
+.scroll-progress{height:2px;background:#b6c9bf;box-shadow:none}
+.hero-section{background:radial-gradient(ellipse at 72% 43%,#273633 0%,#151c1d 38%,#101216 78%)}
+.hero-content h1 em,.inner-hero h1 em{color:#b9cec3}
+.hero-copy{color:#b6c1bb}
+.eyebrow,.section-kicker{color:#b9cbc1}
+.eyebrow-line{background:#b9cbc1}
+.primary-btn{background:#d5e0d7;color:#19241e;box-shadow:none;transition:transform .25s,background .25s}
+.primary-btn:hover{background:#f0f3eb;transform:translateY(-3px)}
+.text-btn{color:#e0e8e1}.text-btn span{color:#b8cfc1}
+.hero-bottom{color:#9facaa}
+.stat-band{background:#171d1e;border-color:#ffffff18}
+.stat-band strong{color:#e7ebe4}.stat-band span{color:#b0bdb5}
+.split-section,.process-section{background:#eeefe9;color:#1b2520}
+.split-section .section-kicker,.process-section .section-kicker{color:#526b5c}
+.split-section h2 span,.process-section h2 span{color:#7b9787}
+.split-copy p{color:#4d5c53}
+.inline-link{color:#344f3e;border-color:#748f7e}
+.process-card{background:#e3e7df;border:1px solid #a8b9ac70;border-radius:6px;transition:transform .35s ease,background .35s ease,border-color .35s ease}
+.process-card:hover{background:#d7e0d6;border-color:#8ca493;transform:translateY(-6px)}
+.process-card>span,.process-symbol{color:#5a7562}
+.process-card p{color:#526157}
+.demo-section{background:radial-gradient(ellipse at 80% 45%,#2a3936,#151d1e 64%,#101216)}
+.demo-intro>p,.section-lead{color:#bac7be}
+.orb-mini{color:#b4cabe;filter:none}
+.chatbox{background:#f1f2ec;color:#1b2a21;border-radius:18px;box-shadow:0 28px 75px #0005}
+.chathead{background:#fafbf7;border-color:#dce5dc}
+.avatar,.chatinput button{background:#506c59}
+.chatbadge{color:#526d59}
+.bubble.user{background:#506c59}
+.suggestions button{color:#425b48;border-color:#bdcfc0}
+.calculator-section{background:#171e1e}
+.calculator{background:#232e2a;border-color:#9bb3a244}
+.calc-controls label{color:#d5ddd5}.calc-controls input{accent-color:#b8cbb9}
+.calc-result{background:linear-gradient(145deg,#567360,#354e41);color:#f7f8f2}
+.end-section{background:radial-gradient(ellipse at 50% 45%,#2c3e34,#101716 70%)}
+.end-section h2 span{color:#b9cec3}
+.inner-hero{background:radial-gradient(ellipse at 85% 35%,#293d35,#101716 68%)}
+.inner-hero p{color:#b6c5bb}
+.feature-row{border-color:#ffffff25}.feature-row>span{color:#c4d6c7}.feature-row p{color:#adbbb2}
+.plan{background:#1b2622;border-color:#a7bbaa55}
+.plan.popular{background:#273a30;border-color:#b6cbb9}
+.popular-label{background:#c7d9cb;color:#21372a}
+@media(max-width:720px){.split-section,.process-section{background:#eeefe9}.process-card{min-height:260px}}
+@media(prefers-reduced-motion:reduce){.process-card,.primary-btn,.header-cta{transition:none!important}}
