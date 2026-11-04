@@ -144,3 +144,17 @@ test('features and about pages include a responsive robot showcase', async ({ pa
     await expect(page.locator('.inner-hero-robot')).not.toContainText('NaN');
   }
 });
+
+
+test('pricing FAQ has light glass layout and accessible accordion', async ({ page }) => {
+  await page.goto('/#/pricing');
+  const faq=page.locator('.faq-glass');
+  await expect(faq).toBeVisible();
+  await expect(faq.locator('.faq-sculpture')).toBeVisible();
+  const question=faq.getByRole('button',{name:/Нужно ли программировать/});
+  await question.click();
+  await expect(question).toHaveAttribute('aria-expanded','true');
+  await expect(faq.getByText(/подключение выполняется/)).toBeVisible();
+  const background=await faq.evaluate(el=>getComputedStyle(el).backgroundImage);
+  expect(background).toContain('gradient');
+});
