@@ -3,10 +3,10 @@ import { RoundedBox } from '@react-three/drei';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-const porcelain = {color:'#c7cfca',metalness:.42,roughness:.24};
-const graphite = {color:'#273331',metalness:.8,roughness:.27};
-const dark = {color:'#101a1b',metalness:.62,roughness:.22};
-const steel = {color:'#7b8b87',metalness:.92,roughness:.2};
+const porcelain = {color:'#e3eff9',metalness:.34,roughness:.19};
+const graphite = {color:'#294a66',metalness:.65,roughness:.24};
+const dark = {color:'#172f49',metalness:.56,roughness:.23};
+const steel = {color:'#9bc5e1',metalness:.82,roughness:.17};
 
 function Humanoid({interactive}:{interactive:boolean}){
   const head=useRef<THREE.Group>(null);
@@ -41,7 +41,7 @@ function Humanoid({interactive}:{interactive:boolean}){
         <mesh position={[side*1.31,-1.24,.04]} rotation={[0,0,side*.24]} scale={[.52,.69,.62]}><sphereGeometry args={[1,40,24]}/><meshStandardMaterial {...porcelain}/></mesh>
         <mesh position={[side*1.32,-1.55,.49]} rotation={[0,0,side*.28]}><torusGeometry args={[.31,.028,10,48]}/><meshStandardMaterial {...steel}/></mesh>
         <mesh position={[side*.43,-1.22,.61]} rotation={[0,0,side*.22]} scale={[.38,.36,.055]}><sphereGeometry args={[1,32,20]}/><meshStandardMaterial {...graphite}/></mesh>
-        <mesh position={[side*.43,-1.22,.67]}><sphereGeometry args={[.055,16,12]}/><meshStandardMaterial color="#a6dfca" emissive="#6ccca6" emissiveIntensity={1.2}/></mesh>
+        <mesh position={[side*.43,-1.22,.67]}><sphereGeometry args={[.055,16,12]}/><meshStandardMaterial color="#c0edff" emissive="#67b7ee" emissiveIntensity={1.2}/></mesh>
         <mesh position={[side*.95,-.93,.08]} rotation={[0,0,side*.4]}><cylinderGeometry args={[.065,.065,.7,16]}/><meshStandardMaterial {...steel}/></mesh>
       </group>)}
       {/* Mechanical collar and neck */}
