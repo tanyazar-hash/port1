@@ -152,9 +152,11 @@ test('pricing FAQ has light glass layout and accessible accordion', async ({ pag
   await expect(faq).toBeVisible();
   await expect(faq.locator('.faq-sculpture')).toBeVisible();
   const question=faq.getByRole('button',{name:/Нужно ли программировать/});
-  await question.click();
+  if (await question.getAttribute('aria-expanded') !== 'true') await question.click();
   await expect(question).toHaveAttribute('aria-expanded','true');
   await expect(faq.getByText(/подключение выполняется/)).toBeVisible();
+  await question.click();
+  await expect(question).toHaveAttribute('aria-expanded','false');
   const background=await faq.evaluate(el=>getComputedStyle(el).backgroundImage);
   expect(background).toContain('gradient');
 });
