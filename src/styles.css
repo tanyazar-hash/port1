@@ -1259,3 +1259,28 @@ body,.site,.page-transition{background:#eaf4fc;color:#152b49}
  .faq-glass .faq-art h2{font-size:clamp(48px,11.7vw,60px)}
  .faq-glass .faq-sculpture{right:-12%;width:78%;opacity:.78}
 }
+
+
+/* ICE GLASS 4.0 — final consistency and interaction pass */
+:root{color-scheme:light}
+.site{overflow:clip}
+.page-transition,.hero-section,.inner-hero,.faq-section{min-width:0}
+.faq-glass .faq-item [hidden]{display:none!important}
+.faq-glass .faq-item [role="region"]{padding-bottom:18px}
+.faq-glass .faq-item [role="region"] p{margin-bottom:0}
+.faq-glass .faq-item button:focus-visible{
+ outline:3px solid #368cbd;outline-offset:3px;border-radius:10px;
+}
+.robot-showcase canvas{display:block}
+@media(max-width:720px){
+ .hero-section,.inner-hero,.section{max-width:100%}
+ .hero-section .hero-content,.inner-hero .inner-hero-copy{min-width:0}
+ .faq-glass .faq-glass-list{min-width:0}
+ .faq-glass .faq-item{max-width:100%}
+ .faq-glass .faq-item button{overflow-wrap:anywhere}
+ .hero-section .hero-content h1{overflow-wrap:break-word}
+}
+@media(prefers-reduced-transparency:reduce){
+ .faq-glass .faq-item{background:#f4faff;border-color:#bcd8ed}
+ .hero-glass-note{background:#f4faff;backdrop-filter:none;-webkit-backdrop-filter:none}
+}
