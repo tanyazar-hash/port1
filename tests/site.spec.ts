@@ -253,3 +253,20 @@ test('scroll reveals remain readable when reduced motion is enabled', async ({ p
   await expect(page.locator('.faq-item').first()).toHaveClass(/visible/);
   await expect(page.locator('.faq-item').first()).toHaveCSS('opacity','1');
 });
+
+test('opening and reloading the site starts at the top instead of restoring the middle', async ({ page }) => {
+  await page.goto('/#/home');
+  await page.locator('.process-section').scrollIntoViewIfNeeded();
+  await expect.poll(()=>page.evaluate(()=>window.scrollY)).toBeGreaterThan(200);
+  await page.reload();
+  await expect.poll(()=>page.evaluate(()=>window.scrollY)).toBe(0);
+  await expect(page.locator('.hero-section')).toBeVisible();
+});
+
+test('switching pages resets scroll to the first screen', async ({ page }) => {
+  await page.goto('/#/home');
+  await page.locator('.process-section').scrollIntoViewIfNeeded();
+  await page.locator('.site-header .nav a[href="#/pricing"]').click();
+  await expect.poll(()=>page.evaluate(()=>window.scrollY)).toBe(0);
+  await expect(page.locator('.inner-hero')).toBeVisible();
+});
