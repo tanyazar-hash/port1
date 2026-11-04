@@ -178,3 +178,14 @@
  .story-step.current,.story-step:first-child.current{transform:translateY(-44%)}
  .chapter-nav{bottom:26px}
 }
+
+
+/* v1.0 — sticky scroll fix: overflow:hidden on an ancestor creates a
+   non-scrolling scroll container and prevents position:sticky from sticking. */
+html,body,#root{overflow-x:clip}
+.site{overflow:clip;overflow-x:clip;overflow-y:clip}
+.page-transition{overflow:visible}
+.scroll-story{height:260svh;min-height:1450px;overflow:visible}
+.story-sticky{position:sticky;top:0;height:100svh;overflow:hidden}
+.story-step.current{opacity:1!important;visibility:visible!important;filter:none!important}
+@media(max-width:720px){.scroll-story{height:240svh;min-height:1250px}}
