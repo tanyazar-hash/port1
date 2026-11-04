@@ -135,16 +135,15 @@ test('business demo switches scenarios and resets conversation', async ({ page }
 });
 
 
-test('features and about pages include a responsive robot showcase', async ({ page }) => {
+test('features and about pages use a decorative glass sculpture instead of a robot', async ({ page }) => {
   for (const route of ['features','about']) {
     await page.goto('/#/'+route);
     await expect(page.locator('.inner-hero-robot')).toBeVisible();
-    await expect(page.getByLabel('Интерактивный 3D-робот, который следит за курсором')).toBeVisible();
+    await expect(page.locator('.inner-hero-orb')).toBeVisible();
+    await expect(page.locator('.robot-showcase')).toHaveCount(0);
     await expect(page.locator('.inner-hero-robot h1')).toBeVisible();
-    await expect(page.locator('.inner-hero-robot')).not.toContainText('NaN');
   }
 });
-
 
 test('pricing FAQ has light glass layout and accessible accordion', async ({ page }) => {
   await page.goto('/#/pricing');
@@ -202,4 +201,10 @@ test('document metadata uses Kontaktium branding and Russian language', async ({
   await expect(page).toHaveTitle(/Контактиум/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /AI-консультант/);
+});
+
+test('FAQ has light decorative glass artwork and no dark WebGL canvas', async ({ page }) => {
+  await page.goto('/#/pricing');
+  await expect(page.locator('.faq-glass-orb')).toBeVisible();
+  await expect(page.locator('.faq-sculpture canvas')).toHaveCount(0);
 });
