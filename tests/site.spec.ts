@@ -117,3 +117,19 @@ test('sticky cinematic scene remains pinned while changing chapters', async ({ p
   await expect(story.locator('.story-step.current')).toBeVisible();
   await expect(page.getByRole('navigation', {name:'Этапы истории'})).toBeInViewport();
 });
+
+
+test('business demo switches scenarios and resets conversation', async ({ page }) => {
+  await page.goto('/#/home');
+  const selector=page.getByRole('group',{name:'Выберите тип бизнеса'});
+  await expect(selector.getByRole('button')).toHaveCount(3);
+  await selector.getByRole('button',{name:'Услуги'}).click();
+  await expect(selector.getByRole('button',{name:'Услуги'})).toHaveAttribute('aria-pressed','true');
+  await expect(page.locator('.bubble.bot').first()).toContainText('Расскажите');
+  await page.getByRole('button',{name:'Хочу узнать стоимость'}).click();
+  await expect(page.locator('.bubble.bot')).toHaveCount(2);
+  await selector.getByRole('button',{name:'IT / SaaS'}).click();
+  await expect(page.locator('.bubble.user')).toHaveCount(0);
+  await expect(page.locator('.bubble.bot')).toHaveCount(1);
+  await expect(page.locator('.bubble.bot')).toContainText('возможностями продукта');
+});
