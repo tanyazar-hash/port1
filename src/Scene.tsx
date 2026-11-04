@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, MeshTransmissionMaterial } from '@react-three/drei';
+import { Float } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -46,7 +46,7 @@ function Sculpture({ entered, storyProgress, scrollProgress, hero = false }: { e
     <Float speed={0.75} floatIntensity={0.15} rotationIntensity={0.05}>
     <mesh ref={mesh} rotation={[0.4, 0, 0.3]}>
       <torusKnotGeometry args={[1.18, 0.34, 300, 32, 2, 3]} />
-      <MeshTransmissionMaterial backside samples={4} resolution={256} transmission={0.98} thickness={1.25} ior={1.35} roughness={0.035} chromaticAberration={0.035} anisotropy={0.12} distortion={0.05} distortionScale={0.08} temporalDistortion={0.015} color="#c8e6ff" metalness={0} />
+      <meshPhysicalMaterial color="#abd8f1" roughness={0.14} metalness={0.14} clearcoat={1} clearcoatRoughness={0.07} emissive="#5faddb" emissiveIntensity={0.17} />
     </mesh>
     </Float>
   </>;
