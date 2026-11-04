@@ -9,10 +9,50 @@ class SceneBoundary extends Component<{children:ReactNode},{failed:boolean}> {
 function canUseWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch{return false;}}
 function useReveal(page:Page){
   useLayoutEffect(()=>{
-    const elements=document.querySelectorAll('.reveal');
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){elements.forEach(el=>el.classList.add('visible'));return;}
-    const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}}),{threshold:.04,rootMargin:'0px 0px 40px 0px'});
-    elements.forEach(el=>observer.observe(el));return()=>observer.disconnect();
+    // Give different elements distinct entrances without animating layout/sticky containers.
+    const variants: {selector:string; motion:string; stagger?:boolean}[] = [
+      {selector:'.hero-content > .hero-edition, .hero-content > .eyebrow',motion:'fade'},
+      {selector:'.hero-content > h1, .inner-hero h1, .faq-art h2',motion:'rise'},
+      {selector:'.hero-copy, .inner-hero p, .split-copy, .demo-intro p',motion:'slide-left'},
+      {selector:'.hero-actions, .hero-glass-note, .inner-hero-orb',motion:'scale'},
+      {selector:'.stat-band > div',motion:'rise',stagger:true},
+      {selector:'.section > .section-kicker, .section > h2, .demo-intro > h2',motion:'rise'},
+      {selector:'.split > h2, .calculator-section > div:first-child',motion:'slide-right'},
+      {selector:'.demo-experience, .chatbox, .calculator',motion:'scale'},
+      {selector:'.process-card, .plan, .feature-row',motion:'rise',stagger:true},
+      {selector:'.faq-item',motion:'slide-left',stagger:true},
+      {selector:'.end-content > *, .end-art',motion:'rise',stagger:true},
+      {selector:'.inner-hero .section-kicker, .faq-art .section-kicker',motion:'fade'},
+    ];
+    const root=document.querySelector('main');
+    if(!root)return;
+    const elements=new Set<HTMLElement>();
+    root.querySelectorAll<HTMLElement>('.reveal').forEach(el=>elements.add(el));
+    variants.forEach(({selector,motion,stagger})=>{
+      root.querySelectorAll<HTMLElement>(selector).forEach((el,index)=>{
+        if(el.closest('.story-sticky'))return;
+        el.classList.add('scroll-animate');
+        el.dataset.motion=motion;
+        if(stagger)el.style.setProperty('--motion-delay',String(Math.min(index%4,3)*105)+'ms');
+        elements.add(el);
+      });
+    });
+    const targets=[...elements];
+    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduceMotion||!('IntersectionObserver' in window)){
+      targets.forEach(el=>el.classList.add('visible'));
+      return;
+    }
+    const observer=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },{threshold:0.08,rootMargin:'0px 0px 80px 0px'});
+    targets.forEach(el=>observer.observe(el));
+    return()=>observer.disconnect();
   },[page]);
 }
 type DemoScenario = 'shop' | 'service' | 'software';
