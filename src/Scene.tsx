@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, MeshTransmissionMaterial, Stars } from '@react-three/drei';
+import { Float, MeshTransmissionMaterial, Environment } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
 import * as THREE from 'three';
 
@@ -21,11 +21,11 @@ function Sculpture({ entered, storyProgress, scrollProgress, hero = false }: { e
     const dive = ease(0.82, 1, t);
     const breathing = Math.sin(clock.elapsedTime * 0.45) * 0.5 + 0.5;
     if (rimLight.current) {
-      rimLight.current.intensity = THREE.MathUtils.damp(rimLight.current.intensity, 16 + chapterTwo * 10 + chapterThree * 6 + breathing * 3, 2, delta);
+      rimLight.current.intensity = THREE.MathUtils.damp(rimLight.current.intensity, 9 + chapterTwo * 3 + chapterThree * 2 + breathing * 1.5, 2, delta);
       rimLight.current.position.x = THREE.MathUtils.damp(rimLight.current.position.x, -3 + chapterTwo * 3 - chapterThree * 1.5, 2, delta);
     }
     if (keyLight.current) {
-      keyLight.current.intensity = THREE.MathUtils.damp(keyLight.current.intensity, 19 + chapterThree * 9, 2, delta);
+      keyLight.current.intensity = THREE.MathUtils.damp(keyLight.current.intensity, 12 + chapterThree * 3, 2, delta);
     }
     mesh.current.rotation.y += delta * (story ? 0.11 + (chapterTwo + chapterThree) * 0.09 : entered ? 0.22 : 0.12);
     mesh.current.rotation.x = THREE.MathUtils.damp(mesh.current.rotation.x, story ? 0.18 + chapterTwo * 0.4 - chapterThree * 0.2 : pointer.y * 0.24, 2, delta);
@@ -41,12 +41,12 @@ function Sculpture({ entered, storyProgress, scrollProgress, hero = false }: { e
     camera.lookAt(hero ? 0.45 : story ? 0.4 : 0, 0, 0);
   });
   return <>
-    <pointLight ref={rimLight} position={[-3, 3, 2]} intensity={16} color="#9cccf0" />
-    <pointLight ref={keyLight} position={[3, -2, 3]} intensity={19} color="#f4f9ff" />
+    <pointLight ref={rimLight} position={[-3, 3, 2]} intensity={9} color="#a9d7ff" />
+    <pointLight ref={keyLight} position={[3, -2, 3]} intensity={12} color="#ffffff" />
     <Float speed={0.75} floatIntensity={0.15} rotationIntensity={0.05}>
     <mesh ref={mesh} rotation={[0.4, 0, 0.3]}>
-      <torusKnotGeometry args={[1.18, 0.35, 240, 24, 2, 3]} />
-      <MeshTransmissionMaterial backside samples={3} resolution={256} transmission={0.85} thickness={0.7} roughness={0.08} chromaticAberration={0.1} anisotropy={0.2} distortion={0.12} distortionScale={0.2} temporalDistortion={0.08} color="#d6ebff" metalness={0.08} />
+      <torusKnotGeometry args={[1.18, 0.34, 300, 32, 2, 3]} />
+      <MeshTransmissionMaterial backside samples={4} resolution={256} transmission={0.98} thickness={1.25} ior={1.35} roughness={0.035} chromaticAberration={0.035} anisotropy={0.12} distortion={0.05} distortionScale={0.08} temporalDistortion={0.015} color="#c8e6ff" metalness={0} />
     </mesh>
     </Float>
   </>;
@@ -56,10 +56,10 @@ export default function Scene({ entered, scrollProgress = 0, storyProgress, hero
   return <Canvas dpr={[1, 1.5]} camera={{ position: [hero ? 1.35 : 0, 0, 7.8], fov: 43 }} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}>
     
     
-    <ambientLight intensity={1.4} />
-    <pointLight position={[-4, 3, 3]} intensity={32} color="#8fc5ee" />
-    <pointLight position={[4, -2, 2]} intensity={25} color="#ffffff" />
-    <pointLight position={[0, 4, -3]} intensity={18} color="#6d9ec9" />
-    <Suspense fallback={null}><Sculpture entered={entered} scrollProgress={scrollProgress} storyProgress={storyProgress} hero={hero} />{!hero&&<Stars radius={40} depth={30} count={350} factor={2} saturation={0.25} fade speed={0.25} />}</Suspense>
+    <ambientLight intensity={0.9} />\n    <Environment preset="city" environmentIntensity={0.65} />
+    <pointLight position={[-4, 3, 3]} intensity={12} color="#8fc5ee" />
+    <pointLight position={[4, -2, 2]} intensity={14} color="#ffffff" />
+    <pointLight position={[0, 4, -3]} intensity={9} color="#6d9ec9" />
+    <Suspense fallback={null}><Sculpture entered={entered} scrollProgress={scrollProgress} storyProgress={storyProgress} hero={hero} /></Suspense>
   </Canvas>;
 }
