@@ -100,3 +100,20 @@ test('interactive story chapters respond to clicks', async ({ page }) => {
   await chapters.getByRole('button', {name:/этапу 3: Результат/}).click();
   await expect(chapters.getByRole('button', {name:/этапу 3: Результат/})).toHaveAttribute('aria-current','step');
 });
+
+
+test('sticky cinematic scene remains pinned while changing chapters', async ({ page }) => {
+  await page.goto('/#/home');
+  const story = page.locator('.scroll-story');
+  const sticky = page.locator('.story-sticky');
+  await story.scrollIntoViewIfNeeded();
+  await page.evaluate(() => {
+    const el = document.querySelector('.scroll-story');
+    if (el) window.scrollTo(0, window.scrollY + el.getBoundingClientRect().top + window.innerHeight * 0.35);
+  });
+  await page.waitForTimeout(500);
+  const position = await sticky.evaluate(el => el.getBoundingClientRect().top);
+  expect(Math.abs(position)).toBeLessThan(10);
+  await expect(story.locator('.story-step.current')).toBeVisible();
+  await expect(page.getByRole('navigation', {name:'Этапы истории'})).toBeInViewport();
+});
