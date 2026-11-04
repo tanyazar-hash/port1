@@ -759,3 +759,50 @@ body,.site,.page-transition{background:#101b2a;color:#f6f8fa}
  .inner-hero.inner-hero-robot{background:linear-gradient(180deg,#2d4d68,#1a3047)}
  .nav{background:#20384e}
 }
+
+
+/* GLASS / ICE BLUE — luminous FAQ and carefully blended white sections */
+.faq-section.faq-glass{
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);
+ align-items:center;gap:4vw;position:relative;isolation:isolate;
+ min-height:760px;padding:105px 6vw 110px;overflow:hidden;
+ background:
+ radial-gradient(ellipse 44% 70% at 52% 50%,#b5d7f1c9,transparent 88%),
+ radial-gradient(ellipse 55% 55% at 90% 8%,#c7e3f8,transparent 90%),
+ linear-gradient(180deg,#dcebf7 0%,#f6f9fc 25%,#eaf4fc 76%,#cbdff0 100%);
+ color:#142b47;
+}
+.faq-glass:before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 5% 20%,#fff9,transparent 45%)}
+.faq-glass .faq-art{position:relative;min-height:540px;align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+.faq-glass .section-kicker{color:#4b779d}
+.faq-glass h2{position:relative;z-index:2;color:#152a45;font-size:clamp(65px,6.6vw,120px);line-height:.98;letter-spacing:-.08em;pointer-events:none}
+.faq-glass h2 span{color:#6599c2}
+.faq-sculpture{position:absolute;z-index:1;right:-12%;top:5%;height:90%;width:72%;pointer-events:none;filter:drop-shadow(0 24px 28px #417aa63b)}
+.faq-sculpture canvas{background:transparent!important}
+.faq-sculpture-fallback{height:100%;width:100%;border-radius:45%;background:radial-gradient(circle at 28% 22%,#fff,#badbf4 31%,#6798c1 65%,#335a81 90%);box-shadow:inset -25px -30px 50px #3d709b66,0 30px 60px #598db64d;transform:scale(.68)}
+.faq-glass-list{position:relative;z-index:3;display:flex;flex-direction:column;gap:13px}
+.faq-glass .faq-item{background:#ffffff50;border:1px solid #fffdfdca;border-radius:22px;box-shadow:0 8px 35px #4c7ba11b,inset 0 1px #fff9;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:0 24px;overflow:hidden;transition:background .25s,box-shadow .25s}
+.faq-glass .faq-item:hover{background:#ffffff88;box-shadow:0 12px 42px #4779a72a}
+.faq-glass .faq-item button{color:#162d4b;font-weight:650;font-size:15px;min-height:75px;line-height:1.4}
+.faq-glass .faq-item button span{color:#284d75}
+.faq-glass .faq-item p{color:#48617e;line-height:1.8;border-top:1px solid #7fa8ca30;margin-top:0;padding-top:18px;padding-bottom:23px}
+.faq-glass .faq-item button:focus-visible{outline:2px solid #3d7cb1;outline-offset:-5px}
+.pricing-grid{background:linear-gradient(180deg,#1b3047 0%,#324d67 57%,#698ba9 100%)}
+.faq-glass+.end-section{background:linear-gradient(180deg,#cbdff0 0%,#8db4d2 20%,#476e90 60%,#263f59 100%);color:#132e4a}
+.faq-glass+.end-section h2{color:#163451}
+.faq-glass+.end-section h2 span{color:#315e85}
+.faq-glass+.end-section .primary-btn{background:#fff;color:#1a3956;border-color:#fff}
+@media(max-width:900px){
+ .faq-section.faq-glass{grid-template-columns:1fr;gap:12px;padding:85px 6vw 95px}
+ .faq-glass .faq-art{min-height:360px}
+ .faq-glass h2{font-size:clamp(60px,11vw,95px)}
+ .faq-sculpture{right:0;top:0;width:55%;height:100%}
+}
+@media(max-width:720px){
+ .faq-section.faq-glass{padding:75px 6vw 90px}
+ .faq-glass .faq-art{min-height:330px}
+ .faq-sculpture{right:-10%;width:70%;opacity:.72}
+ .faq-glass h2{font-size:clamp(57px,12vw,82px)}
+ .faq-glass .faq-item{border-radius:17px;padding:0 18px}
+ .faq-glass .faq-item button{font-size:14px;min-height:68px}
+}
