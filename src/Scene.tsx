@@ -14,19 +14,20 @@ function Sculpture({ entered, storyProgress, scrollProgress, hero = false }: { e
     if (!mesh.current) return;
     const story = storyProgress !== undefined;
     const t = story && Number.isFinite(storyProgress) ? Math.max(0, Math.min(1, storyProgress!)) : 0;
-    const approach = ease(0.06, 0.73, t);
-    const dive = ease(0.72, 0.99, t);
-    mesh.current.rotation.y += delta * (story ? 0.15 + approach * 0.8 : entered ? 0.22 : 0.12);
-    mesh.current.rotation.x = THREE.MathUtils.damp(mesh.current.rotation.x, story ? approach * 0.55 : pointer.y * 0.24, 2, delta);
-    mesh.current.rotation.z = THREE.MathUtils.damp(mesh.current.rotation.z, story ? -approach * 0.4 : pointer.x * -0.16, 2, delta);
-    const scale = story ? 0.72 + approach * 0.48 : hero ? 0.68 : entered ? 1.1 : 0.9;
+    const chapterTwo = ease(0.22, 0.52, t);
+    const chapterThree = ease(0.56, 0.88, t);
+    const dive = ease(0.82, 1, t);
+    mesh.current.rotation.y += delta * (story ? 0.13 + approach * 0.22 : entered ? 0.22 : 0.12);
+    mesh.current.rotation.x = THREE.MathUtils.damp(mesh.current.rotation.x, story ? 0.18 + chapterTwo * 0.4 - chapterThree * 0.2 : pointer.y * 0.24, 2, delta);
+    mesh.current.rotation.z = THREE.MathUtils.damp(mesh.current.rotation.z, story ? -chapterTwo * 0.35 + chapterThree * 0.5 : pointer.x * -0.16, 2, delta);
+    const scale = story ? 0.8 + chapterTwo * 0.16 + chapterThree * 0.2 : hero ? 0.68 : entered ? 1.1 : 0.9;
     mesh.current.scale.setScalar(THREE.MathUtils.damp(mesh.current.scale.x, scale, 3, delta));
-    mesh.current.position.y = Math.sin(clock.elapsedTime * 0.6) * 0.08 + (story ? -approach * 0.25 : Math.min(1, scrollProgress / 12) * 0.25);
-    mesh.current.position.x = story ? THREE.MathUtils.damp(mesh.current.position.x, -0.3 * approach + 0.6 * dive, 3, delta) : 0;
-    const targetZ = story ? 7.7 - approach * 2.1 - dive * 5.2 : 7.8;
+    mesh.current.position.y = Math.sin(clock.elapsedTime * 0.6) * 0.06 + (story ? chapterTwo * 0.2 - chapterThree * 0.35 : Math.min(1, scrollProgress / 12) * 0.25);
+    mesh.current.position.x = story ? THREE.MathUtils.damp(mesh.current.position.x, 1.5 - chapterTwo * 0.55 + chapterThree * 0.3, 2.5, delta) : 0;
+    const targetZ = story ? 8.6 - chapterTwo * 0.8 - chapterThree * 1.1 - dive * 0.7 : 7.8;
     camera.position.z = THREE.MathUtils.damp(camera.position.z, targetZ, 2.5, delta);
-    camera.position.x = THREE.MathUtils.damp(camera.position.x, story ? 0.15 * approach : hero ? 1.35 : 0, 2, delta);
-    camera.lookAt(hero ? 0.45 : 0, 0, 0);
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, story ? -0.5 + chapterTwo * 0.25 - chapterThree * 0.25 : hero ? 1.35 : 0, 2, delta);
+    camera.lookAt(hero ? 0.45 : story ? 0.4 : 0, 0, 0);
   });
   return <Float speed={1.1} floatIntensity={0.24} rotationIntensity={0.08}>
     <mesh ref={mesh} rotation={[0.4, 0, 0.3]}>
