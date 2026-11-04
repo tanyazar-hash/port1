@@ -66,10 +66,15 @@ function DemoChat(){
   const [messages,setMessages]=useState<{from:'bot'|'user';text:string}[]>([{from:'bot',text:demoScenarios.shop.greeting}]);
   const [value,setValue]=useState('');
   const [stage,setStage]=useState(0);
-  const chatEnd=useRef<HTMLDivElement>(null);
+  const messagesRef=useRef<HTMLDivElement>(null);
   const timers=useRef<ReturnType<typeof setTimeout>[]>([]);
   useEffect(()=>()=>{timers.current.forEach(clearTimeout);},[]);
-  useEffect(()=>{chatEnd.current?.scrollIntoView({behavior:'smooth',block:'nearest'});},[messages]);
+  // Scroll only inside the chat log. scrollIntoView on mount used to pull
+  // the entire document down to this off-screen demo section.
+  useLayoutEffect(()=>{
+    const log=messagesRef.current;
+    if(log)log.scrollTop=log.scrollHeight;
+  },[messages]);
   function changeScenario(next:DemoScenario){
     timers.current.forEach(clearTimeout);timers.current=[];
     setScenario(next);setStage(0);setValue('');
@@ -88,7 +93,7 @@ function DemoChat(){
       {(Object.keys(demoScenarios) as DemoScenario[]).map(key=><button key={key} type="button" className={scenario===key?'active':''} aria-pressed={scenario===key} onClick={()=>changeScenario(key)}>{demoScenarios[key].label}</button>)}
     </div>
     <div className="chatbox"><div className="chathead"><span className="avatar">✦</span><div><strong>AI-консультант</strong><small><i/> Симуляция · {demoScenarios[scenario].label}</small></div><span className="chatbadge">DEMO</span></div>
-      <div className="messages" role="log" aria-live="polite">{messages.map((m,i)=><div key={i} className={'bubble '+m.from}>{m.text}</div>)}<div ref={chatEnd}/></div>
+      <div ref={messagesRef} className="messages" role="log" aria-live="polite">{messages.map((m,i)=><div key={i} className={'bubble '+m.from}>{m.text}</div>)}</div>
       {stage===0&&<div className="suggestions">{demoScenarios[scenario].prompts.map(prompt=><button key={prompt} type="button" onClick={()=>reply(prompt)}>{prompt}</button>)}</div>}
       <form className="chatinput" onSubmit={e=>{e.preventDefault();reply(value);}}><input aria-label="Сообщение для демо-чата" placeholder="Напишите свой вопрос..." value={value} onChange={e=>setValue(e.target.value)}/><button aria-label="Отправить сообщение" type="submit">↗</button></form>
       <p className="demo-note">Демонстрационный сценарий: ответы заранее подготовлены, данные не отправляются.</p>
