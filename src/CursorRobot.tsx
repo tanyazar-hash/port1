@@ -1,6 +1,6 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { RoundedBox } from '@react-three/drei';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 function Robot({interactive}:{interactive:boolean}){
@@ -8,10 +8,17 @@ function Robot({interactive}:{interactive:boolean}){
   const body=useRef<THREE.Group>(null);
   const eyes=useRef<THREE.Group>(null);
   const gaze=useRef(new THREE.Vector2());
-  useFrame(({pointer,clock},delta)=>{
+  const cursor=useRef(new THREE.Vector2());
+  useEffect(()=>{
+    if(!interactive)return;
+    const onMove=(event:PointerEvent)=>{cursor.current.set((event.clientX/window.innerWidth)*2-1,1-(event.clientY/window.innerHeight)*2);};
+    window.addEventListener('pointermove',onMove,{passive:true});
+    return()=>window.removeEventListener('pointermove',onMove);
+  },[interactive]);
+  useFrame(({clock},delta)=>{
     if(!head.current||!body.current||!eyes.current)return;
-    const x=interactive?THREE.MathUtils.clamp(pointer.x,-1,1):Math.sin(clock.elapsedTime*.45)*.24;
-    const y=interactive?THREE.MathUtils.clamp(pointer.y,-1,1):Math.cos(clock.elapsedTime*.5)*.12;
+    const x=interactive?THREE.MathUtils.clamp(cursor.current.x,-1,1):Math.sin(clock.elapsedTime*.45)*.24;
+    const y=interactive?THREE.MathUtils.clamp(cursor.current.y,-1,1):Math.cos(clock.elapsedTime*.5)*.12;
     gaze.current.lerp(new THREE.Vector2(x,y),1-Math.exp(-delta*4));
     head.current.rotation.y=THREE.MathUtils.damp(head.current.rotation.y,gaze.current.x*.5,3,delta);
     head.current.rotation.x=THREE.MathUtils.damp(head.current.rotation.x,-gaze.current.y*.23,3,delta);
