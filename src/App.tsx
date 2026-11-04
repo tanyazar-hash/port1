@@ -1,38 +1,62 @@
-import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
+import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
 const Scene = lazy(() => import('./Scene'));
-
-class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false };
-  static getDerivedStateFromError() { return { failed: true }; }
-  render() { return this.state.failed ? <div className="fallback-orb" aria-hidden="true" /> : this.props.children; }
+type Page = 'home' | 'features' | 'pricing' | 'about';
+const links: { id: Page; label: string }[] = [{id:'home',label:'Главная'},{id:'features',label:'Возможности'},{id:'pricing',label:'Тарифы'},{id:'about',label:'О сервисе'}];
+class SceneBoundary extends Component<{children:ReactNode},{failed:boolean}> {
+  state={failed:false}; static getDerivedStateFromError(){return {failed:true};}
+  render(){return this.state.failed?<div className="fallback-orb"/>:this.props.children;}
 }
-
-function supportsWebGL() {
-  try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; }
+function canUseWebGL(){try{const c=document.createElement('canvas');return !!(c.getContext('webgl2')||c.getContext('webgl'));}catch{return false;}}
+function useReveal(page:Page){
+  useEffect(()=>{
+    const elements=document.querySelectorAll('.reveal');
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){elements.forEach(el=>el.classList.add('visible'));return;}
+    const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}}),{threshold:.12,rootMargin:'0px 0px -35px 0px'});
+    elements.forEach(el=>observer.observe(el));return()=>observer.disconnect();
+  },[page]);
 }
-
-export default function App() {
-  const [entered, setEntered] = useState(false);
-  const [canRender, setCanRender] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  useEffect(() => {
-    setCanRender(supportsWebGL());
-    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => setReduceMotion(query.matches);
-    sync(); query.addEventListener('change', sync);
-    return () => query.removeEventListener('change', sync);
-  }, []);
-  return <main className={entered ? 'experience entered' : 'experience'}>
-    <div className="grain" aria-hidden="true" />
-    <header className="topbar"><a className="wordmark" href="/" onClick={(e) => { e.preventDefault(); setEntered(false); }}>O<span>∕</span>S</a><span className="topnote">INDEPENDENT DIGITAL EXPERIMENT · 001</span><span className="status"><i /> LIVE EXPERIENCE</span></header>
-    <div className="visual" aria-hidden="true">{canRender && !reduceMotion ? <SceneBoundary><Suspense fallback={<div className="fallback-orb" />}><Scene entered={entered} /></Suspense></SceneBoundary> : <div className="fallback-orb" />}</div>
-    <div className="halo" aria-hidden="true" />
-    <section className="hero" aria-live="polite">
-      <p className="eyebrow">{entered ? 'CHAPTER 01 — THE DESCENT' : 'AN EXPERIMENT IN PERCEPTION'}</p>
-      <h1>{entered ? <>YOU ARE<br/><em>ELSEWHERE.</em></> : <>BEYOND<br/><em>THE SCREEN.</em></>}</h1>
-      <p className="description">{entered ? 'There is no map for what comes next. Only the unknown, and your curiosity.' : 'Reality is just the beginning. Step into a space beyond the ordinary.'}</p>
-      <button className="enter" onClick={() => setEntered(v => !v)}><span className="arrow">{entered ? '↖' : '↗'}</span><span>{entered ? 'RETURN TO ORIGIN' : 'ENTER EXPERIENCE'}</span></button>
-    </section>
-    <footer className="footer"><span>OTHERSPACE © 2026</span><span>SCROLL LESS. FEEL MORE.</span><span>01 / 02</span></footer>
-  </main>;
+function DemoChat(){
+  const [messages,setMessages]=useState<{from:'bot'|'user';text:string}[]>([{from:'bot',text:'Здравствуйте! 👋 Я виртуальный помощник. Подскажу, как не терять заявки. Что вас интересует?'}]);
+  const [value,setValue]=useState('');
+  const [stage,setStage]=useState(0);
+  const chatEnd=useRef<HTMLDivElement>(null);
+  useEffect(()=>chatEnd.current?.scrollIntoView({behavior:'smooth',block:'nearest'}),[messages]);
+  function reply(text:string){
+    const input=text.trim();if(!input)return;
+    setMessages(m=>[...m,{from:'user',text:input}]);setValue('');
+    const next=stage===0?'Отлично! AI-консультант может первым начать разговор, ответить на вопросы и собрать контакты. Сколько посетителей бывает на вашем сайте?':stage===1?'Спасибо! Мы можем показать, как это будет выглядеть на вашем сайте. Это демонстрация интерфейса — реальные заявки здесь не отправляются.':'В демо можно попробовать разные вопросы. Для подключения настоящего сервиса перейдите на сайт Контактиум.';
+    setStage(s=>s+1);window.setTimeout(()=>setMessages(m=>[...m,{from:'bot',text:next}]),450);
+  }
+  return <div className="chatbox"><div className="chathead"><span className="avatar">✦</span><div><strong>AI-консультант</strong><small><i/> Демо · онлайн</small></div><span className="chatbadge">LIVE DEMO</span></div><div className="messages">{messages.map((m,i)=><div key={i} className={'bubble '+m.from}>{m.text}</div>)}<div ref={chatEnd}/></div>{stage===0&&<div className="suggestions"><button onClick={()=>reply('Как это работает?')}>Как это работает?</button><button onClick={()=>reply('Хочу больше заявок')}>Хочу больше заявок</button></div>}<form className="chatinput" onSubmit={e=>{e.preventDefault();reply(value);}}><input aria-label="Сообщение для демо-чата" placeholder="Напишите сообщение..." value={value} onChange={e=>setValue(e.target.value)}/><button aria-label="Отправить сообщение" type="submit">↗</button></form><p className="demo-note">Интерактивная демонстрация, не подключённая к AI или CRM</p></div>;
 }
+function Calculator(){
+  const [visits,setVisits]=useState(3000);const [engagement,setEngagement]=useState(10);const [conversion,setConversion]=useState(20);
+  const dialogs=Math.round(visits*engagement/100);const leads=Math.round(dialogs*conversion/100);
+  return <div className="calculator"><div className="calc-controls"><label>Посетителей в месяц <strong>{visits.toLocaleString('ru-RU')}</strong><input type="range" min="500" max="20000" step="500" value={visits} onChange={e=>setVisits(+e.target.value)}/></label><label>Начали диалог <strong>{engagement}%</strong><input type="range" min="1" max="30" value={engagement} onChange={e=>setEngagement(+e.target.value)}/></label><label>Оставили контакт <strong>{conversion}%</strong><input type="range" min="5" max="40" value={conversion} onChange={e=>setConversion(+e.target.value)}/></label></div><div className="calc-result"><span>ПОТЕНЦИАЛЬНЫЕ ЗАЯВКИ</span><strong>{leads}</strong><p>в месяц при выбранных параметрах</p><div className="calc-mini">{dialogs} диалогов · {leads} контактов</div></div><p className="calc-disclaimer">Иллюстративный расчёт, не прогноз и не гарантия результата.</p></div>;
+}
+const plans=[{name:'Старт',price:'1 900',dialogs:'30',desc:'Для первого знакомства с AI-продажами',items:['AI изучает ваш сайт','Сбор контактов','Передача диалогов менеджеру']},{name:'Рост',price:'2 900',dialogs:'80',desc:'Для активного потока обращений',items:['Всё из тарифа «Старт»','Больше диалогов','Аналитика по лидам'],popular:true},{name:'Про',price:'3 900',dialogs:'150',desc:'Для каталогов и растущего бизнеса',items:['Всё из тарифа «Рост»','Консультации по каталогу','Расширенная аналитика']}];
+function App(){
+  const getPage=():Page=>{const h=window.location.hash.replace('#/','');return links.some(x=>x.id===h)?h as Page:'home';};
+  const [page,setPage]=useState<Page>(getPage);const [menu,setMenu]=useState(false);const [webgl,setWebgl]=useState(false);const [reduced,setReduced]=useState(false);const [progress,setProgress]=useState(0);const [faq,setFaq]=useState<number|null>(0);
+  useReveal(page);
+  useEffect(()=>{setWebgl(canUseWebGL());setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches);const onHash=()=>{setPage(getPage());window.scrollTo({top:0,behavior:'instant'});};window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash);},[]);
+  useEffect(()=>{const onScroll=()=>{const max=document.documentElement.scrollHeight-innerHeight;setProgress(max>0?scrollY/max*100:0);};window.addEventListener('scroll',onScroll,{passive:true});onScroll();return()=>window.removeEventListener('scroll',onScroll);},[page]);
+  function navigate(id:Page){setMenu(false);if(id===page){window.scrollTo({top:0,behavior:'smooth'});}else{window.location.hash='/'+id;setPage(id);window.scrollTo({top:0,behavior:'instant'});}}
+  const nav=(id:Page,label:string)=> <button key={id} className={page===id?'active':''} onClick={()=>navigate(id)}>{label}</button>;
+  return <div className="site"><div className="scroll-progress" style={{width:progress+'%'}}/><header className="site-header"><button className="brand" onClick={()=>navigate('home')} aria-label="На главную"><span className="brand-icon">✳</span> КОНТАКТИУМ<span className="brand-dot">.</span></button><nav className={menu?'nav open':'nav'} aria-label="Навигация">{links.map(l=>nav(l.id,l.label))}</nav><a className="header-cta" href="https://kontaktium.ru/" target="_blank" rel="noopener noreferrer">Подключить <span>↗</span></a><button className="menu-toggle" onClick={()=>setMenu(v=>!v)} aria-label={menu?'Закрыть меню':'Открыть меню'} aria-expanded={menu}>{menu?'✕':'☰'}</button></header>
+  <main key={page} className="page-transition">
+  {page==='home'&&<>
+    <section className="hero-section"><div className="hero-grid"/><div className="hero-visual" aria-hidden="true">{webgl&&!reduced?<SceneBoundary><Suspense fallback={<div className="fallback-orb"/>}><Scene entered={false}/></Suspense></SceneBoundary>:<div className="fallback-orb"/>}</div><div className="hero-glow"/><div className="hero-content"><div className="eyebrow"><span className="eyebrow-line"/> ИНТЕЛЛЕКТУАЛЬНЫЙ СЕРВИС ДЛЯ БИЗНЕСА</div><h1>САЙТ МОЛЧИТ.<br/><em>МЫ НАЧНЁМ</em><br/>ДИАЛОГ.</h1><p className="hero-copy">AI-консультант вовлекает посетителей, помогает разобраться в предложении и превращает интерес в заявки — даже когда вы не онлайн.</p><div className="hero-actions"><button className="primary-btn" onClick={()=>document.getElementById('demo')?.scrollIntoView({behavior:'smooth'})}>Попробовать демо <span>↗</span></button><button className="text-btn" onClick={()=>document.getElementById('how')?.scrollIntoView({behavior:'smooth'})}>Как это работает <span>↓</span></button></div></div><div className="hero-bottom"><span>01 / НОВАЯ ЭРА КОММУНИКАЦИИ</span><span>ЛИСТАЙТЕ, ЧТОБЫ ИССЛЕДОВАТЬ ↓</span></div></section>
+    <section className="stat-band"><div className="reveal"><strong>24/7</strong><span>на связи с клиентами</span></div><div className="reveal"><strong>10 сек</strong><span>быстрый ответ</span></div><div className="reveal"><strong>AI</strong><span>общается и квалифицирует</span></div></section>
+    <section className="section split-section" id="how"><div className="section-kicker reveal">01 — ПРОБЛЕМА / РЕШЕНИЕ</div><div className="split"><h2 className="reveal">ПОСЕТИТЕЛЬ<br/>УХОДИТ.<br/><span>ВОЗМОЖНОСТЬ — НЕТ.</span></h2><div className="split-copy reveal"><p>Человек изучает ваш сайт, сравнивает варианты и уходит, так и не задав вопрос.</p><p>Контактиум может начать разговор первым — в нужный момент, без ожидания менеджера.</p><button className="inline-link" onClick={()=>navigate('features')}>Исследовать возможности ↗</button></div></div></section>
+    <section className="section demo-section" id="demo"><div className="demo-intro reveal"><div className="section-kicker">02 — ИНТЕРАКТИВ</div><h2>НЕ ЧИТАЙТЕ.<br/><span>ПОПРОБУЙТЕ.</span></h2><p>Почувствуйте, как начинается разговор. Это интерактивная симуляция поведения консультанта.</p><div className="orb-mini">✳</div></div><div className="reveal"><DemoChat/></div></section>
+    <section className="section process-section"><div className="section-kicker reveal">03 — КАК ЭТО РАБОТАЕТ</div><h2 className="reveal">ОТ ВИЗИТА<br/><span>ДО КОНТАКТА.</span></h2><div className="process-grid">{[['01','Замечаем интерес','Система определяет подходящий момент для начала общения.'],['02','Начинаем диалог','AI помогает посетителю сориентироваться и отвечает на вопросы.'],['03','Уточняем задачу','Консультант собирает контекст и контактные данные.'],['04','Передаём менеджеру','Ваша команда получает информацию для продолжения разговора.']].map(([n,t,d])=><article className="process-card reveal" key={n}><span>{n} /</span><div className="process-symbol">✳</div><h3>{t}</h3><p>{d}</p></article>)}</div></section>
+    <section className="section calculator-section"><div className="reveal"><div className="section-kicker">04 — КАЛЬКУЛЯТОР</div><h2>А ЧТО, ЕСЛИ<br/><span>БОЛЬШЕ ЗАЯВОК?</span></h2><p className="section-lead">Поиграйте с параметрами и оцените возможный эффект от вовлечения посетителей.</p></div><div className="reveal"><Calculator/></div></section>
+    <section className="section end-section reveal"><span className="section-kicker">СЛЕДУЮЩИЙ ШАГ</span><h2>ПРЕВРАТИМ<br/><span>ИНТЕРЕС В ДИАЛОГ.</span></h2><button className="primary-btn" onClick={()=>navigate('pricing')}>Посмотреть тарифы ↗</button></section>
+  </>}
+  {page==='features'&&<><section className="inner-hero"><div className="section-kicker reveal">ВОЗМОЖНОСТИ / 02</div><h1 className="reveal">НЕ ПРОСТО ЧАТ.<br/><em>УМНЫЙ КОНТАКТ.</em></h1><p className="reveal">AI-помощник, который не ждёт первого сообщения, а помогает вашему бизнесу сделать первый шаг.</p></section><section className="section feature-list">{[['01','Инициатива в нужный момент','Реагирует на признаки интереса: просмотр предложений, глубокий скролл, задержку на странице.'],['02','Диалог с пониманием контекста','Отвечает на вопросы о бизнесе, уточняет потребности и помогает выбрать решение.'],['03','Готовый бриф для менеджера','Передаёт контакт и контекст разговора, чтобы не начинать всё с нуля.'],['04','Коммуникация без пауз','Помогает посетителям в любое время — пока команда занята другими задачами.']].map(([n,t,d])=><article className="feature-row reveal" key={n}><span>{n}</span><h2>{t}</h2><p>{d}</p><span className="feature-arrow">↗</span></article>)}</section><section className="section end-section reveal"><h2>УВИДЕТЬ<br/><span>В ДЕЙСТВИИ?</span></h2><button className="primary-btn" onClick={()=>navigate('home')}>Открыть демо ↗</button></section></>}
+  {page==='pricing'&&<><section className="inner-hero"><div className="section-kicker reveal">ТАРИФЫ / 03</div><h1 className="reveal">РАЗГОВОРЫ,<br/><em>КОТОРЫЕ ИМЕЮТ СМЫСЛ.</em></h1><p className="reveal">Выберите масштаб общения. Цены приведены по данным сайта сервиса и могут меняться.</p></section><section className="section pricing-grid">{plans.map(p=><article key={p.name} className={'plan reveal '+(p.popular?'popular':'')}>{p.popular&&<span className="popular-label">ПОПУЛЯРНЫЙ ВЫБОР</span>}<div className="plan-name">{p.name}</div><p>{p.desc}</p><div className="plan-price">{p.price} ₽<small>/мес</small></div><div className="plan-dialogs">{p.dialogs} диалогов с AI в месяц</div><ul>{p.items.map(item=><li key={item}>✳ {item}</li>)}</ul><a className="primary-btn" href="https://kontaktium.ru/" target="_blank" rel="noopener noreferrer">Узнать подробнее ↗</a></article>)}</section><section className="section faq-section"><div><div className="section-kicker reveal">ОТВЕТЫ / FAQ</div><h2 className="reveal">ЕСТЬ<br/><span>ВОПРОСЫ?</span></h2></div><div>{[['Нужно ли программировать для подключения?','По информации сервиса, подключение выполняется с помощью настройки на сайте. Уточните детали для вашей платформы у команды Контактиум.'],['Это живой оператор?','Нет, диалог ведёт AI-консультант. При необходимости менеджер может подключиться.'],['Можно ли использовать с существующим чатом?','Возможность совместной работы зависит от вашей платформы и настроек. Уточните совместимость перед подключением.'],['Откуда взяты цены?','Тарифы показаны по публичной информации kontaktium.ru на момент разработки. Актуальные условия проверяйте на официальном сайте.']].map(([q,a],i)=><div className="faq-item reveal" key={q}><button aria-expanded={faq===i} onClick={()=>setFaq(faq===i?null:i)}>{q}<span>{faq===i?'−':'+'}</span></button>{faq===i&&<p>{a}</p>}</div>)}</div></section></>}
+  {page==='about'&&<><section className="inner-hero"><div className="section-kicker reveal">ИДЕЯ / 04</div><h1 className="reveal">ТЕХНОЛОГИЯ<br/><em>НА СТОРОНЕ ДИАЛОГА.</em></h1><p className="reveal">Каждый посетитель — это человек с вопросом. Важно услышать его вовремя.</p></section><section className="section split-section"><div className="section-kicker reveal">НАША ФИЛОСОФИЯ</div><div className="split"><h2 className="reveal">МЕНЬШЕ<br/>МОЛЧАНИЯ.<br/><span>БОЛЬШЕ СВЯЗИ.</span></h2><div className="split-copy reveal"><p>Вместо пассивной формы обратной связи — живое взаимодействие. Вместо потерянного интереса — возможность продолжить разговор.</p><p>Этот сайт — независимый концептуальный дизайн сервиса Контактиум. Для реального подключения, поддержки и условий используйте официальный ресурс.</p><a className="inline-link" href="https://kontaktium.ru/" target="_blank" rel="noopener noreferrer">Официальный сайт ↗</a></div></div></section><section className="section end-section reveal"><h2>ДАВАЙТЕ<br/><span>ПОГОВОРИМ.</span></h2><button className="primary-btn" onClick={()=>navigate('home')}>Посмотреть интерактив ↗</button></section></>}
+  </main><footer className="site-footer"><div className="footer-logo">КОНТАКТИУМ<span>.</span></div><div><span>КОНЦЕПТ ИНТЕРАКТИВНОГО САЙТА</span><span>© 2026 · НЕОФИЦИАЛЬНЫЙ ДЕМО-ДИЗАЙН</span></div><button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}>НАВЕРХ ↑</button></footer></div>;
+}
+export default App;
