@@ -67,3 +67,19 @@
 .story-step p{font-size:15px;line-height:1.8;max-width:360px;color:#bbc5c1}
 @media(max-width:720px){.nav{background:#192124;border-color:#cbdad22a}.nav a{padding:14px 0}.hero-section{background:radial-gradient(ellipse at 55% 32%,#283a3e,#101216 65%)}.story-orbit{width:75vw}.story-step{left:6%;top:63%;width:88%}.story-step h2{font-size:clamp(43px,10vw,70px)}.story-step p{max-width:280px;font-size:13px}.story-ambient{background:radial-gradient(ellipse at 50% 35%,#26353b,#101216 68%)}}
 @media(prefers-reduced-motion:reduce){.story-orbit,.story-core{transform:none}.story-step{transition:none}}
+
+
+/* Real 3D cinematic scroll stage */
+.story-ambient{z-index:0}
+.story-ambient canvas{width:100%;height:100%;display:block}
+.story-ambient>.story-orbit{position:absolute;left:50%;top:50%;margin-left:calc(-1 * min(24vw,295px));margin-top:calc(-1 * min(24vw,295px))}
+.story-steps{z-index:3}
+.story-step{pointer-events:none}
+.story-step h2{text-shadow:0 8px 50px #101216e6}
+.story-vignette{position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(90deg,#1012168a 0%,transparent 70%),linear-gradient(0deg,#101216a6,transparent 25%,transparent 75%,#10121677)}
+.story-meter{position:absolute;z-index:4;right:5%;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:18px;writing-mode:vertical-rl;font:600 10px 'Space Grotesk',sans-serif;letter-spacing:.19em;color:#b9cac4}
+.story-meter>div{height:100px;width:1px;background:#d2e0d33b;position:relative}
+.story-meter i{position:absolute;top:0;left:0;width:2px;background:#d7e5db;transition:height .12s linear}
+.story-sticky:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at center,transparent 30%,#1012166b 100%)}
+@media(max-width:720px){.story-vignette{background:linear-gradient(0deg,#101216b5,transparent 50%,#10121633)}.story-meter{right:3%;gap:10px;font-size:8px}.story-meter>div{height:70px}.story-ambient>.story-orbit{margin-left:-37.5vw;margin-top:-37.5vw}}
+@media(prefers-reduced-motion:reduce){.story-meter i{transition:none}}
