@@ -41,12 +41,12 @@ function Sculpture({ entered, storyProgress, scrollProgress, hero = false }: { e
     camera.lookAt(hero ? 0.45 : story ? 0.4 : 0, 0, 0);
   });
   return <>
-    <pointLight ref={rimLight} position={[-3, 3, 2]} intensity={16} color="#9dbfb2" />
-    <pointLight ref={keyLight} position={[3, -2, 3]} intensity={19} color="#e8e9d9" />
+    <pointLight ref={rimLight} position={[-3, 3, 2]} intensity={16} color="#9cccf0" />
+    <pointLight ref={keyLight} position={[3, -2, 3]} intensity={19} color="#f4f9ff" />
     <Float speed={0.75} floatIntensity={0.15} rotationIntensity={0.05}>
     <mesh ref={mesh} rotation={[0.4, 0, 0.3]}>
       <torusKnotGeometry args={[1.18, 0.35, 240, 24, 2, 3]} />
-      <MeshTransmissionMaterial backside samples={3} resolution={256} transmission={0.72} thickness={0.7} roughness={0.15} chromaticAberration={0.1} anisotropy={0.2} distortion={0.12} distortionScale={0.2} temporalDistortion={0.08} color="#b8cfc7" metalness={0.35} />
+      <MeshTransmissionMaterial backside samples={3} resolution={256} transmission={0.72} thickness={0.7} roughness={0.15} chromaticAberration={0.1} anisotropy={0.2} distortion={0.12} distortionScale={0.2} temporalDistortion={0.08} color={hero ? "#d6ebff" : "#9abedc"} metalness={0.1} />
     </mesh>
     </Float>
   </>;
@@ -54,12 +54,12 @@ function Sculpture({ entered, storyProgress, scrollProgress, hero = false }: { e
 
 export default function Scene({ entered, scrollProgress = 0, storyProgress, hero = false }: { entered: boolean; scrollProgress?: number; storyProgress?: number; hero?: boolean }) {
   return <Canvas dpr={[1, 1.5]} camera={{ position: [hero ? 1.35 : 0, 0, 7.8], fov: 43 }} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}>
-    <color attach="background" args={['#101216']} />
-    <fog attach="fog" args={['#101216', 8, 18]} />
+    {!hero&&<color attach="background" args={['#101b2a']} />}
+    {!hero&&<fog attach="fog" args={['#101b2a', 8, 18]} />}
     <ambientLight intensity={1.4} />
-    <pointLight position={[-4, 3, 3]} intensity={32} color="#658f91" />
-    <pointLight position={[4, -2, 2]} intensity={25} color="#e1eee8" />
-    <pointLight position={[0, 4, -3]} intensity={18} color="#34545c" />
-    <Suspense fallback={null}><Sculpture entered={entered} scrollProgress={scrollProgress} storyProgress={storyProgress} hero={hero} /><Stars radius={40} depth={30} count={350} factor={2} saturation={0.25} fade speed={0.25} /></Suspense>
+    <pointLight position={[-4, 3, 3]} intensity={32} color="#8fc5ee" />
+    <pointLight position={[4, -2, 2]} intensity={25} color="#ffffff" />
+    <pointLight position={[0, 4, -3]} intensity={18} color="#6d9ec9" />
+    <Suspense fallback={null}><Sculpture entered={entered} scrollProgress={scrollProgress} storyProgress={storyProgress} hero={hero} />{!hero&&<Stars radius={40} depth={30} count={350} factor={2} saturation={0.25} fade speed={0.25} />}</Suspense>
   </Canvas>;
 }
