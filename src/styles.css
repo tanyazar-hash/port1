@@ -248,3 +248,76 @@ body{background:var(--ink)}
 .popular-label{background:#c7d9cb;color:#21372a}
 @media(max-width:720px){.split-section,.process-section{background:#eeefe9}.process-card{min-height:260px}}
 @media(prefers-reduced-motion:reduce){.process-card,.primary-btn,.header-cta{transition:none!important}}
+
+
+/* DESIGN SYSTEM v1.1 — editorial contrast, warm surfaces, restrained sage.
+   Keep sticky-scene overflow rules from v1.0 intact. */
+:root{--ink:#101216;--cream:#f2f0e9;--paper:#e7e8df;--sage:#b8c9c2;--muted:#9eaaa7;--line:#ffffff22;--radius:22px}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d7e6d8;outline-offset:4px}
+.scroll-progress{background:#c4d8cd;box-shadow:none;height:2px}
+.site-header{background:#101216e8;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid #d8e4db1c}
+.brand-icon{background:#c4d2ca;color:#1b2522}
+.brand-dot,.footer-logo span{color:#bdcec4}
+.header-cta{border-color:#b9ccc44a;transition:background .25s,border-color .25s}
+.header-cta:hover{background:#c7d6ce18;border-color:#c7d6ce}
+.header-cta span{color:#c4d5cc}
+.hero-section{background:radial-gradient(ellipse at 72% 40%,#263735 0%,#171d1e 40%,#101216 76%)}
+.hero-grid{opacity:.22}
+.hero-glow{border-color:#c3d4c31b;box-shadow:0 0 110px #c3d4c315}
+.hero-content h1 em,.inner-hero h1 em{color:#bdcec6}
+.hero-copy{color:#b9c3be}
+.eyebrow,.section-kicker{color:#b3c9be}
+.eyebrow-line{background:#b3c9be}
+.primary-btn{background:#d8e1d9;color:#17221d;box-shadow:none;transition:transform .3s,background .3s,box-shadow .3s}
+.primary-btn:hover{background:#f1f4ee;box-shadow:0 12px 35px #0003}
+.text-btn{color:#e4e9e3}
+.text-btn span{color:#b4cfc1}
+.hero-bottom{color:#9faea5}
+.stat-band{background:#171b1c;border-color:#d8e4db1c}
+.stat-band strong{color:#e9eee7}
+.stat-band span{color:#a7b3ac}
+.split-section,.process-section{background:var(--cream);color:#19221f}
+.split-section .section-kicker,.process-section .section-kicker{color:#677d72}
+.split-section h2 span,.process-section h2 span{color:#80978b}
+.split-copy p{color:#4e5b53}
+.inline-link{color:#355c4b;border-color:#77988a}
+.demo-section{background:radial-gradient(ellipse at 78% 35%,#2a3b38 0%,#171e1e 53%,#101216 100%)}
+.demo-section h2 span,.calculator-section h2 span,.end-section h2 span{color:#b7cec1}
+.demo-intro>p,.section-lead{color:#bac8bf}
+.orb-mini{color:#b5cfc2;filter:drop-shadow(0 0 35px #8fae9c40)}
+.chatbox{background:#f4f3ef;color:#24332c;box-shadow:0 25px 85px #0004;border:1px solid #ffffff4a}
+.chathead{background:#fafaf7;border-color:#e0e6df}
+.avatar,.chatinput button{background:#435e50;color:#fff}
+.chatbadge{color:#547061}
+.bubble.user{background:#425e50}
+.suggestions button{color:#425e50;border-color:#c7d5ca}
+.process-card{background:#e8eae2;border:1px solid #c8d2c8;border-radius:18px;transition:transform .35s,border-color .35s,box-shadow .35s}
+.process-card:hover{border-color:#81998b;box-shadow:0 20px 50px #1c302112}
+.process-card>span,.process-symbol{color:#6e8778}
+.process-card p{color:#58665c}
+.calculator-section{background:#171e1c}
+.calculator{background:#222d28;border:1px solid #b7cbb63b}
+.calc-controls label{color:#d3ddd5}
+.calc-controls input{accent-color:#b8cfbf}
+.calc-result{background:linear-gradient(150deg,#c7d6c9,#8ea89b);color:#14231b}
+.calc-disclaimer{color:#b7c6bb}
+.end-section{background:radial-gradient(ellipse at 50% 45%,#33483c,#151c19 68%)}
+.inner-hero{background:radial-gradient(ellipse at 80% 32%,#2b3e38,#101216 72%)}
+.inner-hero p{color:#b8c7bc}
+.feature-row{border-color:#d4e1d022}
+.feature-row>span,.feature-arrow{color:#b4cbbd}
+.feature-row p{color:#b5c2ba}
+.plan{background:#1b2421;border-color:#b9cfbb2d}
+.plan.popular{background:#27372e;border-color:#a5c3ac}
+.popular-label{background:#d8e3d6;color:#213428}
+.plan>p,.plan li{color:#b5c6b8}
+.plan-dialogs{color:#d1e3d2}
+.plan-price small{color:#a6baaa}
+.faq-section{background:#181f1b}
+.faq-item{border-color:#d0dfd02b}
+.faq-item button span{color:#b4d0b9}
+.faq-item p{color:#b8c8b8}
+.site-footer{background:#101512;border-color:#d3e2d025}
+.site-footer button{color:#c0d6c4}
+.fallback-orb{background:radial-gradient(circle at 30% 25%,#e2eae1,#a5bcb0 24%,#47675c 51%,#17241f 76%);box-shadow:inset -25px -30px 50px #10171a,0 0 95px #8db9af20}
+@media(max-width:720px){.nav{background:#19231e;border-color:#b9cdbb30}.hero-section{background:radial-gradient(ellipse at 60% 25%,#283c35,#101216 69%)}}
