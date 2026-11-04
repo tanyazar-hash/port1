@@ -230,3 +230,24 @@ test('editorial call to action has readable context and glass illustration', asy
     await expect(cta.getByRole('button')).toBeVisible();
   }
 });
+
+test('sections receive varied scroll-reveal styles', async ({ page }) => {
+  await page.goto('/#/home');
+  await expect(page.locator('.hero-content h1')).toHaveAttribute('data-motion','rise');
+  await expect(page.locator('.hero-copy')).toHaveAttribute('data-motion','slide-left');
+  await expect(page.locator('.process-card').first()).toHaveAttribute('data-motion','rise');
+  await expect(page.locator('.chatbox')).toHaveAttribute('data-motion','scale');
+  await expect(page.locator('.end-art')).toHaveAttribute('data-motion','rise');
+});
+
+test('scroll reveals remain readable when reduced motion is enabled', async ({ page }) => {
+  await page.goto('/#/home');
+  const cards=page.locator('.process-card');
+  await cards.first().scrollIntoViewIfNeeded();
+  await expect(cards.first()).toHaveClass(/visible/);
+  await expect(cards.first()).toHaveCSS('opacity','1');
+  await expect(cards.first()).toHaveCSS('transform','none');
+  await page.goto('/#/pricing');
+  await expect(page.locator('.faq-item').first()).toHaveClass(/visible/);
+  await expect(page.locator('.faq-item').first()).toHaveCSS('opacity','1');
+});
