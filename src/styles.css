@@ -388,3 +388,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #d7e6
  .inner-hero-robot .robot-showcase{position:relative;width:100%;height:min(53svh,480px);min-height:290px;flex:none;right:auto;bottom:auto;top:auto;pointer-events:none}
  .inner-hero-robot .robot-caption{right:0;bottom:0}
 }
+
+/* Orb alignment and character bottom spacing */
+@media(min-width:721px){.hero-section .hero-glow{left:76%;right:auto;top:50%;width:min(27vw,420px);transform:translate(-50%,-50%)}.hero-section .hero-visual{inset:0;transform:none;opacity:.85}.hero-section .hero-visual .fallback-orb{left:76%;top:50%;width:min(22vw,345px);transform:translate(-50%,-50%) rotate(-25deg)}.inner-hero-robot .robot-showcase{transform:translateY(40px) scale(1.075);transform-origin:bottom center}.inner-hero-robot .robot-caption{bottom:7%;right:8%}}
+@media(max-width:720px){.hero-section .hero-glow{left:58%;right:auto;top:35%;width:62vw;transform:translate(-50%,-50%)}.hero-section .hero-visual .fallback-orb{left:58%;top:35%;width:52vw;transform:translate(-50%,-50%) rotate(-25deg)}.inner-hero-robot .robot-showcase{margin-bottom:-30px;transform:translateY(20px)}}
