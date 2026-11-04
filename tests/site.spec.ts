@@ -196,3 +196,10 @@ test('demo does not append stale replies after scenario switch', async ({ page }
   await expect(page.locator('.bubble.bot')).toHaveCount(1);
   await expect(page.locator('.bubble.user')).toHaveCount(0);
 });
+
+test('document metadata uses Kontaktium branding and Russian language', async ({ page }) => {
+  await page.goto('/#/home');
+  await expect(page).toHaveTitle(/Контактиум/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ru');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /AI-консультант/);
+});
