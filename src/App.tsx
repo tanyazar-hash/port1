@@ -20,7 +20,7 @@ function DemoChat(){
   const [value,setValue]=useState('');
   const [stage,setStage]=useState(0);
   const chatEnd=useRef<HTMLDivElement>(null);
-  useEffect(()=>chatEnd.current?.scrollIntoView({behavior:'smooth',block:'nearest'}),[messages]);
+  useEffect(() => { chatEnd.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, [messages]);
   function reply(text:string){
     const input=text.trim();if(!input)return;
     setMessages(m=>[...m,{from:'user',text:input}]);setValue('');
