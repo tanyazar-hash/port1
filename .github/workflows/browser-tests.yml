@@ -5,6 +5,11 @@ on:
     branches: [main, master]
   pull_request:
   workflow_dispatch:
+    inputs:
+      site_url:
+        description: 'Optional public site URL (leave empty to test current GitHub code locally)'
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -24,8 +29,18 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Build site
         run: npm run build
-      - name: Run browser tests
+      - name: Run browser tests and capture all six scenes
+        env:
+          TEST_BASE_URL: ${{ inputs.site_url }}
         run: npm run test:e2e
+      - name: Upload desktop and mobile visual walkthroughs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-review-desktop-mobile
+          path: test-results/visual-review/
+          if-no-files-found: warn
+          retention-days: 30
       - name: Upload screenshots, traces and HTML report
         if: always()
         uses: actions/upload-artifact@v4
