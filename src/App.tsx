@@ -2,12 +2,12 @@ import { Component, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState
 const PhoneScene = lazy(() => import('./PhoneScene'));
 
 const chapters = [
-  {no:'01',eyebrow:'ПЕРВОЕ ВПЕЧАТЛЕНИЕ',title:<>НЕ ПРОСТО<br/><em>ТЕЛЕФОН.</em></>,description:'Предмет, который хочется рассмотреть со всех сторон. Знакомься с формой через движение.',tag:'THE OBJECT / 001'},
-  {no:'02',eyebrow:'ДИЗАЙН И ФОРМА',title:<>ТОЧНОСТЬ<br/><em>В ЛИНИЯХ.</em></>,description:'Плавные грани. Выверенный силуэт. Ничего лишнего — только характер и детали.',tag:'DESIGN / 002'},
-  {no:'03',eyebrow:'МАТЕРИАЛЫ',title:<>МЕТАЛЛ.<br/><em>СТЕКЛО. СВЕТ.</em></>,description:'Серебристые отражения, глубокие тени и игра света на каждой поверхности.',tag:'MATERIAL / 003'},
-  {no:'04',eyebrow:'ДВИЖЕНИЕ',title:<>ДРУГОЙ<br/><em>РАКУРС.</em></>,description:'Прокручивай страницу. Объект меняет положение, раскрывая новые стороны.',tag:'MOTION / 004'},
-  {no:'05',eyebrow:'ДЕТАЛИ',title:<>ВНИМАНИЕ<br/><em>К МЕЛОЧАМ.</em></>,description:'Каждый изгиб и каждый блик становятся частью одной визуальной истории.',tag:'DETAIL / 005'},
-  {no:'06',eyebrow:'ФИНАЛ',title:<>ФОРМА<br/><em>В ДВИЖЕНИИ.</em></>,description:'Экспериментальная 3D-презентация. Создана, чтобы смотреть, листать и исследовать.',tag:'FINALE / 006'},
+  {no:'01',eyebrow:'ПЕРВОЕ ВПЕЧАТЛЕНИЕ',title:<>НЕ ПРОСТО<br/><em>ТЕЛЕФОН.</em></>,description:'Корпус, камеры, экран. Один объект — шесть ракурсов.',tag:'THE OBJECT / 001'},
+  {no:'02',eyebrow:'ДИЗАЙН И ФОРМА',title:<>ТОЧНОСТЬ<br/><em>В ЛИНИЯХ.</em></>,description:'Прямые грани, закруглённые углы и тонкий металлический контур.',tag:'DESIGN / 002'},
+  {no:'03',eyebrow:'МАТЕРИАЛЫ',title:<>МЕТАЛЛ.<br/><em>СТЕКЛО. СВЕТ.</em></>,description:'Металлическая рамка, стеклянные панели и отражения на гранях.',tag:'MATERIAL / 003'},
+  {no:'04',eyebrow:'ДВИЖЕНИЕ',title:<>ДРУГОЙ<br/><em>РАКУРС.</em></>,description:'Прокрути вниз: телефон поворачивается и показывает боковые грани.',tag:'MOTION / 004'},
+  {no:'05',eyebrow:'ДЕТАЛИ',title:<>ВНИМАНИЕ<br/><em>К МЕЛОЧАМ.</em></>,description:'Три объектива, кнопки на корпусе и аккуратные стыки материалов.',tag:'DETAIL / 005'},
+  {no:'06',eyebrow:'ФИНАЛ',title:<>ФОРМА<br/><em>В ДВИЖЕНИИ.</em></>,description:'Вид спереди, сзади и сбоку. Вернись к началу, чтобы рассмотреть ещё раз.',tag:'FINALE / 006'},
 ];
 
 class ModelBoundary extends Component<{children:ReactNode},{failed:boolean}> {
@@ -65,8 +65,8 @@ export default function App(){
     <div className="grain" aria-hidden="true"/>
     <div className="scroll-track" aria-hidden="true"><div style={{transform:`scaleY(${progress})`}}/></div>
     <header className="topbar">
-      <a href="#chapter-0" onClick={e=>{e.preventDefault();goTo(0);}} className="brand" aria-label="На начало">FORM<span> / </span>FACTOR<sup>®</sup></a>
-      <span className="topbar-center">3D PRODUCT EXPERIENCE <span className="topbar-star">✳</span> CONCEPT 2026</span>
+      <a href="#chapter-0" onClick={e=>{e.preventDefault();goTo(0);}} className="brand" aria-label="На начало">FORM<span> / </span>FACTOR</a>
+      <span className="topbar-center">IPHONE 17 PRO MAX <span className="topbar-star">✳</span> 360° VIEW</span>
       <button className="menu-link" onClick={()=>goTo(5)}>ФИНАЛ <span>↗</span></button>
     </header>
     <div className="ambient-halo" aria-hidden="true"/>
@@ -74,14 +74,14 @@ export default function App(){
       <div className="falling-trails" aria-hidden="true" style={{opacity:Math.min(.7,.14+progress*.55)}}><i/><i/><i/><i/><i/></div>
       {webgl?<ModelBoundary><Suspense fallback={<div className="loading-object">ЗАГРУЖАЕМ 3D...</div>}><PhoneScene progress={progressRef} reduced={reduced}/></Suspense></ModelBoundary>:<PhoneFallback/>}
     </div>
-    <div className="stage-label" aria-hidden="true"><span className="stage-cross">✳</span> INTERACTIVE OBJECT <span className="stage-line"/> 360°</div>
+    <div className="stage-label" aria-hidden="true"><span className="stage-cross">✳</span> 3D VIEW <span className="stage-line"/> 360°</div>
     <main>
       {chapters.map((chapter,i)=><section className={'chapter chapter-'+i} id={'chapter-'+i} key={chapter.no} aria-label={'Раздел '+chapter.no}>
         <div className="chapter-inner">
           <div className="chapter-meta"><span className="meta-line"/><span>{chapter.no} / 06</span><span className="meta-divider">—</span><span>{chapter.eyebrow}</span></div>
           <h1 className="chapter-title">{chapter.title}</h1>
           <p className="chapter-description">{chapter.description}</p>
-          <div className="chapter-footer"><span className="chapter-tag">{chapter.tag}</span>{i===0?<button className="scroll-prompt" onClick={()=>goTo(1)}>ЛИСТАЙ ВНИЗ <span>↓</span></button>:<span className="chapter-coordinate">{String((i+1)*16.7).padStart(4,'0')} / 100</span>}</div>
+          <div className="chapter-footer"><span className="chapter-tag">{chapter.tag}</span>{i===0?<button className="scroll-prompt" onClick={()=>goTo(1)}>ЛИСТАЙ ВНИЗ <span>↓</span></button>:<span className="chapter-coordinate">{String(Math.round((i+1)/chapters.length*100)).padStart(3,'0')} / 100</span>}</div>
         </div>
         <span className="section-index" aria-hidden="true">{chapter.no}</span>
       </section>)}
@@ -89,6 +89,6 @@ export default function App(){
     <nav className="chapter-nav" aria-label="Навигация по разделам">
       {chapters.map((c,i)=><button key={c.no} className={active===i?'current':''} aria-label={'Перейти к разделу '+c.no} aria-current={active===i?'step':undefined} onClick={()=>goTo(i)}><span/></button>)}
     </nav>
-    <footer className="site-footer"><span>FORM / FACTOR — НЕОФИЦИАЛЬНЫЙ ДИЗАЙН-КОНЦЕПТ</span><span>МОДЕЛЬ ДЛЯ ДЕМОНСТРАЦИИ · 2026</span><button onClick={()=>goTo(0)}>НАВЕРХ ↑</button></footer>
+    <footer className="site-footer"><span>FORM / FACTOR</span><span>3D PRODUCT VIEWER · 2026</span><button onClick={()=>goTo(0)}>НАВЕРХ ↑</button></footer>
   </div>;
 }
