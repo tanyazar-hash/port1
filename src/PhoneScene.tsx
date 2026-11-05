@@ -5,6 +5,37 @@ import * as THREE from 'three';
 
 type Props = { progress: MutableRefObject<number>; reduced: boolean };
 
+/**
+ * Six deliberately composed product shots.
+ * Rotation Y shows front/back/edge; Z stays near zero to keep portrait upright.
+ * The fifth shot pushes in toward the rear camera cluster.
+ */
+const SHOTS = [
+  { x:1.46, y:.54, z:0, yaw:-.35, pitch:.07, roll:-.1, zoom:1.00 },
+  { x:1.53, y:.44, z:0, yaw:-1.02, pitch:.09, roll:.04, zoom:1.07 },
+  { x:1.48, y:.32, z:0, yaw:-2.93, pitch:-.06, roll:-.06, zoom:1.11 },
+  { x:1.52, y:.19, z:0, yaw:-4.65, pitch:.12, roll:.06, zoom:1.04 },
+  { x:1.43, y:.13, z:.5, yaw:-6.14, pitch:.09, roll:-.09, zoom:1.34 },
+  { x:1.48, y:.14, z:0, yaw:-6.63, pitch:.04, roll:-.07, zoom:1.06 },
+] as const;
+
+function interpolateShot(progress:number) {
+  const scaled = THREE.MathUtils.clamp(progress,0,1)*(SHOTS.length-1);
+  const index = Math.min(SHOTS.length-2,Math.floor(scaled));
+  const raw = scaled-index;
+  const t = raw*raw*(3-2*raw);
+  const a=SHOTS[index],b=SHOTS[index+1];
+  return {
+    x:THREE.MathUtils.lerp(a.x,b.x,t),
+    y:THREE.MathUtils.lerp(a.y,b.y,t),
+    z:THREE.MathUtils.lerp(a.z,b.z,t),
+    yaw:THREE.MathUtils.lerp(a.yaw,b.yaw,t),
+    pitch:THREE.MathUtils.lerp(a.pitch,b.pitch,t),
+    roll:THREE.MathUtils.lerp(a.roll,b.roll,t),
+    zoom:THREE.MathUtils.lerp(a.zoom,b.zoom,t),
+  };
+}
+
 function Phone({ progress, reduced }: Props) {
   const gltf = useGLTF('/phone.glb');
   const root = useRef<THREE.Group>(null);
@@ -39,19 +70,19 @@ function Phone({ progress, reduced }: Props) {
     if (!root.current) return;
     const p = progress.current;
     const compact = viewport.width < 6;
-    // Portrait orientation is applied to the mesh itself below.
-    // The outer group only makes small tilts and spins around the upright axis.
-    const fall = p * p * (3 - 2 * p);
-    const wobble = reduced ? 0 : Math.sin(clock.elapsedTime * 0.75 + p * 12) * 0.075;
-    const x = (compact ? 0.18 : 1.45) + Math.sin(p * Math.PI * 3.4) * (compact ? 0.23 : 0.5);
-    const y = (compact ? 0.58 : 0.62) - fall * (compact ? 0.48 : 0.72) + wobble;
-    root.current.position.x = THREE.MathUtils.damp(root.current.position.x, x, 3.2, delta);
-    root.current.position.y = THREE.MathUtils.damp(root.current.position.y, y, 3.2, delta);
-    root.current.rotation.y = THREE.MathUtils.damp(root.current.rotation.y, -0.25 + p * Math.PI * 4, 3.2, delta);
-    root.current.rotation.z = THREE.MathUtils.damp(root.current.rotation.z, -0.12 + Math.sin(p * Math.PI * 4) * 0.17, 3.2, delta);
-    root.current.rotation.x = THREE.MathUtils.damp(root.current.rotation.x, 0.08 + Math.sin(p * Math.PI * 4) * 0.13, 3.2, delta);
-    const scale = (compact ? 15.2 : 23.5) * (1 + Math.sin(p * Math.PI) * 0.09);
-    root.current.scale.setScalar(THREE.MathUtils.damp(root.current.scale.x, scale, 3.4, delta));
+    const shot = interpolateShot(p);
+    const wobble = reduced ? 0 : Math.sin(clock.elapsedTime * .72) * .027;
+    const x = compact ? .18 + (shot.x-1.48)*.42 : shot.x;
+    const y = compact ? .44 + (shot.y-.32)*.42 : shot.y;
+    root.current.position.x = THREE.MathUtils.damp(root.current.position.x,x,3.7,delta);
+    root.current.position.y = THREE.MathUtils.damp(root.current.position.y,y+wobble,3.7,delta);
+    root.current.position.z = THREE.MathUtils.damp(root.current.position.z,shot.z,3.5,delta);
+    root.current.rotation.y = THREE.MathUtils.damp(root.current.rotation.y,shot.yaw,3.5,delta);
+    root.current.rotation.x = THREE.MathUtils.damp(root.current.rotation.x,shot.pitch,3.5,delta);
+    root.current.rotation.z = THREE.MathUtils.damp(root.current.rotation.z,shot.roll,3.5,delta);
+    const base = compact ? 15.2 : 23.5;
+    const targetScale = base * (compact ? 1 + (shot.zoom-1)*.35 : shot.zoom);
+    root.current.scale.setScalar(THREE.MathUtils.damp(root.current.scale.x,targetScale,3.5,delta));
   });
 
   return <group ref={root} position={[1.5, 0.4, 0]}>
@@ -59,13 +90,31 @@ function Phone({ progress, reduced }: Props) {
   </group>;
 }
 
+function StudioLighting({ progress }: { progress: MutableRefObject<number> }) {
+  const key = useRef<THREE.DirectionalLight>(null);
+  const rim = useRef<THREE.DirectionalLight>(null);
+  useFrame((_, delta) => {
+    const p = progress.current;
+    if(key.current) {
+      key.current.intensity = THREE.MathUtils.damp(key.current.intensity,3.2 + Math.sin(p*Math.PI*2)*1.3,2,delta);
+      key.current.position.x = THREE.MathUtils.damp(key.current.position.x,3.5 - p*5,2,delta);
+    }
+    if(rim.current) {
+      rim.current.intensity = THREE.MathUtils.damp(rim.current.intensity,2.3 + Math.sin(p*Math.PI*3+.7)*.8,2,delta);
+    }
+  });
+  return <>
+    <ambientLight intensity={1.85}/>
+    <hemisphereLight args={['#ffffff','#777c86',2.2]}/>
+    <directionalLight ref={key} position={[3.5,5,6]} intensity={3.2} color="#ffffff"/>
+    <directionalLight ref={rim} position={[-5,1,-4]} intensity={2.4} color="#b4c7df"/>
+    <pointLight position={[-3,-3,4]} intensity={55} color="#e1e8f1"/>
+  </>;
+}
+
 export default function PhoneScene(props: Props) {
   return <Canvas dpr={[1, 1.75]} camera={{ position: [0, 0, 8], fov: 42 }} gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}>
-    <ambientLight intensity={2.25}/>
-    <hemisphereLight args={['#ffffff', '#6d737d', 2.4]}/>
-    <directionalLight position={[3, 5, 6]} intensity={3.8} color="#ffffff"/>
-    <directionalLight position={[-5, 0, -4]} intensity={3.1} color="#9aa4b3"/>
-    <pointLight position={[-3, -3, 4]} intensity={75} color="#c9d2df"/>
+    <StudioLighting progress={props.progress}/>
     <Suspense fallback={null}><Phone {...props}/></Suspense>
   </Canvas>;
 }
