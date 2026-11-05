@@ -47,9 +47,15 @@ export default function App(){
         raf=0;
         const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
         const p=Math.min(1,Math.max(0,window.scrollY/max));
-        progressRef.current=p;
+        // Map the 3D shots and navigation to actual chapter dimensions.
+        // Sections are taller than the viewport so each shot can be enjoyed longer.
+        const firstChapter=document.querySelector<HTMLElement>('.chapter');
+        const chapterHeight=firstChapter?.offsetHeight || window.innerHeight;
+        const chapterOffset=firstChapter?.offsetTop || 0;
+        const chapterPosition=Math.max(0,(window.scrollY+window.innerHeight*.5-chapterOffset)/chapterHeight);
+        progressRef.current=Math.min(1,chapterPosition/chapters.length);
         setProgress(p);
-        const current=Math.min(chapters.length-1,Math.floor((window.scrollY+window.innerHeight*.5)/Math.max(1,window.innerHeight)));
+        const current=Math.min(chapters.length-1,Math.floor(chapterPosition));
         setActive(current);
       });
     };
