@@ -21,19 +21,25 @@ function Phone({ progress, reduced }: Props) {
     if (!root.current) return;
     const p = progress.current;
     const compact = viewport.width < 6;
-    const x = compact ? 0.55 : 1.48;
-    const y = (compact ? 0.35 - p * 0.45 : 0.48 - p * 1.1) + (reduced ? 0 : Math.sin(clock.elapsedTime * 0.8) * 0.075);
-    root.current.position.x = THREE.MathUtils.damp(root.current.position.x, x, 3.5, delta);
-    root.current.position.y = THREE.MathUtils.damp(root.current.position.y, y, 3.5, delta);
-    root.current.rotation.y = THREE.MathUtils.damp(root.current.rotation.y, -0.48 + p * Math.PI * 5.5, 3, delta);
-    root.current.rotation.z = THREE.MathUtils.damp(root.current.rotation.z, -0.19 + Math.sin(p * Math.PI * 4) * 0.24, 3, delta);
-    root.current.rotation.x = THREE.MathUtils.damp(root.current.rotation.x, 0.08 + Math.sin(p * Math.PI * 2.5) * 0.22, 3, delta);
-    const scale = compact ? 15.2 : 23.5;
-    root.current.scale.setScalar(THREE.MathUtils.damp(root.current.scale.x, scale, 4, delta));
+    // The GLB exporter already converts Blender's axes to glTF coordinates.
+    // The old -90deg correction turned the phone upside down; keep its native orientation.
+    // A slow, curved fall: vertical travel, sideways drift, a tumbling spin,
+    // and a brief acceleration through each section.
+    const fall = p * p * (3 - 2 * p);
+    const wobble = reduced ? 0 : Math.sin(clock.elapsedTime * 0.75 + p * 12) * 0.075;
+    const x = (compact ? 0.18 : 1.45) + Math.sin(p * Math.PI * 3.4) * (compact ? 0.23 : 0.5);
+    const y = (compact ? 0.62 : 0.72) - fall * (compact ? 1.25 : 2.15) + wobble;
+    root.current.position.x = THREE.MathUtils.damp(root.current.position.x, x, 3.2, delta);
+    root.current.position.y = THREE.MathUtils.damp(root.current.position.y, y, 3.2, delta);
+    root.current.rotation.y = THREE.MathUtils.damp(root.current.rotation.y, -0.25 + p * Math.PI * 4.3, 3.2, delta);
+    root.current.rotation.z = THREE.MathUtils.damp(root.current.rotation.z, -0.18 + p * Math.PI * 1.4 + Math.sin(p * Math.PI * 6) * 0.2, 3.2, delta);
+    root.current.rotation.x = THREE.MathUtils.damp(root.current.rotation.x, 0.12 + Math.sin(p * Math.PI * 3.2) * 0.38, 3.2, delta);
+    const scale = (compact ? 15.2 : 23.5) * (1 + Math.sin(p * Math.PI) * 0.09);
+    root.current.scale.setScalar(THREE.MathUtils.damp(root.current.scale.x, scale, 3.4, delta));
   });
 
   return <group ref={root} position={[1.5, 0.4, 0]}>
-    <group rotation={[-Math.PI / 2, 0, 0]}><primitive object={object}/></group>
+    <primitive object={object}/>
   </group>;
 }
 
