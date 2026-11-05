@@ -100,3 +100,24 @@ test('headlines and descriptions remain within the viewport at common widths', a
     expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   }
 });
+
+test('mobile product stage clears the header and reading panel stays legible',async ({page})=>{
+  for(const width of [360,390,430]){
+    await page.setViewportSize({width,height:844});
+    await page.goto('/');
+    const layout=await page.evaluate(()=>{
+      const header=document.querySelector('.topbar')!.getBoundingClientRect();
+      const stage=document.querySelector('.object-stage')!.getBoundingClientRect();
+      const chapters=[...document.querySelectorAll('.chapter')];
+      const headings=chapters.map(ch=>ch.querySelector('.chapter-title')!.getBoundingClientRect());
+      return {headerBottom:header.bottom,stageTop:stage.top,stageBottom:stage.bottom,
+        headingRights:headings.map(h=>h.right),headingLefts:headings.map(h=>h.left),
+        horizontalOverflow:document.documentElement.scrollWidth>innerWidth};
+    });
+    expect(layout.stageTop).toBeGreaterThanOrEqual(layout.headerBottom-1);
+    expect(layout.stageBottom).toBeLessThanOrEqual(844);
+    expect(layout.horizontalOverflow).toBe(false);
+    for(const right of layout.headingRights)expect(right).toBeLessThanOrEqual(width+1);
+    for(const left of layout.headingLefts)expect(left).toBeGreaterThanOrEqual(-1);
+  }
+});
