@@ -137,7 +137,7 @@ test('iPhone 14 Pro mobile composition brings chapter copy into the first viewpo
     const note=getComputedStyle(document.querySelector('.detail-note-copy')!).fontSize;
     return {sectionHeight:section.height,headingTop:heading.top,headingBottom:heading.bottom,stageBottom:stage.bottom,noteSize:parseFloat(note)};
   });
-  expect(layout.sectionHeight).toBeGreaterThan(852);
+  expect(layout.sectionHeight).toBeGreaterThanOrEqual(850);
   expect(layout.headingTop).toBeGreaterThan(400);
   expect(layout.headingTop).toBeLessThan(700);
   expect(layout.headingBottom).toBeLessThan(852);
@@ -178,4 +178,22 @@ test('iPhone 14 Pro finale fits above footer without overlapping the 3D stage',a
   expect(bounds.copyTop).toBeGreaterThan(bounds.stageBottom-4);
   expect(bounds.copyBottom).toBeLessThanOrEqual(bounds.footerTop+8);
   expect(bounds.opacity).toBeGreaterThan(.95);
+});
+
+test('iPhone 14 Pro chapters have no blank inter-scene spacer or hard divider',async ({page})=>{
+  await page.setViewportSize({width:393,height:852});
+  await page.goto('/');
+  const geometry=await page.evaluate(()=>{
+    const chapters=[...document.querySelectorAll<HTMLElement>('.chapter')];
+    const data=chapters.map(ch=>({top:ch.offsetTop,height:ch.offsetHeight,divider:getComputedStyle(ch,'::after').display}));
+    const overlays=[...document.querySelectorAll<HTMLElement>('.chapter-inner')].map(el=>getComputedStyle(el,'::before').display);
+    return {data,overlays,overflow:document.documentElement.scrollWidth>innerWidth};
+  });
+  expect(geometry.overflow).toBe(false);
+  for(let i=0;i<geometry.data.length;i++){
+    expect(geometry.data[i].height).toBeLessThanOrEqual(854);
+    expect(geometry.data[i].divider).toBe('none');
+    expect(geometry.overlays[i]).toBe('none');
+    if(i>0)expect(geometry.data[i].top-(geometry.data[i-1].top+geometry.data[i-1].height)).toBeLessThanOrEqual(1);
+  }
 });
