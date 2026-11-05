@@ -62,14 +62,22 @@ test('chapters give visitors more room to inspect the product', async ({page})=>
   expect(sizes.section).toBeGreaterThan(sizes.viewport*1.19);
 });
 
-test('short line-and-detail annotations appear only on chosen product shots', async ({page})=>{
+test('detail markers smoothly appear and disappear in sync with scroll', async ({page})=>{
   await page.goto('/');
-  await expect(page.locator('.detail-note')).toHaveCount(0);
-  await page.getByRole('button',{name:'Перейти к разделу 02'}).click();
-  await expect(page.locator('.detail-note-copy')).toHaveText('ТОЧНОСТЬ КАЖДОЙ ГРАНИ');
-  await expect(page.locator('.detail-note-rule')).toBeVisible();
-  await page.getByRole('button',{name:'Перейти к разделу 03'}).click();
-  await expect(page.locator('.detail-note')).toHaveCount(0);
-  await page.getByRole('button',{name:'Перейти к разделу 05'}).click();
-  await expect(page.locator('.detail-note-copy')).toHaveText('ТРИ ОБЪЕКТИВА КРУПНО');
+  await expect(page.locator('.detail-note')).toHaveCount(3);
+  const opacity=async (chapter:number,position:number)=>{
+    await page.evaluate(([index,progress])=>{
+      const section=document.querySelectorAll<HTMLElement>('.chapter')[index];
+      const offset=section.offsetTop+section.offsetHeight*progress-innerHeight*.5;
+      window.scrollTo({top:offset,behavior:'instant'});
+    },[chapter,position] as [number,number]);
+    return Number(await page.locator(`.detail-note-chapter-${chapter+1}`).evaluate(el=>getComputedStyle(el).opacity));
+  };
+  expect(await opacity(1,.1)).toBeLessThan(.05);
+  expect(await opacity(1,.62)).toBeGreaterThan(.95);
+  expect(await opacity(1,.98)).toBeLessThan(.15);
+  expect(await opacity(3,.62)).toBeGreaterThan(.95);
+  expect(await opacity(4,.62)).toBeGreaterThan(.95);
+  await expect(page.locator('.detail-note-horizontal .detail-note-rule')).toHaveCSS('height','1px');
+  await expect(page.locator('.detail-note-vertical')).toHaveCount(2);
 });
