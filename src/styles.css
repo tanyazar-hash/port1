@@ -99,3 +99,9 @@ main{z-index:5}
  .shot-caption-content small{font-size:8px}
 }
 @media(prefers-reduced-motion:reduce){.shot-caption-content{animation:none}}
+
+/* Longer editorial chapters: more scroll distance for every camera move. */
+.chapter{height:135svh;min-height:760px}
+@media(max-width:720px){
+  .chapter{height:125svh;min-height:760px}
+}
