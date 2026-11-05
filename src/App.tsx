@@ -15,7 +15,7 @@ class ModelBoundary extends Component<{children:ReactNode},{failed:boolean}> {
   static getDerivedStateFromError(){return {failed:true};}
   render(){return this.state.failed?<PhoneFallback/>:this.props.children;}
 }
-function PhoneFallback(){return <div className="phone-fallback" aria-label="Силуэт телефона"><span className="camera-lenses"><i/><i/><i/></span><span className="phone-mark"/></div>;}
+function PhoneFallback(){return <div className="model-missing" role="status"><strong>3D-МОДЕЛЬ НЕ ЗАГРУЖЕНА</strong><span>Добавьте оригинальный файл phone.glb в папку public репозитория.</span></div>;}
 function canRender3D(){try{const canvas=document.createElement('canvas');return !!(canvas.getContext('webgl2')||canvas.getContext('webgl'));}catch{return false;}}
 
 export default function App(){
