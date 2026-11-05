@@ -121,3 +121,21 @@ test('mobile product stage clears the header and reading panel stays legible',as
     for(const left of layout.headingLefts)expect(left).toBeGreaterThanOrEqual(-1);
   }
 });
+
+test('iPhone 14 Pro mobile composition brings chapter copy into the first viewport',async ({page})=>{
+  await page.setViewportSize({width:393,height:852});
+  await page.goto('/');
+  const layout=await page.evaluate(()=>{
+    const section=document.querySelector('.chapter-0')!.getBoundingClientRect();
+    const heading=document.querySelector('.chapter-0 .chapter-title')!.getBoundingClientRect();
+    const stage=document.querySelector('.object-stage')!.getBoundingClientRect();
+    const note=getComputedStyle(document.querySelector('.detail-note-copy')!).fontSize;
+    return {sectionHeight:section.height,headingTop:heading.top,headingBottom:heading.bottom,stageBottom:stage.bottom,noteSize:parseFloat(note)};
+  });
+  expect(layout.sectionHeight).toBeGreaterThan(852);
+  expect(layout.headingTop).toBeGreaterThan(400);
+  expect(layout.headingTop).toBeLessThan(700);
+  expect(layout.headingBottom).toBeLessThan(852);
+  expect(layout.stageBottom).toBeLessThan(layout.headingBottom);
+  expect(layout.noteSize).toBeGreaterThanOrEqual(10);
+});
