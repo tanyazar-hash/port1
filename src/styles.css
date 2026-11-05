@@ -768,7 +768,7 @@ main{z-index:5}
   inset:0;
   z-index:0;
   pointer-events:none;
-  background-image:url('/luminous-arcs.svg');
+  background-image:url('../luminous-arcs.svg');
   background-position:center center;
   background-repeat:no-repeat;
   background-size:cover;
