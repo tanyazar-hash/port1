@@ -206,3 +206,37 @@ main{z-index:5}
   .detail-note{transform:none;transition:none}
   .detail-note .detail-note-rule{transform:none}
 }
+
+/* Model-anchored editorial labels. The WebGL scene supplies the projected
+   edge and focal points; no hard-coded 72vw positions or model overlap. */
+.detail-note,
+.detail-note-horizontal,
+.detail-note-vertical,
+.detail-note-chapter-5{
+  position:fixed;
+  left:var(--phone-note-x,72%);
+  right:auto;
+  top:var(--phone-note-center-y,50%);
+  bottom:auto;
+  transform:translate3d(0,calc(-50% + 12px * (1 - var(--note-visibility))),0);
+}
+.detail-note-chapter-5{top:var(--phone-note-camera-y,42%)}
+.detail-note-copy{
+  color:#252b33;
+  text-shadow:0 1px 8px #eef0f3c9;
+}
+.detail-note-vertical{gap:14px}
+.detail-note-vertical .detail-note-rule{height:clamp(85px,13vh,135px)}
+.detail-note-horizontal .detail-note-rule{width:clamp(82px,9vw,130px)}
+@media(max-width:720px){
+  .detail-note,.detail-note-horizontal,.detail-note-vertical,.detail-note-chapter-5{
+    left:var(--phone-note-x,66%);
+    right:auto;
+    top:var(--phone-note-center-y,50%);
+    bottom:auto;
+  }
+  .detail-note-chapter-5{top:var(--phone-note-camera-y,42%)}
+  .detail-note-vertical{gap:8px}
+  .detail-note-vertical .detail-note-rule{height:80px}
+  .detail-note-horizontal .detail-note-rule{width:72px}
+}
