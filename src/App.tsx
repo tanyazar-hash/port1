@@ -20,9 +20,9 @@ const chapters = [
 ];
 
 const detailNotes = [
-  {chapter:1, text:'ТОЧНОСТЬ КАЖДОЙ ГРАНИ', orientation:'horizontal'},
+  {chapter:1, text:'ТОЧНОСТЬ КАЖДОЙ ГРАНИ', orientation:'vertical'},
   {chapter:3, text:'ЧИСТАЯ ГЕОМЕТРИЯ КОРПУСА', orientation:'vertical'},
-  {chapter:4, text:'ТРИ ОБЪЕКТИВА КРУПНО', orientation:'vertical'},
+  {chapter:4, text:'ТРИ ОБЪЕКТИВА КРУПНО', orientation:'horizontal'},
 ] as const;
 
 function smoothstep(start:number,end:number,value:number){
