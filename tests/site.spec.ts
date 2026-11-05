@@ -4,7 +4,7 @@ test('new phone showcase has six chapters and a 3D stage', async ({page})=>{
   await page.goto('/');
   await expect(page).toHaveTitle(/FORM \/ FACTOR/);
   await expect(page.locator('.chapter')).toHaveCount(6);
-  await expect(page.locator('.chapter-0 h1')).toContainText('НЕ ПРОСТО');
+  await expect(page.locator('.chapter-0 h1')).toContainText('ФОРМА, КОТОРАЯ');
   await expect(page.locator('.object-stage')).toBeVisible();
 });
 
@@ -60,4 +60,16 @@ test('chapters give visitors more room to inspect the product', async ({page})=>
     return {section:section.getBoundingClientRect().height,viewport:window.innerHeight};
   });
   expect(sizes.section).toBeGreaterThan(sizes.viewport*1.19);
+});
+
+test('short line-and-detail annotations appear only on chosen product shots', async ({page})=>{
+  await page.goto('/');
+  await expect(page.locator('.detail-note')).toHaveCount(0);
+  await page.getByRole('button',{name:'Перейти к разделу 02'}).click();
+  await expect(page.locator('.detail-note-copy')).toHaveText('ТОЧНОСТЬ КАЖДОЙ ГРАНИ');
+  await expect(page.locator('.detail-note-rule')).toBeVisible();
+  await page.getByRole('button',{name:'Перейти к разделу 03'}).click();
+  await expect(page.locator('.detail-note')).toHaveCount(0);
+  await page.getByRole('button',{name:'Перейти к разделу 05'}).click();
+  await expect(page.locator('.detail-note-copy')).toHaveText('ТРИ ОБЪЕКТИВА КРУПНО');
 });
