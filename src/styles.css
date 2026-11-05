@@ -717,3 +717,16 @@ main{z-index:5}
   .chapter-inner{top:clamp(435px,62svh,500px)}
   .chapter-5 .chapter-inner{top:clamp(510px,74svh,555px)}
 }
+
+/* One fluid mobile layout for all current phone widths and browser chrome. */
+.menu-link{display:inline-flex;align-items:center;justify-content:center;gap:12px}
+.menu-link svg{display:block;flex:none}
+@media(max-width:720px){
+  .topbar{padding-left:clamp(18px,5vw,26px);padding-right:clamp(18px,5vw,26px)}
+  .menu-link{gap:8px;font-size:10px;white-space:nowrap}
+  .menu-link svg{width:15px;height:15px}
+  .object-stage{left:0;right:0;width:100%;height:calc(56svh - 68px);min-height:290px}
+  .object-stage canvas{width:100%!important;height:100%!important}
+  .shot-caption{right:clamp(25px,7vw,38px)}
+  .chapter-nav{right:10px}
+}
