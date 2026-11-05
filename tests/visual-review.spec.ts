@@ -24,7 +24,7 @@ test('capture complete scroll journey for visual review', async ({ page }, testI
   for (let i = 0; i < 6; i++) {
     await page.evaluate(index => {
       const section = document.querySelectorAll<HTMLElement>('.chapter')[index];
-      window.scrollTo({ top: section.offsetTop, behavior: 'instant' });
+      window.scrollTo({ top: section.offsetTop + (section.offsetHeight - innerHeight) / 2, behavior: 'instant' });
     }, i);
     await expect(page.locator('.shot-caption strong')).toContainText('/ 0' + (i + 1));
     // Smooth-damped camera, lighting and text reveals must finish before capture.
