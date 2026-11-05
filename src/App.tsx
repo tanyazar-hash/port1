@@ -107,7 +107,7 @@ export default function App(){
     <div className="scroll-track" aria-hidden="true"><div style={{transform:`scaleY(${progress})`}}/></div>
     <header className="topbar">
       <a href="#chapter-0" onClick={e=>{e.preventDefault();goTo(0);}} className="brand" aria-label="На начало">FORM<span> / </span>FACTOR</a>
-      <span className="topbar-center">IPHONE 17 PRO MAX <span className="topbar-star">✳</span> 360° VIEW</span>
+      <span className="topbar-center">IPHONE 17 PRO MAX 360° VIEW</span>
       <button className="menu-link" onClick={()=>goTo(5)}>ФИНАЛ <span>↗</span></button>
     </header>
     <div className="ambient-halo" aria-hidden="true"/>
@@ -131,7 +131,7 @@ export default function App(){
         <span className="detail-note-copy">{note.text}</span>
       </div>;
     })}
-    <div className="stage-label" aria-hidden="true"><span className="stage-cross">✳</span> 3D VIEW <span className="stage-line"/> 360°</div>
+    <div className="stage-label" aria-hidden="true">3D VIEW <span className="stage-line"/> 360°</div>
     <main>
       {chapters.map((chapter,i)=><section className={'chapter chapter-'+i} id={'chapter-'+i} key={chapter.no} aria-label={'Раздел '+chapter.no}>
         <div className="chapter-inner">
