@@ -80,7 +80,14 @@ function Phone({ progress, reduced, onAnchor }: Props) {
     const shot = interpolateShot(p);
     const wobble = reduced ? 0 : Math.sin(clock.elapsedTime * .72) * .027;
     const base = compact ? 15.2 : 23.5;
-    const targetScale = base * (compact ? 1 + (shot.zoom-1)*.72 : shot.zoom);
+    // Mobile has its own art direction: a stronger edge close-up in chapter 02,
+    // while rear-panel and camera views stay close to the approved composition.
+    const mobileZooms = [1.04, 1.32, 1.05, 1.15, 1.04, 1.02];
+    const shotPosition = THREE.MathUtils.clamp(p * SHOTS.length - .5, 0, SHOTS.length - 1);
+    const mobileIndex = Math.min(SHOTS.length - 2, Math.floor(shotPosition));
+    const mobileT = THREE.MathUtils.smoothstep(shotPosition - mobileIndex, .38, .94);
+    const mobileZoom = THREE.MathUtils.lerp(mobileZooms[mobileIndex], mobileZooms[mobileIndex + 1], mobileT);
+    const targetScale = base * (compact ? (1 + (shot.zoom - 1) * .72) * mobileZoom : shot.zoom);
     // The rear camera island is in the upper corner of the upright phone.
     // Shift the model in screen space as we zoom, so that corner stays in frame.
     const focusX = Math.min(1.3,portraitSize.width*targetScale*.27)*shot.cameraFocus;
