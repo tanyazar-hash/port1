@@ -76,7 +76,10 @@ function Phone({ progress, reduced, onAnchor }: Props) {
   useFrame(({ clock, viewport, camera, size }, delta) => {
     if (!root.current) return;
     const p = progress.current;
-    const compact = viewport.width < 6;
+    // R3F viewport.width is measured in THREE WORLD UNITS, not CSS pixels.
+    // On a tall iPhone it can exceed 6, accidentally activating desktop
+    // positioning and zoom. Use actual canvas pixel width instead.
+    const compact = size.width <= 720;
     const shot = interpolateShot(p);
     const wobble = reduced ? 0 : Math.sin(clock.elapsedTime * .72) * .027;
     const base = compact ? 15.2 : 23.5;
