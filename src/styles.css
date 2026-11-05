@@ -240,3 +240,51 @@ main{z-index:5}
   .detail-note-vertical .detail-note-rule{height:80px}
   .detail-note-horizontal .detail-note-rule{width:72px}
 }
+
+/* Screenshot refinement: keep chapter 04 untouched.
+   Chapter 02 is an upright edge in the actual render: use a vertical guide.
+   Chapter 05's camera island is wide: place a horizontal guide just to its left. */
+.detail-note-chapter-2{
+  left:clamp(22px,calc(var(--phone-note-x,55%) - 34px),calc(100% - 145px));
+  top:var(--phone-note-center-y,50%);
+  flex-direction:row;
+  align-items:center;
+  gap:12px;
+}
+.detail-note-chapter-2 .detail-note-rule{
+  width:1px;
+  height:clamp(85px,14vh,145px);
+  transform-origin:top;
+  transform:scaleY(var(--note-visibility));
+}
+.detail-note-chapter-2 .detail-note-copy{max-width:115px;line-height:1.8}
+.detail-note-chapter-5{
+  left:clamp(24px,calc(var(--phone-note-x,30%) + 62px),calc(100% - 160px));
+  top:var(--phone-note-camera-y,42%);
+  flex-direction:column;
+  align-items:flex-start;
+  gap:11px;
+}
+.detail-note-chapter-5 .detail-note-rule{
+  width:clamp(85px,9vw,135px);
+  height:1px;
+  transform-origin:left;
+  transform:scaleX(var(--note-visibility));
+}
+.detail-note-chapter-5 .detail-note-copy{max-width:170px;line-height:1.6}
+@media(max-width:720px){
+  .detail-note-chapter-2{
+    left:clamp(16px,calc(var(--phone-note-x,55%) - 20px),calc(100% - 110px));
+    top:var(--phone-note-center-y,50%);
+    gap:8px;
+  }
+  .detail-note-chapter-2 .detail-note-rule{width:1px;height:88px}
+  .detail-note-chapter-2 .detail-note-copy{max-width:85px}
+  .detail-note-chapter-5{
+    left:clamp(15px,calc(var(--phone-note-x,30%) + 28px),calc(100% - 110px));
+    top:var(--phone-note-camera-y,42%);
+    gap:8px;
+  }
+  .detail-note-chapter-5 .detail-note-rule{width:74px;height:1px}
+  .detail-note-chapter-5 .detail-note-copy{max-width:110px}
+}
