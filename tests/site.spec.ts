@@ -87,7 +87,8 @@ test('headlines and descriptions remain within the viewport at common widths', a
   for(const width of [360,390,768,1024,1440]){
     await page.setViewportSize({width,height:900});
     await page.goto('/');
-    await page.addStyleTag({content:'.chapter-inner>*{animation:none!important;transform:none!important;opacity:1!important}'});
+    await page.evaluate(()=>document.querySelectorAll('.chapter').forEach(el=>el.classList.add('is-visible')));
+    await page.addStyleTag({content:'.chapter-inner>*{animation:none!important;transition:none!important;filter:none!important;transform:none!important;opacity:1!important}'});
     const bounds=await page.locator('.chapter').evaluateAll(sections=>sections.map(section=>{
       const heading=section.querySelector('.chapter-title')!.getBoundingClientRect();
       const description=section.querySelector('.chapter-description')!.getBoundingClientRect();
@@ -107,6 +108,8 @@ test('mobile product stage clears the header and reading panel stays legible',as
   for(const width of [360,390,430]){
     await page.setViewportSize({width,height:844});
     await page.goto('/');
+    await page.evaluate(()=>document.querySelectorAll('.chapter').forEach(el=>el.classList.add('is-visible')));
+    await page.addStyleTag({content:'.chapter-inner>*{transition:none!important;filter:none!important;transform:none!important;opacity:1!important}'});
     const layout=await page.evaluate(()=>{
       const header=document.querySelector('.topbar')!.getBoundingClientRect();
       const stage=document.querySelector('.object-stage')!.getBoundingClientRect();
