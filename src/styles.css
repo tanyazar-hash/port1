@@ -470,3 +470,66 @@ main{z-index:5}
   .detail-note-chapter-5{top:calc(68px + var(--phone-note-camera-y,40%))}
   .detail-note-chapter-2{top:calc(68px + var(--phone-note-center-y,40%))}
 }
+
+/* Mobile composition v2: put the editorial content inside the visible
+   viewport, not at the bottom of a 125svh chapter. */
+@media(max-width:720px){
+  .chapter{
+    position:relative;
+    display:block;
+    height:125svh;
+    min-height:790px;
+    padding:0;
+  }
+  .chapter-inner{
+    position:absolute;
+    top:clamp(445px,60svh,580px);
+    left:23px;
+    right:23px;
+    width:auto;
+    max-width:none;
+    padding:0;
+    margin:0;
+  }
+  .chapter-inner:before{
+    inset:-42px -23px -32px;
+    background:linear-gradient(0deg,rgba(198,201,207,.96),rgba(205,208,214,.92) 58%,rgba(213,215,219,0));
+  }
+  .chapter-4 .chapter-inner:before,
+  .chapter-5 .chapter-inner:before{
+    background:linear-gradient(0deg,rgba(155,160,169,.96),rgba(171,175,183,.91) 58%,rgba(190,193,199,0));
+  }
+  .chapter-title,
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,
+  .chapter-3 .chapter-title,.chapter-4 .chapter-title,.chapter-5 .chapter-title{
+    font-size:clamp(30px,7.25vw,49px);
+    line-height:1.12;
+    margin:13px 0 11px;
+  }
+  .chapter-description{font-size:13px;line-height:1.58;max-width:335px}
+  .chapter-footer{margin-top:18px}
+  .object-stage{height:calc(66svh - 68px);min-height:320px}
+  .shot-caption{top:82px;right:20px}
+  .detail-note-copy{
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.1em;
+    line-height:1.45;
+  }
+  .detail-note-chapter-2 .detail-note-copy{max-width:95px}
+  .detail-note-chapter-5 .detail-note-copy{max-width:96px;width:96px}
+  .detail-note-vertical .detail-note-rule{height:82px}
+  .detail-note-chapter-2 .detail-note-rule{height:82px}
+  .detail-note-chapter-5 .detail-note-rule{height:82px}
+  .section-index{bottom:clamp(55px,9svh,100px)}
+}
+@media(max-width:380px){
+  .chapter-inner{left:18px;right:18px;top:clamp(430px,60svh,545px)}
+  .chapter-inner:before{left:-18px;right:-18px}
+  .chapter-title,
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,
+  .chapter-3 .chapter-title,.chapter-4 .chapter-title,.chapter-5 .chapter-title{
+    font-size:clamp(28px,7.1vw,34px);
+  }
+  .chapter-description{font-size:12.5px}
+}
