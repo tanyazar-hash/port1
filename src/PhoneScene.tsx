@@ -8,23 +8,34 @@ type Props = { progress: MutableRefObject<number>; reduced: boolean };
 function Phone({ progress, reduced }: Props) {
   const gltf = useGLTF('/phone.glb');
   const root = useRef<THREE.Group>(null);
-  const object = useMemo(() => {
-    // The original export contains two coincident copies; show one.
+  const { object, portraitRotation } = useMemo(() => {
+    // Normalize the actual Blender mesh axes rather than guessing a 90° angle.
+    // Longest dimension = height, middle = width, shortest = thickness.
     const original = gltf.scene.children[0] || gltf.scene;
     const copy = original.clone(true);
-    const center = new THREE.Box3().setFromObject(copy).getCenter(new THREE.Vector3());
+    const bounds = new THREE.Box3().setFromObject(copy);
+    const center = bounds.getCenter(new THREE.Vector3());
+    const size = bounds.getSize(new THREE.Vector3());
     copy.position.sub(center);
-    return copy;
+    const axes = [
+      { axis: new THREE.Vector3(1, 0, 0), size: size.x },
+      { axis: new THREE.Vector3(0, 1, 0), size: size.y },
+      { axis: new THREE.Vector3(0, 0, 1), size: size.z },
+    ].sort((a, b) => b.size - a.size);
+    const vertical = axes[0].axis;
+    const horizontal = axes[1].axis;
+    const depth = new THREE.Vector3().crossVectors(horizontal, vertical).normalize();
+    const basis = new THREE.Matrix4().makeBasis(horizontal, vertical, depth);
+    const portraitRotation = new THREE.Quaternion().setFromRotationMatrix(basis).invert();
+    return { object: copy, portraitRotation };
   }, [gltf]);
 
   useFrame(({ clock, viewport }, delta) => {
     if (!root.current) return;
     const p = progress.current;
     const compact = viewport.width < 6;
-    // The GLB exporter already converts Blender's axes to glTF coordinates.
-    // The old -90deg correction turned the phone upside down; keep its native orientation.
-    // Keep the handset upright in portrait at the beginning and end.
-    // Rotate it around its vertical axis during the fall, not around the screen axis.
+    // Portrait orientation is applied to the mesh itself below.
+    // The outer group only makes small tilts and spins around the upright axis.
     const fall = p * p * (3 - 2 * p);
     const wobble = reduced ? 0 : Math.sin(clock.elapsedTime * 0.75 + p * 12) * 0.075;
     const x = (compact ? 0.18 : 1.45) + Math.sin(p * Math.PI * 3.4) * (compact ? 0.23 : 0.5);
@@ -33,13 +44,13 @@ function Phone({ progress, reduced }: Props) {
     root.current.position.y = THREE.MathUtils.damp(root.current.position.y, y, 3.2, delta);
     root.current.rotation.y = THREE.MathUtils.damp(root.current.rotation.y, -0.25 + p * Math.PI * 4, 3.2, delta);
     root.current.rotation.z = THREE.MathUtils.damp(root.current.rotation.z, -0.12 + Math.sin(p * Math.PI * 4) * 0.17, 3.2, delta);
-    root.current.rotation.x = THREE.MathUtils.damp(root.current.rotation.x, 0.1 + Math.sin(p * Math.PI * 4) * 0.22, 3.2, delta);
+    root.current.rotation.x = THREE.MathUtils.damp(root.current.rotation.x, 0.08 + Math.sin(p * Math.PI * 4) * 0.13, 3.2, delta);
     const scale = (compact ? 15.2 : 23.5) * (1 + Math.sin(p * Math.PI) * 0.09);
     root.current.scale.setScalar(THREE.MathUtils.damp(root.current.scale.x, scale, 3.4, delta));
   });
 
   return <group ref={root} position={[1.5, 0.4, 0]}>
-    <primitive object={object}/>
+    <group quaternion={portraitRotation}><primitive object={object}/></group>
   </group>;
 }
 
