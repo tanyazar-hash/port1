@@ -125,3 +125,32 @@ main{z-index:5}
   .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,.chapter-3 .chapter-title{font-size:clamp(35px,8.3vw,62px)}
 }
 @media(prefers-reduced-motion:reduce){.detail-note,.detail-note-rule{animation:none}}
+
+/* Chapter 04: align the annotation vertically alongside the phone's side edge. */
+.detail-note-vertical{
+  left:clamp(67%,72vw,78%);
+  right:auto;
+  top:37%;
+  bottom:auto;
+  flex-direction:row;
+  align-items:center;
+  gap:15px;
+}
+.detail-note-vertical .detail-note-rule{
+  width:1px;
+  height:clamp(110px,19vh,190px);
+  background:linear-gradient(180deg,#333a43,#333a4390);
+  transform-origin:top;
+  animation:detail-rule-vertical-in .85s cubic-bezier(.16,1,.3,1) both;
+}
+.detail-note-vertical .detail-note-copy{
+  max-width:140px;
+  line-height:1.8;
+}
+@keyframes detail-rule-vertical-in{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media(max-width:720px){
+  .detail-note-vertical{left:auto;right:6%;top:39%;bottom:auto;gap:9px}
+  .detail-note-vertical .detail-note-rule{height:105px;width:1px}
+  .detail-note-vertical .detail-note-copy{max-width:100px}
+}
+@media(prefers-reduced-motion:reduce){.detail-note-vertical .detail-note-rule{animation:none}}
