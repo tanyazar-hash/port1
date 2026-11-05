@@ -137,10 +137,10 @@ export default function App(){
         // On narrow screens the product occupies the upper viewport. Fade the
         // reading panel away before it scrolls across the fixed 3D model.
         const distance=chapterPosition-i;
-        const fadeIn=i===0?1:smoothstep(-.12,.22,distance);
+        const fadeIn=i===0?1:smoothstep(.08,.35,distance);
         // The finale remains readable at the end of the page, including when
         // the footer enters the viewport. Other chapters still fade on exit.
-        const fadeOut=i===chapters.length-1?1:1-smoothstep(.60,.87,distance);
+        const fadeOut=i===chapters.length-1?1:1-smoothstep(.67,.91,distance);
         const mobileCopyVisibility=fadeIn*fadeOut;
         return <section className={'chapter chapter-'+i} id={'chapter-'+i} key={chapter.no} aria-label={'Раздел '+chapter.no}
           style={{'--mobile-copy-opacity':mobileCopyVisibility} as CSSProperties}>
