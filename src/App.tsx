@@ -1,5 +1,14 @@
-import { Component, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { Component, lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type ReactNode, type CSSProperties } from 'react';
 const PhoneScene = lazy(() => import('./PhoneScene'));
+
+const shotLabels = [
+  { title:'ОБЪЕКТ / 01', detail:'ПЕРВЫЙ ВЗГЛЯД' },
+  { title:'ПРОФИЛЬ / 02', detail:'ТОНКАЯ ГРАНЬ' },
+  { title:'МАТЕРИАЛ / 03', detail:'ОТРАЖЕНИЕ СВЕТА' },
+  { title:'ПОВОРОТ / 04', detail:'НОВЫЙ УГОЛ' },
+  { title:'КАМЕРА / 05', detail:'В ФОКУСЕ ДЕТАЛИ' },
+  { title:'ФИНАЛ / 06', detail:'ПОЛНЫЙ ОБЗОР' },
+];
 
 const chapters = [
   {no:'01',eyebrow:'ПЕРВОЕ ВПЕЧАТЛЕНИЕ',title:<>НЕ ПРОСТО<br/><em>ТЕЛЕФОН.</em></>,description:'Корпус, камеры, экран. Один объект — шесть ракурсов.',tag:'THE OBJECT / 001'},
@@ -61,7 +70,7 @@ export default function App(){
     return()=>observer.disconnect();
   },[]);
   const goTo=(i:number)=>document.getElementById('chapter-'+i)?.scrollIntoView({behavior:reduced?'instant':'smooth'});
-  return <div className="experience">
+  return <div className="experience" style={{'--scroll-progress':progress} as CSSProperties}>
     <div className="grain" aria-hidden="true"/>
     <div className="scroll-track" aria-hidden="true"><div style={{transform:`scaleY(${progress})`}}/></div>
     <header className="topbar">
@@ -73,6 +82,10 @@ export default function App(){
     <div className="object-stage" aria-label="Интерактивная трёхмерная модель телефона">
       <div className="falling-trails" aria-hidden="true" style={{opacity:Math.min(.7,.14+progress*.55)}}><i/><i/><i/><i/><i/></div>
       {webgl?<ModelBoundary><Suspense fallback={<div className="loading-object">ЗАГРУЖАЕМ 3D...</div>}><PhoneScene progress={progressRef} reduced={reduced}/></Suspense></ModelBoundary>:<PhoneFallback/>}
+    </div>
+    <div className="shot-caption" aria-live="off" aria-hidden="true">
+      <span className="shot-caption-line"/>
+      <span key={active} className="shot-caption-content"><strong>{shotLabels[active].title}</strong><small>{shotLabels[active].detail}</small></span>
     </div>
     <div className="stage-label" aria-hidden="true"><span className="stage-cross">✳</span> 3D VIEW <span className="stage-line"/> 360°</div>
     <main>
