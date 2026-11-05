@@ -160,3 +160,22 @@ test('mobile reading panel fades before crossing the fixed phone stage',async ({
   const next=await page.locator('.chapter-1').evaluate(el=>Number(getComputedStyle(el).getPropertyValue('--mobile-copy-opacity')));
   expect(next).toBeGreaterThan(.5);
 });
+
+test('iPhone 14 Pro finale fits above footer without overlapping the 3D stage',async ({page})=>{
+  await page.setViewportSize({width:393,height:852});
+  await page.goto('/');
+  await page.evaluate(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'instant'}));
+  await page.waitForTimeout(400);
+  const bounds=await page.evaluate(()=>{
+    const chapter=document.querySelector('.chapter-5')!.getBoundingClientRect();
+    const copy=document.querySelector('.chapter-5 .chapter-inner')!.getBoundingClientRect();
+    const stage=document.querySelector('.object-stage')!.getBoundingClientRect();
+    const footer=document.querySelector('.site-footer')!.getBoundingClientRect();
+    const opacity=Number(getComputedStyle(document.querySelector('.chapter-5 .chapter-inner')!).opacity);
+    return {chapterHeight:chapter.height,copyTop:copy.top,copyBottom:copy.bottom,stageBottom:stage.bottom,footerTop:footer.top,opacity};
+  });
+  expect(bounds.chapterHeight).toBeLessThanOrEqual(852);
+  expect(bounds.copyTop).toBeGreaterThan(bounds.stageBottom-4);
+  expect(bounds.copyBottom).toBeLessThanOrEqual(bounds.footerTop+8);
+  expect(bounds.opacity).toBeGreaterThan(.95);
+});
