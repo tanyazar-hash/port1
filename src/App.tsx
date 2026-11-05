@@ -19,11 +19,21 @@ const chapters = [
   {no:'06',eyebrow:'ФИНАЛ',title:<>БОЛЬШЕ,<br/><em>ЧЕМ ФОРМА.</em></>,description:'Рассмотри с другой стороны. Вернись к началу.',tag:'FINALE / 006'},
 ];
 
-const detailNotes: Record<number, string> = {
-  1: 'ТОЧНОСТЬ КАЖДОЙ ГРАНИ',
-  3: 'ЧИСТАЯ ГЕОМЕТРИЯ КОРПУСА',
-  4: 'ТРИ ОБЪЕКТИВА КРУПНО',
-};
+const detailNotes = [
+  {chapter:1, text:'ТОЧНОСТЬ КАЖДОЙ ГРАНИ', orientation:'horizontal'},
+  {chapter:3, text:'ЧИСТАЯ ГЕОМЕТРИЯ КОРПУСА', orientation:'vertical'},
+  {chapter:4, text:'ТРИ ОБЪЕКТИВА КРУПНО', orientation:'vertical'},
+] as const;
+
+function smoothstep(start:number,end:number,value:number){
+  const t=Math.max(0,Math.min(1,(value-start)/(end-start)));
+  return t*t*(3-2*t);
+}
+function noteVisibility(position:number,chapter:number){
+  // Wait for the camera to settle, then fade in. Fade away before the next shot.
+  return smoothstep(chapter+.26,chapter+.52,position) *
+    (1-smoothstep(chapter+.76,chapter+1.06,position));
+}
 
 class ModelBoundary extends Component<{children:ReactNode},{failed:boolean}> {
   state={failed:false};
@@ -37,6 +47,7 @@ export default function App(){
   const progressRef=useRef(0);
   const [progress,setProgress]=useState(0);
   const [active,setActive]=useState(0);
+  const [chapterPosition,setChapterPosition]=useState(0);
   const [webgl,setWebgl]=useState(false);
   const [reduced,setReduced]=useState(false);
   useLayoutEffect(()=>{
@@ -61,6 +72,7 @@ export default function App(){
         const chapterPosition=Math.max(0,(window.scrollY+window.innerHeight*.5-chapterOffset)/chapterHeight);
         progressRef.current=Math.min(1,chapterPosition/chapters.length);
         setProgress(p);
+        setChapterPosition(chapterPosition);
         const current=Math.min(chapters.length-1,Math.floor(chapterPosition));
         setActive(current);
       });
@@ -99,10 +111,18 @@ export default function App(){
       <span className="shot-caption-line"/>
       <span key={active} className="shot-caption-content"><strong>{shotLabels[active].title}</strong><small>{shotLabels[active].detail}</small></span>
     </div>
-    {detailNotes[active] && <div className={`detail-note${active===3 ? " detail-note-vertical" : ""}`} aria-hidden="true" key={active}>
-      <span className="detail-note-rule"/>
-      <span className="detail-note-copy">{detailNotes[active]}</span>
-    </div>}
+    {detailNotes.map(note=>{
+      const visibility=reduced
+        ? Number(chapterPosition>=note.chapter+.4 && chapterPosition<note.chapter+.85)
+        : noteVisibility(chapterPosition,note.chapter);
+      return <div key={note.chapter}
+        className={`detail-note detail-note-${note.orientation} detail-note-chapter-${note.chapter+1}`}
+        aria-hidden="true"
+        style={{opacity:visibility,'--note-visibility':visibility} as CSSProperties}>
+        <span className="detail-note-rule"/>
+        <span className="detail-note-copy">{note.text}</span>
+      </div>;
+    })}
     <div className="stage-label" aria-hidden="true"><span className="stage-cross">✳</span> 3D VIEW <span className="stage-line"/> 360°</div>
     <main>
       {chapters.map((chapter,i)=><section className={'chapter chapter-'+i} id={'chapter-'+i} key={chapter.no} aria-label={'Раздел '+chapter.no}>
