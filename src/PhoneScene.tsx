@@ -44,7 +44,7 @@ function interpolateShot(progress:number) {
 }
 
 function Phone({ progress, reduced, onAnchor }: Props) {
-  const gltf = useGLTF('/phone.glb');
+  const gltf = useGLTF(`${import.meta.env.BASE_URL}phone.glb`);
   const root = useRef<THREE.Group>(null);
   const { object, portraitRotation, portraitSize } = useMemo(() => {
     // Normalize the actual Blender mesh axes rather than guessing a 90° angle.
