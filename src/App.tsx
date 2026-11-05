@@ -22,7 +22,7 @@ const chapters = [
 const detailNotes = [
   {chapter:1, text:'ТОЧНОСТЬ КАЖДОЙ ГРАНИ', orientation:'vertical'},
   {chapter:3, text:'ЧИСТАЯ ГЕОМЕТРИЯ КОРПУСА', orientation:'vertical'},
-  {chapter:4, text:'ТРИ ОБЪЕКТИВА КРУПНО', orientation:'horizontal'},
+  {chapter:4, text:'ТРИ ОБЪЕКТИВА КРУПНО', orientation:'vertical'},
 ] as const;
 
 function smoothstep(start:number,end:number,value:number){
