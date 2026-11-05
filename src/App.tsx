@@ -11,13 +11,19 @@ const shotLabels = [
 ];
 
 const chapters = [
-  {no:'01',eyebrow:'ПЕРВОЕ ВПЕЧАТЛЕНИЕ',title:<>НЕ ПРОСТО<br/><em>ТЕЛЕФОН.</em></>,description:'Корпус, камеры, экран. Один объект — шесть ракурсов.',tag:'THE OBJECT / 001'},
-  {no:'02',eyebrow:'ДИЗАЙН И ФОРМА',title:<>ТОЧНОСТЬ<br/><em>В ЛИНИЯХ.</em></>,description:'Прямые грани, закруглённые углы и тонкий металлический контур.',tag:'DESIGN / 002'},
-  {no:'03',eyebrow:'МАТЕРИАЛЫ',title:<>МЕТАЛЛ.<br/><em>СТЕКЛО. СВЕТ.</em></>,description:'Металлическая рамка, стеклянные панели и отражения на гранях.',tag:'MATERIAL / 003'},
-  {no:'04',eyebrow:'ДВИЖЕНИЕ',title:<>ДРУГОЙ<br/><em>РАКУРС.</em></>,description:'Прокрути вниз: телефон поворачивается и показывает боковые грани.',tag:'MOTION / 004'},
-  {no:'05',eyebrow:'ДЕТАЛИ',title:<>ВНИМАНИЕ<br/><em>К МЕЛОЧАМ.</em></>,description:'Три объектива, кнопки на корпусе и аккуратные стыки материалов.',tag:'DETAIL / 005'},
-  {no:'06',eyebrow:'ФИНАЛ',title:<>ФОРМА<br/><em>В ДВИЖЕНИИ.</em></>,description:'Вид спереди, сзади и сбоку. Вернись к началу, чтобы рассмотреть ещё раз.',tag:'FINALE / 006'},
+  {no:'01',eyebrow:'ПЕРВОЕ ВПЕЧАТЛЕНИЕ',title:<>ФОРМА, КОТОРАЯ<br/><em>ВПЕЧАТЛЯЕТ.</em></>,description:'Один объект. Шесть ракурсов. Внимание к каждой детали.',tag:'THE OBJECT / 001'},
+  {no:'02',eyebrow:'ГОРИЗОНТАЛЬНАЯ ГРАНЬ',title:<>ТОЧНОСТЬ<br/><em>В КАЖДОЙ ЛИНИИ.</em></>,description:'Металлический контур, плавные переходы и выверенная геометрия.',tag:'DESIGN / 002'},
+  {no:'03',eyebrow:'ЗАДНЯЯ ПАНЕЛЬ',title:<>МАТЕРИАЛЫ<br/><em>ГОВОРЯТ САМИ.</em></>,description:'Стекло, металл и свет. Ничего лишнего.',tag:'MATERIAL / 003'},
+  {no:'04',eyebrow:'ВЕРТИКАЛЬНАЯ ГРАНЬ',title:<>СОВЕРШЕНСТВО<br/><em>В ПРОФИЛЬ.</em></>,description:'Один поворот — и привычная форма раскрывается по-новому.',tag:'PROFILE / 004'},
+  {no:'05',eyebrow:'КАМЕРЫ',title:<>ДЕТАЛИ<br/><em>В ФОКУСЕ.</em></>,description:'Три объектива. Точная геометрия. Выразительный акцент.',tag:'CAMERA / 005'},
+  {no:'06',eyebrow:'ФИНАЛ',title:<>БОЛЬШЕ,<br/><em>ЧЕМ ФОРМА.</em></>,description:'Рассмотри с другой стороны. Вернись к началу.',tag:'FINALE / 006'},
 ];
+
+const detailNotes: Record<number, string> = {
+  1: 'ТОЧНОСТЬ КАЖДОЙ ГРАНИ',
+  3: 'ЧИСТАЯ ГЕОМЕТРИЯ КОРПУСА',
+  4: 'ТРИ ОБЪЕКТИВА КРУПНО',
+};
 
 class ModelBoundary extends Component<{children:ReactNode},{failed:boolean}> {
   state={failed:false};
@@ -93,6 +99,10 @@ export default function App(){
       <span className="shot-caption-line"/>
       <span key={active} className="shot-caption-content"><strong>{shotLabels[active].title}</strong><small>{shotLabels[active].detail}</small></span>
     </div>
+    {detailNotes[active] && <div className="detail-note" aria-hidden="true" key={active}>
+      <span className="detail-note-rule"/>
+      <span className="detail-note-copy">{detailNotes[active]}</span>
+    </div>}
     <div className="stage-label" aria-hidden="true"><span className="stage-cross">✳</span> 3D VIEW <span className="stage-line"/> 360°</div>
     <main>
       {chapters.map((chapter,i)=><section className={'chapter chapter-'+i} id={'chapter-'+i} key={chapter.no} aria-label={'Раздел '+chapter.no}>
