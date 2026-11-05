@@ -140,7 +140,7 @@ export default function App(){
         const fadeIn=i===0?1:smoothstep(.08,.35,distance);
         // The finale remains readable at the end of the page, including when
         // the footer enters the viewport. Other chapters still fade on exit.
-        const fadeOut=i===chapters.length-1?1:1-smoothstep(.67,.91,distance);
+        const fadeOut=i===chapters.length-1?1:1-smoothstep(.53,.73,distance);
         const mobileCopyVisibility=fadeIn*fadeOut;
         return <section className={'chapter chapter-'+i} id={'chapter-'+i} key={chapter.no} aria-label={'Раздел '+chapter.no}
           style={{'--mobile-copy-opacity':mobileCopyVisibility} as CSSProperties}>
