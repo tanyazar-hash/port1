@@ -379,3 +379,84 @@ main{z-index:5}
 .chapter-nav button:focus-visible,.scroll-prompt:focus-visible,.site-footer button:focus-visible{
   outline:2px solid #15191e;outline-offset:4px;
 }
+
+/* Mobile art direction: keep the product above a readable editorial panel. */
+@media(max-width:720px){
+  .topbar{height:68px;padding:0 20px;gap:12px}
+  .brand{font-size:18px}
+  .menu-link{font-size:9px;letter-spacing:.1em;white-space:nowrap}
+  .object-stage{
+    top:68px;
+    height:calc(70svh - 68px);
+    min-height:340px;
+  }
+  .ambient-halo{top:7%;left:0;width:100vw}
+  .chapter{
+    height:125svh;
+    min-height:790px;
+    align-items:flex-end;
+    padding:92px 23px max(92px,env(safe-area-inset-bottom,0px) + 74px);
+  }
+  .chapter-inner{
+    width:100%;
+    max-width:100%;
+    padding:22px 0 0;
+    isolation:isolate;
+  }
+  .chapter-inner:before{
+    content:'';
+    position:absolute;
+    z-index:-1;
+    inset:-26px -23px -30px;
+    pointer-events:none;
+    background:linear-gradient(0deg,rgba(195,198,204,.94),rgba(205,208,214,.84) 58%,rgba(213,215,219,0));
+    mask-image:linear-gradient(to bottom,transparent,#000 32%,#000);
+  }
+  .chapter-4 .chapter-inner:before,.chapter-5 .chapter-inner:before{
+    background:linear-gradient(0deg,rgba(148,153,162,.94),rgba(170,174,181,.82) 58%,rgba(190,193,199,0));
+  }
+  .chapter-meta{max-width:calc(100% - 12px);font-size:8px;letter-spacing:.12em;line-height:1.6}
+  .chapter-title,
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,
+  .chapter-3 .chapter-title,.chapter-4 .chapter-title,.chapter-5 .chapter-title{
+    font-size:clamp(31px,7.5vw,52px);
+    line-height:1.12;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    margin:16px 0 13px;
+  }
+  .chapter-description{max-width:min(95%,360px);font-size:13px;line-height:1.62}
+  .chapter-footer{margin-top:24px}
+  .chapter-tag,.chapter-coordinate{font-size:8px;letter-spacing:.12em}
+  .shot-caption{top:88px;right:22px;gap:8px;max-width:145px}
+  .shot-caption-content{gap:6px}
+  .shot-caption-content strong{font-size:8px;letter-spacing:.12em}
+  .shot-caption-content small{font-size:7px;letter-spacing:.1em}
+  .chapter-nav{right:5px;gap:5px}
+  .chapter-nav button{width:20px;height:23px}
+  .chapter-nav button span{width:4px;height:4px}
+  .chapter-nav button.current span{width:9px;height:9px}
+  .section-index{bottom:29px;right:23px;font-size:56px;opacity:.22}
+  .detail-note{max-width:125px}
+  .detail-note-copy{font-size:8px;line-height:1.5;letter-spacing:.09em}
+  .detail-note-vertical .detail-note-rule{height:70px}
+  .detail-note-chapter-2 .detail-note-rule{height:70px}
+  .detail-note-chapter-5 .detail-note-rule{height:75px}
+  .detail-note-chapter-5 .detail-note-copy{max-width:84px;width:84px}
+  .site-footer{padding-bottom:max(28px,env(safe-area-inset-bottom,0px) + 16px)}
+}
+@media(max-width:380px){
+  .chapter{padding-left:18px;padding-right:18px}
+  .chapter-inner:before{left:-18px;right:-18px}
+  .chapter-title,
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,
+  .chapter-3 .chapter-title,.chapter-4 .chapter-title,.chapter-5 .chapter-title{
+    font-size:clamp(27px,7.2vw,33px);
+  }
+  .chapter-description{font-size:12px}
+  .chapter-meta{font-size:7px}
+}
+@media(max-width:720px) and (max-height:700px){
+  .chapter{min-height:750px}
+  .object-stage{height:calc(68svh - 68px)}
+}
