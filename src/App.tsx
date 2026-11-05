@@ -133,7 +133,15 @@ export default function App(){
     })}
     <div className="stage-label" aria-hidden="true">3D VIEW <span className="stage-line"/> 360°</div>
     <main>
-      {chapters.map((chapter,i)=><section className={'chapter chapter-'+i} id={'chapter-'+i} key={chapter.no} aria-label={'Раздел '+chapter.no}>
+      {chapters.map((chapter,i)=>{
+        // On narrow screens the product occupies the upper viewport. Fade the
+        // reading panel away before it scrolls across the fixed 3D model.
+        const distance=chapterPosition-i;
+        const fadeIn=i===0?1:smoothstep(-.12,.22,distance);
+        const fadeOut=1-smoothstep(.60,.87,distance);
+        const mobileCopyVisibility=fadeIn*fadeOut;
+        return <section className={'chapter chapter-'+i} id={'chapter-'+i} key={chapter.no} aria-label={'Раздел '+chapter.no}
+          style={{'--mobile-copy-opacity':mobileCopyVisibility} as CSSProperties}>
         <div className="chapter-inner">
           <div className="chapter-meta"><span className="meta-line"/><span>{chapter.no} / 06</span><span className="meta-divider">—</span><span>{chapter.eyebrow}</span></div>
           <h1 className="chapter-title">{chapter.title}</h1>
@@ -141,7 +149,7 @@ export default function App(){
           <div className="chapter-footer"><span className="chapter-tag">{chapter.tag}</span>{i===0?<button className="scroll-prompt" onClick={()=>goTo(1)}>ЛИСТАЙ ВНИЗ <span>↓</span></button>:<span className="chapter-coordinate">{String(Math.round((i+1)/chapters.length*100)).padStart(3,'0')} / 100</span>}</div>
         </div>
         <span className="section-index" aria-hidden="true">{chapter.no}</span>
-      </section>)}
+      </section>})}
     </main>
     <nav className="chapter-nav" aria-label="Навигация по разделам">
       {chapters.map((c,i)=><button key={c.no} className={active===i?'current':''} aria-label={'Перейти к разделу '+c.no} aria-current={active===i?'step':undefined} onClick={()=>goTo(i)}><span/></button>)}
