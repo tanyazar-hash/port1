@@ -99,7 +99,7 @@ export default function App(){
       <span className="shot-caption-line"/>
       <span key={active} className="shot-caption-content"><strong>{shotLabels[active].title}</strong><small>{shotLabels[active].detail}</small></span>
     </div>
-    {detailNotes[active] && <div className="detail-note" aria-hidden="true" key={active}>
+    {detailNotes[active] && <div className={`detail-note${active===3 ? " detail-note-vertical" : ""}`} aria-hidden="true" key={active}>
       <span className="detail-note-rule"/>
       <span className="detail-note-copy">{detailNotes[active]}</span>
     </div>}
