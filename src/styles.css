@@ -324,3 +324,58 @@ main{z-index:5}
   .detail-note-chapter-5 .detail-note-rule{width:1px;height:90px}
   .detail-note-chapter-5 .detail-note-copy{width:90px;max-width:90px}
 }
+
+/* Portfolio polish / typography: a deliberate, readable left editorial column.
+   Do not alter the approved 3D compositions or their detail annotations. */
+@media(min-width:1051px){
+  .chapter-inner{width:min(47vw,720px)}
+  .chapter-title{max-width:100%;margin-top:31px;margin-bottom:25px}
+  .chapter-description{max-width:390px;font-size:clamp(15px,1.03vw,17px);line-height:1.78;letter-spacing:0;word-spacing:0}
+  .chapter-footer{margin-top:49px}
+  .chapter-meta{font-size:9px;letter-spacing:.19em;gap:12px}
+  .chapter-0 .chapter-title{font-size:clamp(48px,5.05vw,90px)}
+  .chapter-1 .chapter-title{font-size:clamp(45px,4.75vw,85px)}
+  .chapter-2 .chapter-title{font-size:clamp(46px,5.05vw,91px)}
+  .chapter-3 .chapter-title{font-size:clamp(44px,4.5vw,81px)}
+  .chapter-4 .chapter-title{font-size:clamp(50px,5.4vw,96px)}
+  .chapter-5 .chapter-title{font-size:clamp(51px,5.5vw,98px)}
+}
+@media(min-width:721px) and (max-width:1050px){
+  .chapter-inner{width:53vw}
+  .chapter-title{font-size:clamp(40px,5.2vw,63px);line-height:1.1;letter-spacing:-.055em}
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,.chapter-3 .chapter-title{font-size:clamp(39px,5.05vw,60px)}
+  .chapter-description{font-size:14px;line-height:1.7;max-width:330px}
+  .chapter-footer{margin-top:38px}
+}
+@media(max-width:720px){
+  .chapter-inner{max-width:min(100%,520px)}
+  .chapter-title,
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,
+  .chapter-3 .chapter-title,.chapter-4 .chapter-title,.chapter-5 .chapter-title{
+    font-size:clamp(32px,8vw,55px);
+    line-height:1.1;
+    letter-spacing:-.055em;
+    word-spacing:0;
+    white-space:normal;
+    overflow-wrap:normal;
+    margin-top:20px;
+    margin-bottom:16px;
+  }
+  .chapter-title em{letter-spacing:-.055em;word-spacing:0}
+  .chapter-description{max-width:min(85%,345px);font-size:13px;line-height:1.68;word-spacing:0;letter-spacing:0}
+  .chapter-footer{margin-top:27px;gap:20px;flex-wrap:wrap}
+  .chapter-meta{font-size:8px;letter-spacing:.12em;gap:7px;white-space:normal}
+  .chapter-tag{font-size:9px}
+}
+@media(max-width:380px){
+  .chapter-title,
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,
+  .chapter-3 .chapter-title,.chapter-4 .chapter-title,.chapter-5 .chapter-title{
+    font-size:clamp(28px,7.6vw,35px);
+  }
+  .chapter-meta{font-size:7px}
+}
+/* Accessible focus contrast and unobtrusive motion on text controls. */
+.chapter-nav button:focus-visible,.scroll-prompt:focus-visible,.site-footer button:focus-visible{
+  outline:2px solid #15191e;outline-offset:4px;
+}
