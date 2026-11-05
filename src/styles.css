@@ -631,3 +631,89 @@ main{z-index:5}
   .chapter-5{min-height:700px}
   .chapter-5 .chapter-inner{top:clamp(475px,70svh,535px)}
 }
+
+/* FINAL MOBILE ART DIRECTION — seamless six-scene editorial scroll.
+   The earlier 125svh chapters left 25svh of empty travel after each panel.
+   Keep desktop entirely untouched. */
+@media(max-width:720px){
+  .chapter,.chapter-5{
+    height:100svh;
+    min-height:700px;
+    padding:0;
+    overflow:visible;
+  }
+  .chapter:after{display:none}
+  .chapter-inner{
+    top:clamp(470px,61svh,555px);
+    left:23px;
+    right:23px;
+    opacity:var(--mobile-copy-opacity,1);
+    transition:opacity .10s linear;
+    isolation:auto;
+  }
+  /* A section-sized transparent panel previously caused hard horizontal
+     bands. The page-wide silver gradient now carries the entire transition. */
+  .chapter-inner:before,
+  .chapter-4 .chapter-inner:before,
+  .chapter-5 .chapter-inner:before{display:none}
+  .chapter-title,
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,
+  .chapter-2 .chapter-title,.chapter-3 .chapter-title,
+  .chapter-4 .chapter-title,.chapter-5 .chapter-title{
+    color:#222832;
+    font-size:clamp(29px,7.15vw,44px);
+    line-height:1.10;
+    margin:12px 0 11px;
+    letter-spacing:-.05em;
+    text-shadow:0 1px 12px #d4d7dc55;
+  }
+  .chapter-title em,
+  .chapter-0 .chapter-title em,.chapter-1 .chapter-title em,
+  .chapter-2 .chapter-title em,.chapter-3 .chapter-title em,
+  .chapter-4 .chapter-title em,.chapter-5 .chapter-title em{
+    color:#4a505a;
+    text-shadow:none;
+  }
+  .chapter-description,
+  .chapter-4 .chapter-description,.chapter-5 .chapter-description{
+    color:#383e48;
+    font-size:12.5px;
+    line-height:1.6;
+    max-width:345px;
+  }
+  .chapter-meta,.chapter-4 .chapter-meta,.chapter-5 .chapter-meta{
+    color:#434952;
+  }
+  .chapter-footer{margin-top:17px}
+  .chapter-tag,.chapter-coordinate{color:#555d67}
+  .section-index{bottom:22px;right:23px;font-size:53px;opacity:.12}
+  .object-stage{
+    top:68px;
+    height:calc(56svh - 68px);
+    min-height:290px;
+  }
+  .falling-trails{opacity:.24!important}
+  .chapter-5{
+    min-height:700px;
+  }
+  .chapter-5 .chapter-inner{
+    top:clamp(550px,72svh,640px);
+  }
+  .chapter-5 .section-index{bottom:20px}
+  .site-footer{
+    border-top:1px solid #343a4440;
+    background:transparent;
+    min-height:88px;
+    padding-top:19px;
+    padding-bottom:max(19px,env(safe-area-inset-bottom,0px) + 12px);
+  }
+}
+@media(max-width:380px){
+  .chapter-inner{left:18px;right:18px;top:clamp(435px,60svh,520px)}
+  .chapter-5 .chapter-inner{top:clamp(505px,71svh,590px)}
+}
+@media(max-width:720px) and (max-height:700px){
+  .chapter,.chapter-5{min-height:700px}
+  .chapter-inner{top:clamp(435px,62svh,500px)}
+  .chapter-5 .chapter-inner{top:clamp(510px,74svh,555px)}
+}
