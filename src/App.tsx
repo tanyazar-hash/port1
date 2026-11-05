@@ -45,6 +45,7 @@ function canRender3D(){try{const canvas=document.createElement('canvas');return 
 
 export default function App(){
   const progressRef=useRef(0);
+  const experienceRef=useRef<HTMLDivElement>(null);
   const [progress,setProgress]=useState(0);
   const [active,setActive]=useState(0);
   const [chapterPosition,setChapterPosition]=useState(0);
@@ -94,7 +95,14 @@ export default function App(){
     return()=>observer.disconnect();
   },[]);
   const goTo=(i:number)=>document.getElementById('chapter-'+i)?.scrollIntoView({behavior:reduced?'instant':'smooth'});
-  return <div className="experience" style={{'--scroll-progress':progress} as CSSProperties}>
+  const updateNoteAnchor=(x:number,centerY:number,cameraY:number)=>{
+    const element=experienceRef.current;
+    if(!element)return;
+    element.style.setProperty('--phone-note-x',`${x}px`);
+    element.style.setProperty('--phone-note-center-y',`${centerY}px`);
+    element.style.setProperty('--phone-note-camera-y',`${cameraY}px`);
+  };
+  return <div ref={experienceRef} className="experience" style={{'--scroll-progress':progress} as CSSProperties}>
     <div className="grain" aria-hidden="true"/>
     <div className="scroll-track" aria-hidden="true"><div style={{transform:`scaleY(${progress})`}}/></div>
     <header className="topbar">
@@ -105,7 +113,7 @@ export default function App(){
     <div className="ambient-halo" aria-hidden="true"/>
     <div className="object-stage" aria-label="Интерактивная трёхмерная модель телефона">
       <div className="falling-trails" aria-hidden="true" style={{opacity:Math.min(.7,.14+progress*.55)}}><i/><i/><i/><i/><i/></div>
-      {webgl?<ModelBoundary><Suspense fallback={<div className="loading-object">ЗАГРУЖАЕМ 3D...</div>}><PhoneScene progress={progressRef} reduced={reduced}/></Suspense></ModelBoundary>:<PhoneFallback/>}
+      {webgl?<ModelBoundary><Suspense fallback={<div className="loading-object">ЗАГРУЖАЕМ 3D...</div>}><PhoneScene progress={progressRef} reduced={reduced} onAnchor={updateNoteAnchor}/></Suspense></ModelBoundary>:<PhoneFallback/>}
     </div>
     <div className="shot-caption" aria-live="off" aria-hidden="true">
       <span className="shot-caption-line"/>
