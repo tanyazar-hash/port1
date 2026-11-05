@@ -141,3 +141,19 @@ test('iPhone 14 Pro mobile composition brings chapter copy into the first viewpo
   expect(layout.stageBottom).toBeLessThan(layout.headingBottom);
   expect(layout.noteSize).toBeGreaterThanOrEqual(10);
 });
+
+test('mobile reading panel fades before crossing the fixed phone stage',async ({page})=>{
+  await page.setViewportSize({width:393,height:852});
+  await page.goto('/');
+  const chapter=page.locator('.chapter-0');
+  await expect(chapter).toHaveCSS('--mobile-copy-opacity',/^(1|1\.0+)$/);
+  const height=await chapter.evaluate(el=>(el as HTMLElement).offsetHeight);
+  await page.evaluate(y=>window.scrollTo(0,y),height*.42);
+  await page.waitForTimeout(220);
+  const faded=await chapter.evaluate(el=>Number(getComputedStyle(el).getPropertyValue('--mobile-copy-opacity')));
+  expect(faded).toBeLessThan(.45);
+  await page.evaluate(y=>window.scrollTo(0,y),height*.85);
+  await page.waitForTimeout(220);
+  const next=await page.locator('.chapter-1').evaluate(el=>Number(getComputedStyle(el).getPropertyValue('--mobile-copy-opacity')));
+  expect(next).toBeGreaterThan(.5);
+});
