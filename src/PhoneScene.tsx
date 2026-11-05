@@ -15,7 +15,7 @@ type Props = { progress: MutableRefObject<number>; reduced: boolean };
  */
 const SHOTS = [
   { x:1.46, y:.54, z:0, yaw:-.35, pitch:.07, roll:-.10, zoom:1.00, cameraFocus:0 },
-  { x:1.53, y:.32, z:0, yaw:-1.52, pitch:0, roll:-Math.PI/2, zoom:2.15, cameraFocus:0 },
+  { x:1.53, y:.32, z:0, yaw:-1.52, pitch:0, roll:-Math.PI/2, zoom:1.83, cameraFocus:0 },
   { x:1.48, y:.32, z:0, yaw:-2.93, pitch:-.06, roll:-.06, zoom:1.11, cameraFocus:0 },
   { x:1.52, y:.28, z:0, yaw:-4.68, pitch:0, roll:0, zoom:2.20, cameraFocus:0 },
   { x:1.43, y:.13, z:0, yaw:-3.06, pitch:.09, roll:-.09, zoom:2.25, cameraFocus:1 },
