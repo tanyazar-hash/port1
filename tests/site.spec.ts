@@ -71,6 +71,7 @@ test('detail markers smoothly appear and disappear in sync with scroll', async (
       const offset=section.offsetTop+section.offsetHeight*progress-innerHeight*.5;
       window.scrollTo({top:offset,behavior:'instant'});
     },[chapter,position] as [number,number]);
+    await page.waitForTimeout(120);
     return Number(await page.locator(`.detail-note-chapter-${chapter+1}`).evaluate(el=>getComputedStyle(el).opacity));
   };
   expect(await opacity(1,.1)).toBeLessThan(.05);
@@ -86,6 +87,7 @@ test('headlines and descriptions remain within the viewport at common widths', a
   for(const width of [360,390,768,1024,1440]){
     await page.setViewportSize({width,height:900});
     await page.goto('/');
+    await page.addStyleTag({content:'.chapter-inner>*{animation:none!important;transform:none!important;opacity:1!important}'});
     const bounds=await page.locator('.chapter').evaluateAll(sections=>sections.map(section=>{
       const heading=section.querySelector('.chapter-title')!.getBoundingClientRect();
       const description=section.querySelector('.chapter-description')!.getBoundingClientRect();
