@@ -460,3 +460,13 @@ main{z-index:5}
   .chapter{min-height:750px}
   .object-stage{height:calc(68svh - 68px)}
 }
+
+/* The mobile WebGL canvas begins below the fixed header. Its projected
+   label anchors are canvas-relative; compensate for that offset. */
+@media(max-width:720px){
+  .detail-note,.detail-note-horizontal,.detail-note-vertical,.detail-note-chapter-5{
+    top:calc(68px + var(--phone-note-center-y,40%));
+  }
+  .detail-note-chapter-5{top:calc(68px + var(--phone-note-camera-y,40%))}
+  .detail-note-chapter-2{top:calc(68px + var(--phone-note-center-y,40%))}
+}
