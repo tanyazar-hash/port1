@@ -730,3 +730,21 @@ main{z-index:5}
   .shot-caption{right:clamp(25px,7vw,38px)}
   .chapter-nav{right:10px}
 }
+
+/* iOS Safari: prevent the native blue button tint on the finale control. */
+.topbar .menu-link,
+.topbar .menu-link:link,
+.topbar .menu-link:visited,
+.topbar .menu-link:hover,
+.topbar .menu-link:active{
+  color:#171b20;
+  -webkit-text-fill-color:#171b20;
+  -webkit-appearance:none;
+  appearance:none;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  text-decoration:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.topbar .menu-link svg{stroke:#171b20;fill:none}
