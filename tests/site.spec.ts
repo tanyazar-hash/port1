@@ -78,6 +78,25 @@ test('detail markers smoothly appear and disappear in sync with scroll', async (
   expect(await opacity(1,.98)).toBeLessThan(.15);
   expect(await opacity(3,.62)).toBeGreaterThan(.95);
   expect(await opacity(4,.62)).toBeGreaterThan(.95);
-  await expect(page.locator('.detail-note-horizontal .detail-note-rule')).toHaveCSS('height','1px');
-  await expect(page.locator('.detail-note-vertical')).toHaveCount(2);
+  await expect(page.locator('.detail-note-vertical')).toHaveCount(3);
+  await expect(page.locator('.detail-note-chapter-5 .detail-note-rule')).toHaveCSS('width','1px');
+});
+
+test('headlines and descriptions remain within the viewport at common widths', async ({page})=>{
+  for(const width of [360,390,768,1024,1440]){
+    await page.setViewportSize({width,height:900});
+    await page.goto('/');
+    const bounds=await page.locator('.chapter').evaluateAll(sections=>sections.map(section=>{
+      const heading=section.querySelector('.chapter-title')!.getBoundingClientRect();
+      const description=section.querySelector('.chapter-description')!.getBoundingClientRect();
+      return {headingLeft:heading.left,headingRight:heading.right,descriptionLeft:description.left,descriptionRight:description.right};
+    }));
+    for(const item of bounds){
+      expect(item.headingLeft).toBeGreaterThanOrEqual(-1);
+      expect(item.headingRight).toBeLessThanOrEqual(width+1);
+      expect(item.descriptionLeft).toBeGreaterThanOrEqual(-1);
+      expect(item.descriptionRight).toBeLessThanOrEqual(width+1);
+    }
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
 });
