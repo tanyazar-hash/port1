@@ -87,13 +87,24 @@ function Phone({ progress, reduced, onAnchor }: Props) {
     const mobileIndex = Math.min(SHOTS.length - 2, Math.floor(shotPosition));
     const mobileT = THREE.MathUtils.smoothstep(shotPosition - mobileIndex, .38, .94);
     const mobileZoom = THREE.MathUtils.lerp(mobileZooms[mobileIndex], mobileZooms[mobileIndex + 1], mobileT);
-    const targetScale = base * (compact ? (1 + (shot.zoom - 1) * .72) * mobileZoom : shot.zoom);
+    // Fit the actual rotated mesh into the usable mobile canvas, regardless
+    // of iPhone width, browser toolbar height or DPR. Desktop is unchanged.
+    const intendedScale = base * (compact ? (1 + (shot.zoom - 1) * .72) * mobileZoom : shot.zoom);
+    const yaw = shot.yaw, pitch = shot.pitch, roll = shot.roll;
+    const rotation = new THREE.Euler(pitch,yaw,roll,'XYZ');
+    const boxRotation = new THREE.Matrix4().makeRotationFromEuler(rotation);
+    const w=portraitSize.width,h=portraitSize.height,d=portraitSize.depth;
+    const rotatedW=Math.abs(boxRotation.elements[0])*w+Math.abs(boxRotation.elements[4])*h+Math.abs(boxRotation.elements[8])*d;
+    const rotatedH=Math.abs(boxRotation.elements[1])*w+Math.abs(boxRotation.elements[5])*h+Math.abs(boxRotation.elements[9])*d;
+    const fitWidth=(viewport.width*.80)/Math.max(rotatedW,.001);
+    const fitHeight=(viewport.height*.77)/Math.max(rotatedH,.001);
+    const targetScale=compact?Math.min(intendedScale,fitWidth,fitHeight):intendedScale;
     // The rear camera island is in the upper corner of the upright phone.
     // Shift the model in screen space as we zoom, so that corner stays in frame.
     const focusX = Math.min(1.3,portraitSize.width*targetScale*.27)*shot.cameraFocus;
     const focusY = Math.min(1.93,portraitSize.height*targetScale*.34)*shot.cameraFocus;
-    const x = (compact ? .18+(shot.x-1.48)*.42 : shot.x) + focusX*(compact ? .45 : 1);
-    const y = (compact ? .44+(shot.y-.32)*.42 : shot.y) - focusY*(compact ? .55 : 1);
+    const x = compact ? 0 : shot.x + focusX;
+    const y = compact ? 0 : shot.y - focusY;
     root.current.position.x = THREE.MathUtils.damp(root.current.position.x,x,4.1,delta);
     root.current.position.y = THREE.MathUtils.damp(root.current.position.y,y+wobble,4.1,delta);
     root.current.position.z = THREE.MathUtils.damp(root.current.position.z,shot.z,3.8,delta);
