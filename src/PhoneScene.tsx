@@ -1,9 +1,9 @@
-import { Suspense, useMemo, useRef } from 'react';
+import { Suspense, useMemo, useRef, type MutableRefObject } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
-type Props = { progress: React.MutableRefObject<number>; reduced: boolean };
+type Props = { progress: MutableRefObject<number>; reduced: boolean };
 
 function Phone({ progress, reduced }: Props) {
   const gltf = useGLTF('/phone.glb');
