@@ -108,7 +108,7 @@ export default function App(){
     <header className="topbar">
       <a href="#chapter-0" onClick={e=>{e.preventDefault();goTo(0);}} className="brand" aria-label="На начало">FORM<span> / </span>FACTOR</a>
       <span className="topbar-center">IPHONE 17 PRO MAX 360° VIEW</span>
-      <button className="menu-link" onClick={()=>goTo(5)}>ФИНАЛ <span>↗</span></button>
+      <button className="menu-link" onClick={()=>goTo(5)}>ФИНАЛ <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 19 19 5M8 5h11v11"/></svg></button>
     </header>
     <div className="ambient-halo" aria-hidden="true"/>
     <div className="object-stage" aria-label="Интерактивная трёхмерная модель телефона">
