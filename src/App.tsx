@@ -51,9 +51,12 @@ export default function App(){
   },[]);
   useEffect(()=>{
     const sections=[...document.querySelectorAll<HTMLElement>('.chapter')];
+    // The first chapter must be readable immediately; later chapters wait until
+    // they are substantially in view, so the reveal is visible while scrolling.
+    sections[0]?.classList.add('is-visible');
     const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
       if(entry.isIntersecting)entry.target.classList.add('is-visible');
-    }),{threshold:0.22,rootMargin:'0px 0px -8% 0px'});
+    }),{threshold:0.62,rootMargin:'0px 0px -6% 0px'});
     sections.forEach(s=>observer.observe(s));
     return()=>observer.disconnect();
   },[]);
@@ -68,6 +71,7 @@ export default function App(){
     </header>
     <div className="ambient-halo" aria-hidden="true"/>
     <div className="object-stage" aria-label="Интерактивная трёхмерная модель телефона">
+      <div className="falling-trails" aria-hidden="true" style={{opacity:Math.min(.7,.14+progress*.55)}}><i/><i/><i/><i/><i/></div>
       {webgl?<ModelBoundary><Suspense fallback={<div className="loading-object">ЗАГРУЖАЕМ 3D...</div>}><PhoneScene progress={progressRef} reduced={reduced}/></Suspense></ModelBoundary>:<PhoneFallback/>}
     </div>
     <div className="stage-label" aria-hidden="true"><span className="stage-cross">✳</span> INTERACTIVE OBJECT <span className="stage-line"/> 360°</div>
