@@ -32,7 +32,7 @@ test('chapters reveal later and the phone stays behind readable text', async ({p
   await expect(page.locator('.falling-trails i')).toHaveCount(5);
   await page.evaluate(()=>window.scrollTo({top:window.innerHeight*.3,behavior:'instant'}));
   await expect(page.locator('#chapter-1')).not.toHaveClass(/is-visible/);
-  await page.evaluate(()=>window.scrollTo({top:window.innerHeight*.78,behavior:'instant'}));
+  await page.evaluate(()=>window.scrollTo({top:window.innerHeight*1.35,behavior:'instant'}));
   await expect(page.locator('#chapter-1')).toHaveClass(/is-visible/);
 });
 
@@ -51,4 +51,13 @@ test('mobile shot labels do not create horizontal scrolling', async ({page})=>{
   await page.goto('/');
   await expect(page.locator('.shot-caption')).toBeVisible();
   await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});
+
+test('chapters give visitors more room to inspect the product', async ({page})=>{
+  await page.goto('/');
+  const sizes=await page.evaluate(()=>{
+    const section=document.querySelector<HTMLElement>('.chapter')!;
+    return {section:section.getBoundingClientRect().height,viewport:window.innerHeight};
+  });
+  expect(sizes.section).toBeGreaterThan(sizes.viewport*1.19);
 });
