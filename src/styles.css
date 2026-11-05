@@ -105,3 +105,23 @@ main{z-index:5}
 @media(max-width:720px){
   .chapter{height:125svh;min-height:760px}
 }
+
+/* Short editorial detail markers appear only in the edge and camera chapters. */
+.detail-note{position:fixed;z-index:10;right:clamp(60px,9vw,170px);bottom:clamp(105px,17vh,185px);display:flex;flex-direction:column;align-items:flex-start;gap:13px;pointer-events:none;animation:detail-note-in .7s cubic-bezier(.16,1,.3,1) both}
+.detail-note-rule{display:block;width:clamp(80px,9vw,155px);height:1px;background:#333a43;transform-origin:left;animation:detail-rule-in .85s cubic-bezier(.16,1,.3,1) both}
+.detail-note-copy{font-family:'DM Sans',sans-serif;font-size:10px;line-height:1.6;font-weight:800;letter-spacing:.2em;color:#313741}
+@keyframes detail-note-in{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
+@keyframes detail-rule-in{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* Long new headlines retain their editorial scale without running into the 3D object. */
+.chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-3 .chapter-title{font-size:clamp(49px,5.45vw,99px)}
+.chapter-2 .chapter-title{font-size:clamp(53px,6.1vw,108px)}
+@media(max-width:1050px){
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-3 .chapter-title{font-size:clamp(42px,5.5vw,72px)}
+}
+@media(max-width:720px){
+  .detail-note{right:26px;bottom:clamp(108px,17svh,180px);gap:8px}
+  .detail-note-rule{width:74px}
+  .detail-note-copy{font-size:8px;letter-spacing:.12em;max-width:170px}
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,.chapter-2 .chapter-title,.chapter-3 .chapter-title{font-size:clamp(35px,8.3vw,62px)}
+}
+@media(prefers-reduced-motion:reduce){.detail-note,.detail-note-rule{animation:none}}
