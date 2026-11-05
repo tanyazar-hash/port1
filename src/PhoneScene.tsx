@@ -3,7 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
-type Props = { progress: MutableRefObject<number>; reduced: boolean };
+type Props = { progress: MutableRefObject<number>; reduced: boolean; onAnchor?: (x:number,centerY:number,cameraY:number)=>void };
 
 /**
  * Six camera setups, aligned with the CENTER of each full-screen chapter.
@@ -43,7 +43,7 @@ function interpolateShot(progress:number) {
   };
 }
 
-function Phone({ progress, reduced }: Props) {
+function Phone({ progress, reduced, onAnchor }: Props) {
   const gltf = useGLTF('/phone.glb');
   const root = useRef<THREE.Group>(null);
   const { object, portraitRotation, portraitSize } = useMemo(() => {
@@ -70,10 +70,10 @@ function Phone({ progress, reduced }: Props) {
     const portraitRotation = new THREE.Quaternion()
       .setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI)
       .multiply(new THREE.Quaternion().setFromRotationMatrix(basis).invert());
-    return { object: copy, portraitRotation, portraitSize: { width: axes[1].size, height: axes[0].size } };
+    return { object: copy, portraitRotation, portraitSize: { width: axes[1].size, height: axes[0].size, depth: axes[2].size } };
   }, [gltf]);
 
-  useFrame(({ clock, viewport }, delta) => {
+  useFrame(({ clock, viewport, camera, size }, delta) => {
     if (!root.current) return;
     const p = progress.current;
     const compact = viewport.width < 6;
@@ -94,6 +94,29 @@ function Phone({ progress, reduced }: Props) {
     root.current.rotation.x = THREE.MathUtils.damp(root.current.rotation.x,shot.pitch,3.5,delta);
     root.current.rotation.z = THREE.MathUtils.damp(root.current.rotation.z,shot.roll,3.5,delta);
     root.current.scale.setScalar(THREE.MathUtils.damp(root.current.scale.x,targetScale,3.8,delta));
+    // Project the actual transformed phone silhouette into screen coordinates.
+    // This keeps detail captions beside the device even as it rotates and zooms.
+    if (onAnchor) {
+      root.current.updateWorldMatrix(true,true);
+      const halfW=portraitSize.width*.5,halfH=portraitSize.height*.5,halfD=portraitSize.depth*.5;
+      let left=Infinity,right=-Infinity;
+      for (const px of [-halfW,halfW]) for(const py of [-halfH,halfH]) for(const pz of [-halfD,halfD]){
+        const projected=root.current.localToWorld(new THREE.Vector3(px,py,pz)).project(camera);
+        const screenX=(projected.x+1)*size.width*.5;
+        left=Math.min(left,screenX);right=Math.max(right,screenX);
+      }
+      const center=root.current.localToWorld(new THREE.Vector3(0,0,0)).project(camera);
+      const cameraDetail=root.current.localToWorld(new THREE.Vector3(0,halfH*.7,0)).project(camera);
+      const captionWidth=compact?112:205;
+      const x=right+22+captionWidth<size.width-24
+        ? right+22
+        : Math.max(24,left-captionWidth-22);
+      onAnchor(
+        THREE.MathUtils.clamp(x,20,Math.max(20,size.width-captionWidth-15)),
+        THREE.MathUtils.clamp((1-center.y)*size.height*.5,145,size.height-125),
+        THREE.MathUtils.clamp((1-cameraDetail.y)*size.height*.5,145,size.height-125)
+      );
+    }
   });
 
   return <group ref={root} position={[1.5, 0.4, 0]}>
