@@ -288,3 +288,39 @@ main{z-index:5}
   .detail-note-chapter-5 .detail-note-rule{width:74px;height:1px}
   .detail-note-chapter-5 .detail-note-copy{max-width:110px}
 }
+
+/* Chapter 05: the camera-module side is upright in this close-up.
+   Put a vertical guide immediately to the left of the phone, with copy outside. */
+.detail-note-chapter-5{
+  left:clamp(18px,calc(var(--phone-note-x,30%) + 45px),calc(100% - 175px));
+  top:var(--phone-note-camera-y,42%);
+  bottom:auto;
+  right:auto;
+  display:flex;
+  flex-direction:row-reverse;
+  align-items:center;
+  gap:14px;
+}
+.detail-note-chapter-5 .detail-note-rule{
+  width:1px;
+  height:clamp(95px,14vh,145px);
+  flex:0 0 1px;
+  transform-origin:top;
+  transform:scaleY(var(--note-visibility));
+}
+.detail-note-chapter-5 .detail-note-copy{
+  width:130px;
+  max-width:130px;
+  text-align:right;
+  line-height:1.7;
+}
+@media(max-width:720px){
+  .detail-note-chapter-5{
+    left:clamp(12px,calc(var(--phone-note-x,30%) + 18px),calc(100% - 125px));
+    top:var(--phone-note-camera-y,42%);
+    right:auto;
+    gap:8px;
+  }
+  .detail-note-chapter-5 .detail-note-rule{width:1px;height:90px}
+  .detail-note-chapter-5 .detail-note-copy{width:90px;max-width:90px}
+}
