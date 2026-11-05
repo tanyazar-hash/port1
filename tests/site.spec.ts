@@ -35,3 +35,20 @@ test('chapters reveal later and the phone stays behind readable text', async ({p
   await page.evaluate(()=>window.scrollTo({top:window.innerHeight*.78,behavior:'instant'}));
   await expect(page.locator('#chapter-1')).toHaveClass(/is-visible/);
 });
+
+test('product shots update as visitors move through six chapters', async ({page})=>{
+  await page.goto('/');
+  await expect(page.locator('.shot-caption strong')).toHaveText('ОБЪЕКТ / 01');
+  await page.getByRole('button',{name:'Перейти к разделу 05'}).click();
+  await expect(page.locator('.shot-caption strong')).toHaveText('КАМЕРА / 05');
+  await expect(page.locator('.shot-caption small')).toHaveText('В ФОКУСЕ ДЕТАЛИ');
+  await page.getByRole('button',{name:'Перейти к разделу 06'}).click();
+  await expect(page.locator('.shot-caption strong')).toHaveText('ФИНАЛ / 06');
+});
+
+test('mobile shot labels do not create horizontal scrolling', async ({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('/');
+  await expect(page.locator('.shot-caption')).toBeVisible();
+  await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+});
