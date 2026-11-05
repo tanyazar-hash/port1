@@ -533,3 +533,43 @@ main{z-index:5}
   }
   .chapter-description{font-size:12.5px}
 }
+
+/* iPhone 14 Pro recording review: keep the product and the reading panel
+   in separate vertical zones. Preserve the 125svh cinematic scroll. */
+@media(max-width:720px){
+  .object-stage{
+    top:68px;
+    height:calc(56svh - 68px);
+    min-height:290px;
+  }
+  .chapter-inner{
+    top:clamp(480px,64svh,605px);
+    opacity:var(--mobile-copy-opacity,1);
+    transition:opacity .12s linear;
+    pointer-events:auto;
+  }
+  .chapter-inner:before{
+    inset:-28px -23px -28px;
+    background:linear-gradient(0deg,rgba(198,201,207,.93),rgba(205,208,214,.82) 64%,transparent);
+  }
+  .chapter-4 .chapter-inner:before,.chapter-5 .chapter-inner:before{
+    background:linear-gradient(0deg,rgba(155,160,169,.93),rgba(171,175,183,.82) 64%,transparent);
+  }
+  .chapter-0 .chapter-title,.chapter-1 .chapter-title,
+  .chapter-2 .chapter-title,.chapter-3 .chapter-title,
+  .chapter-4 .chapter-title,.chapter-5 .chapter-title{
+    font-size:clamp(29px,7.1vw,46px);
+  }
+  .chapter-footer{margin-top:16px}
+  .section-index{bottom:clamp(42px,7svh,75px)}
+}
+@media(max-width:380px){
+  .chapter-inner{top:clamp(450px,63svh,570px)}
+}
+@media(max-width:720px) and (max-height:700px){
+  .object-stage{height:calc(55svh - 68px);min-height:250px}
+  .chapter-inner{top:clamp(395px,63svh,490px)}
+}
+@media(max-width:720px) and (prefers-reduced-motion:reduce){
+  .chapter-inner{transition:none}
+}
