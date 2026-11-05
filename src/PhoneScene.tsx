@@ -15,10 +15,10 @@ type Props = { progress: MutableRefObject<number>; reduced: boolean };
  */
 const SHOTS = [
   { x:1.46, y:.54, z:0, yaw:-.35, pitch:.07, roll:-.10, zoom:1.00, cameraFocus:0 },
-  { x:1.53, y:.32, z:0, yaw:-1.52, pitch:0, roll:-Math.PI/2, zoom:1.83, cameraFocus:0 },
+  { x:1.52, y:.29, z:0, yaw:-Math.PI/2, pitch:0, roll:-Math.PI/2, zoom:1.78, cameraFocus:0 },
   { x:1.48, y:.32, z:0, yaw:-2.93, pitch:-.06, roll:-.06, zoom:1.11, cameraFocus:0 },
-  { x:1.52, y:.28, z:0, yaw:-4.68, pitch:0, roll:0, zoom:2.20, cameraFocus:0 },
-  { x:1.43, y:.13, z:0, yaw:-3.06, pitch:.09, roll:-.09, zoom:2.25, cameraFocus:1 },
+  { x:1.48, y:-.04, z:0, yaw:-Math.PI*1.5, pitch:0, roll:0, zoom:1.97, cameraFocus:0 },
+  { x:1.52, y:.13, z:0, yaw:-3.06, pitch:.03, roll:-.07, zoom:2.13, cameraFocus:1 },
   { x:1.48, y:.14, z:0, yaw:-6.63, pitch:.04, roll:-.07, zoom:1.06, cameraFocus:0 },
 ] as const;
 
@@ -28,8 +28,8 @@ function interpolateShot(progress:number) {
   const scaled = THREE.MathUtils.clamp(progress*SHOTS.length-.5,0,SHOTS.length-1);
   const index = Math.min(SHOTS.length-2,Math.floor(scaled));
   const raw = scaled-index;
-  // A generous hold near both ends prevents constant spinning while reading.
-  const t = THREE.MathUtils.smoothstep(raw,.12,.88);
+  // Hold each close-up for longer; rotate mainly between chapters.
+  const t = THREE.MathUtils.smoothstep(raw,.38,.94);
   const a=SHOTS[index],b=SHOTS[index+1];
   return {
     x:THREE.MathUtils.lerp(a.x,b.x,t),
@@ -84,7 +84,7 @@ function Phone({ progress, reduced }: Props) {
     // The rear camera island is in the upper corner of the upright phone.
     // Shift the model in screen space as we zoom, so that corner stays in frame.
     const focusX = Math.min(1.3,portraitSize.width*targetScale*.27)*shot.cameraFocus;
-    const focusY = Math.min(1.65,portraitSize.height*targetScale*.31)*shot.cameraFocus;
+    const focusY = Math.min(1.93,portraitSize.height*targetScale*.34)*shot.cameraFocus;
     const x = (compact ? .18+(shot.x-1.48)*.42 : shot.x) + focusX*(compact ? .45 : 1);
     const y = (compact ? .44+(shot.y-.32)*.42 : shot.y) - focusY*(compact ? .55 : 1);
     root.current.position.x = THREE.MathUtils.damp(root.current.position.x,x,4.1,delta);
