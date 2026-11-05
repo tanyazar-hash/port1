@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<defs>
+  <linearGradient id="arcTop" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#f9fbff" stop-opacity="0"/><stop offset=".26" stop-color="#ffffff" stop-opacity=".65"/><stop offset=".44" stop-color="#fff" stop-opacity="1"/><stop offset=".66" stop-color="#f6f9ff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+  <linearGradient id="arcBottom" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".28" stop-color="#fff" stop-opacity=".85"/><stop offset=".52" stop-color="#fff" stop-opacity=".6"/><stop offset=".83" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient>
+  <filter id="glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="13"/></filter>
+  <filter id="sheen" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+<!-- Elliptical luminous ribbons, inspired by the approved visual reference;
+     purely decorative background, no rasterized product or typography. -->
+<g fill="none" stroke-linecap="round">
+<path d="M-210 680 C 280 225, 745 -5, 1495 -100" stroke="#fff" stroke-width="35" opacity=".35" filter="url(#glow)"/>
+<path d="M-210 680 C 280 225, 745 -5, 1495 -100" stroke="url(#arcTop)" stroke-width="4" opacity=".84" filter="url(#sheen)"/>
+<path d="M-210 680 C 280 225, 745 -5, 1495 -100" stroke="url(#arcTop)" stroke-width="1.7" opacity=".85"/>
+<path d="M-135 1090 C 430 720, 1110 720, 1810 90" stroke="#fff" stroke-width="47" opacity=".3" filter="url(#glow)"/>
+<path d="M-135 1090 C 430 720, 1110 720, 1810 90" stroke="url(#arcBottom)" stroke-width="4" opacity=".86" filter="url(#sheen)"/>
+<path d="M-135 1090 C 430 720, 1110 720, 1810 90" stroke="url(#arcBottom)" stroke-width="1.6" opacity=".86"/>
+<path d="M860 1030 C 1210 720, 1430 505, 1770 190" stroke="#f5f8ff" stroke-width="30" opacity=".2" filter="url(#glow)"/>
+<path d="M860 1030 C 1210 720, 1430 505, 1770 190" stroke="#fff" stroke-width="1.1" opacity=".3"/>
+</g>
+</svg>
