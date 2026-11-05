@@ -26,7 +26,12 @@ function Phone({ progress, reduced }: Props) {
     const horizontal = axes[1].axis;
     const depth = new THREE.Vector3().crossVectors(horizontal, vertical).normalize();
     const basis = new THREE.Matrix4().makeBasis(horizontal, vertical, depth);
-    const portraitRotation = new THREE.Quaternion().setFromRotationMatrix(basis).invert();
+    // Bounding-box axes tell us portrait vs landscape, but not which end is top.
+    // This particular Blender export has its camera module at the bottom after
+    // axis alignment. Turn the mesh 180° in its screen plane to put cameras on top.
+    const portraitRotation = new THREE.Quaternion()
+      .setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI)
+      .multiply(new THREE.Quaternion().setFromRotationMatrix(basis).invert());
     return { object: copy, portraitRotation };
   }, [gltf]);
 
