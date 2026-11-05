@@ -1,24 +1,22 @@
-# OTHERSPACE
+# FORM / FACTOR — 3D Phone Experience
 
-Immersive experimental 3D website — Obsidian / Violet.
+Экспериментальный одностраничный сайт: серебристая палитра, шесть полноэкранных глав, анимированная модель телефона и анимации появления текста по мере прокрутки.
 
-## Run locally
+## Модель
 
-Requires Node.js 20+.
+Для отображения настоящего телефона **нужен файл `public/phone.glb`**. В GitHub он пока не загружен: бинарный файл входит в полный архив проекта, который подготовлен отдельно. До его добавления показывается резервный CSS-силуэт телефона.
+
+Добавьте файл `phone.glb` в папку `public` через GitHub или скопируйте его из архива проекта.
+
+## Запуск
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the URL printed by Vite. Production build: `npm run build`.
+Сборка: `npm run build`.
 
-## Features
+Исходная 3D-модель предоставлена пользователем из Blendkit. Перед коммерческой публикацией проверьте условия лицензии и использование товарных знаков.
 
-- React + TypeScript + Vite
-- Interactive 3D sculpture with React Three Fiber
-- Pointer-responsive motion and cinematic transitions
-- Accessible Enter / Return controls
-- Reduced-motion and WebGL fallback
-
-This is an initial prototype. It has not yet been built in CI.
+Предыдущая версия сайта сохранена в ветке `backup-kontaktium-before-phone`.
