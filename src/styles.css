@@ -154,3 +154,55 @@ main{z-index:5}
   .detail-note-vertical .detail-note-copy{max-width:100px}
 }
 @media(prefers-reduced-motion:reduce){.detail-note-vertical .detail-note-rule{animation:none}}
+
+/* Scroll-synchronised annotations: no mounting/unmounting jump.
+   Keep rules parallel to the corresponding phone edge. */
+.detail-note{
+  z-index:10;
+  animation:none;
+  will-change:opacity,transform;
+  transform:translate3d(0,calc(15px * (1 - var(--note-visibility))),0);
+  transition:none;
+}
+.detail-note .detail-note-rule{
+  animation:none;
+  transform:scaleX(var(--note-visibility));
+}
+.detail-note-vertical .detail-note-rule{
+  animation:none;
+  transform:scaleY(var(--note-visibility));
+}
+.detail-note-horizontal{
+  left:auto;right:clamp(65px,10vw,185px);
+  top:65%;bottom:auto;
+  flex-direction:column;align-items:flex-start;
+  gap:12px;
+}
+.detail-note-horizontal .detail-note-rule{width:clamp(95px,11vw,170px);height:1px}
+.detail-note-vertical{
+  left:auto;
+  right:clamp(60px,8vw,145px);
+  top:43%;
+  bottom:auto;
+  flex-direction:row;
+  align-items:center;
+  gap:18px;
+}
+.detail-note-vertical .detail-note-rule{
+  width:1px;height:clamp(105px,17vh,165px);
+}
+.detail-note-vertical .detail-note-copy{max-width:140px}
+.detail-note-chapter-5{top:40%;right:clamp(55px,8vw,145px)}
+@media(max-width:720px){
+  .detail-note-horizontal{left:auto;right:6%;top:66%;bottom:auto}
+  .detail-note-horizontal .detail-note-rule{width:80px;height:1px}
+  .detail-note-vertical,.detail-note-chapter-5{
+    left:auto;right:5%;top:43%;bottom:auto;gap:9px;
+  }
+  .detail-note-vertical .detail-note-rule{height:90px;width:1px}
+  .detail-note-vertical .detail-note-copy{max-width:85px}
+}
+@media(prefers-reduced-motion:reduce){
+  .detail-note{transform:none;transition:none}
+  .detail-note .detail-note-rule{transform:none}
+}
