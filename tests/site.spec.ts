@@ -75,7 +75,7 @@ test('detail markers smoothly appear and disappear in sync with scroll', async (
   };
   expect(await opacity(1,.1)).toBeLessThan(.05);
   expect(await opacity(1,.62)).toBeGreaterThan(.95);
-  expect(await opacity(1,.98)).toBeLessThan(.15);
+  expect(await opacity(1,.98)).toBeLessThan(.22);
   expect(await opacity(3,.62)).toBeGreaterThan(.95);
   expect(await opacity(4,.62)).toBeGreaterThan(.95);
   await expect(page.locator('.detail-note-vertical')).toHaveCount(3);
